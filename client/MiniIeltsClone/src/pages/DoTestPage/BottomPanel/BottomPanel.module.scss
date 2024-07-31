@@ -1,0 +1,101 @@
+.wrapper {
+  bottom: 0;
+  position: absolute;
+  height: 120px;
+  background: rgb(250, 235, 215);
+  width: 100%;
+  border: 1px solid #ffa500;
+  padding: 10px 100px;
+  display: block;
+}
+.title {
+}
+
+.answered {
+  background-color: #2199e8 !important;
+  margin-bottom: 6px;
+  &:hover {
+    background-color: #2199e8;
+  }
+}
+
+.unanswered {
+  background-color: white;
+  &:hover {
+    background-color: white !important;
+  }
+}
+
+.answered,
+.unanswered {
+  border: #999;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.clock {
+  padding: 10px;
+  background-color: black;
+  border-radius: 12px;
+  .text {
+    color: white;
+    font-size: 20px;
+    font-weight: 700px;
+  }
+}
+
+.btn-wrapper {
+  color: #fff !important;
+
+  &:hover {
+    color: #fff !important;
+  }
+
+  .submit-btn {
+    background-color: #5cb85c !important;
+
+    &:hover {
+      background-color: #449d44 !important;
+    }
+  }
+
+  .review-btn {
+    background-color: #337ab7 !important;
+
+    &:hover {
+      background-color: #286090;
+    }
+  }
+
+  .solution-btn {
+    background-color: #f0ad4e;
+
+    &:hover {
+      background-color: #ec971f !important;
+    }
+  }
+
+  .submit-btn,
+  .review-btn,
+  .solution-btn {
+    color: #fff !important;
+    &:hover {
+      color: #fff !important;
+    }
+  }
+}
+
+.question-circle {
+  background-color: white;
+
+  &.active {
+    background-color: #2199e8;
+    color: white;
+  }
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    display: none;
+  }
+}

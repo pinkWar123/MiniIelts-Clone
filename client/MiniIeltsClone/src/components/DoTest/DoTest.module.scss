@@ -1,0 +1,24 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+}
+
+.left-container {
+  align-items: center;
+  justify-content: center;
+  border: solid 1px #ddd;
+  background: #f0f0f0;
+}
+
+.right-container {
+  flex: 1;
+  overflow-y: scroll;
+  max-height: 100vh;
+}
+
+.left-container,
+.right-container {
+  padding: 20px;
+  overflow-y: scroll;
+  min-height: 100vh;
+}

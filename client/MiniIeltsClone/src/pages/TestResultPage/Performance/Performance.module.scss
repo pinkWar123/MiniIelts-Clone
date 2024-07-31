@@ -1,0 +1,37 @@
+.value {
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 1em;
+  color: #1e90ff;
+}
+
+.title {
+  font-size: 1.2em;
+  color: gray;
+}
+
+.container {
+  border-bottom: dotted 3px #ddd;
+  padding-left: 12px;
+  margin-bottom: 5px;
+}
+
+.border-green {
+  border-left: solid 10px #64e572;
+}
+
+.border-orange {
+  border-left: 10px solid #ff9655;
+}
+
+.border-yellow {
+  border-left: solid 10px #fff263;
+}
+
+.marks {
+  font-size: 20px;
+}
+
+.stat {
+  margin-top: 30px;
+}

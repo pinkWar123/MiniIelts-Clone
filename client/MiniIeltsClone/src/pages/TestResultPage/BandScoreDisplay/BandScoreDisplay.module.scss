@@ -1,0 +1,38 @@
+.dark-gray {
+  background-color: gray;
+}
+
+.green {
+  background-color: #98c244;
+}
+
+.yellow {
+  background-color: #dcab35;
+}
+
+.red {
+  background-color: #d02537;
+}
+
+.blue {
+  background-color: #54aacb;
+}
+
+.gray {
+  background-color: #f5f5f5;
+  color: black !important;
+  font-weight: normal !important;
+}
+
+.green,
+.yellow,
+.red,
+.blue,
+.gray,
+.dark-gray {
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px;
+  margin-bottom: 2px;
+}
