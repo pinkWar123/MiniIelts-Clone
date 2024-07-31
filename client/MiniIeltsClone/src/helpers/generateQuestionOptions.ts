@@ -45,3 +45,16 @@ export const generateMatchingHeadingsOptions = (questionCount: number) => {
   for (let i = 1; i <= questionCount; i++) romanArray.push(intToRoman(i));
   return romanArray.map((item) => ({ value: item, label: item }));
 };
+
+export const generateABCOptions = (questionCount: number) => {
+  if (questionCount <= 0) return [];
+  let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  letters = letters.slice(0, questionCount);
+  const options: string[] = [];
+
+  for (let i = 0; i < letters.length; i++) {
+    options.push(letters[i]);
+  }
+
+  return options.map((option) => ({ label: option, value: option }));
+};

@@ -3,3 +3,10 @@ export interface IChoice {
   value: string;
   order: number;
 }
+
+export interface IExerciseChoice {
+  exerciseId: string;
+  content: string;
+  order: number;
+  value: string;
+}

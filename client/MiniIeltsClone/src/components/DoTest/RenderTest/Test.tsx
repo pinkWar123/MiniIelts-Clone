@@ -5,6 +5,7 @@ import { QuestionTypeEnum } from "../../../contants/questionType";
 import SummaryCompletion from "./SummaryCompletion";
 import { TestBase } from "./base";
 import MatchingHeading from "./MatchingHeadings";
+import ChooseMany from "./ChooseMany";
 
 interface TestProps {
   exercises: IExercise[];
@@ -30,6 +31,13 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
         );
       case QuestionTypeEnum.MatchingHeadings:
         return <MatchingHeading {...props} />;
+      case QuestionTypeEnum.MultipleChoice:
+        return (
+          <ChooseMany
+            {...props}
+            chooseManyChoices={exercise.chooseManyChoices}
+          />
+        );
       default:
         return <></>;
     }
