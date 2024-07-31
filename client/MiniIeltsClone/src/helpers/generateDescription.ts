@@ -8,3 +8,15 @@ export const generateTFNGDescription = (start: number, end: number) => {
 
     NOT GIVEN if there is no information on this`;
 };
+
+export const generateMatchingHeadingsDescription = (
+  start: number,
+  end: number
+) => {
+  return [
+    `The reading has ${end - start + 1} paragraphs.`,
+    `Choose the correct heading for each paragraph from the list of headings below.`,
+    `Write the correct number in boxes ${start}-${end} on your answer sheet.
+  `,
+  ];
+};

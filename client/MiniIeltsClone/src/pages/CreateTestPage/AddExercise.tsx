@@ -25,7 +25,7 @@ const AddExercise: FunctionComponent<AddExerciseProps> = () => {
     if (numOfQuestions === 0) {
       message.error("Input number of questions");
       return;
-    } else if (!questionType) {
+    } else if (questionType === undefined) {
       message.error("Input type of question");
       return;
     }

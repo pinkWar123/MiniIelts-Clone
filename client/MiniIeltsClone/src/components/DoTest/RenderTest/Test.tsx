@@ -3,6 +3,8 @@ import { IExercise } from "../../../types/Model/Exercise";
 import TFNG from "./TFNG";
 import { QuestionTypeEnum } from "../../../contants/questionType";
 import SummaryCompletion from "./SummaryCompletion";
+import { TestBase } from "./base";
+import MatchingHeading from "./MatchingHeadings";
 
 interface TestProps {
   exercises: IExercise[];
@@ -11,28 +13,23 @@ interface TestProps {
 
 const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
   const renderExercise = (exercise: IExercise, index: number) => {
+    const { startQuestion, endQuestion, questions, content } = exercise;
+    const props: TestBase = {
+      startQuestion,
+      endQuestion,
+      questions,
+      content,
+      showAnswer,
+    };
     switch (exercise.exerciseType) {
       case QuestionTypeEnum.TFNG:
-        return (
-          <TFNG
-            startQuestion={exercise.startQuestion}
-            endQuestion={exercise.endQuestion}
-            questions={exercise.questions}
-            key={`TFNG-${index}`}
-            showAnswer={showAnswer}
-          />
-        );
+        return <TFNG {...props} key={`TFNG-${index}`} />;
       case QuestionTypeEnum.SummaryCompletion:
         return (
-          <SummaryCompletion
-            startQuestion={exercise.startQuestion}
-            endQuestion={exercise.endQuestion}
-            questions={exercise.questions}
-            content={exercise.content}
-            key={`SummaryCompletion-${index}`}
-            showAnswer={showAnswer}
-          />
+          <SummaryCompletion {...props} key={`SummaryCompletion-${index}`} />
         );
+      case QuestionTypeEnum.MatchingHeadings:
+        return <MatchingHeading {...props} />;
       default:
         return <></>;
     }

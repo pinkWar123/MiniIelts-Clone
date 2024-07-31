@@ -17,7 +17,7 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
   options,
   content,
 }) => {
-  const { getAnswerByOrder, answers, handleUpdateAnswer } = useAnswers();
+  const { getAnswerByOrder, handleUpdateAnswer } = useAnswers();
   const [defaultValue, setDefautValue] = useState<IDoTestAnswer>();
   useEffect(() => {
     setDefautValue(getAnswerByOrder(order));
