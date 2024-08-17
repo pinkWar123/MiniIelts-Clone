@@ -25,7 +25,7 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
   return (
     <Flex gap="small">
       <strong>{order}</strong>
-      <Form.Item>
+      <Form.Item key={`select-${content}`}>
         <Select
           id={order.toString()}
           options={options}
@@ -35,7 +35,7 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
           onChange={(item) => handleUpdateAnswer(order, item)}
         />
       </Form.Item>
-      <Typography.Text>{content}</Typography.Text>
+      <Form.Item key={"content"}>{content}</Form.Item>
     </Flex>
   );
 };

@@ -31,11 +31,13 @@ const TestCard: FunctionComponent<TestCardProps> = ({
         <img
           alt="example"
           src={
-            picture === "string" || picture === "example"
-              ? "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+            picture === "string" ||
+            picture === "example" ||
+            picture === "empty picture"
+              ? "https://miniieltsbypinkwar.blob.core.windows.net/apiimages/52271514743_a574519057_o.png"
               : picture
           }
-          style={{ maxHeight: "100px" }}
+          style={{ height: "150px" }}
         />
       }
     >
