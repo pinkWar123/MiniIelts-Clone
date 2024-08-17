@@ -13,6 +13,7 @@ using MiniIeltsCloneServer.Exceptions;
 using MiniIeltsCloneServer.Middleware.Permission;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
+using MiniIeltsCloneServer.Services.BlobService;
 using MiniIeltsCloneServer.Services.ExerciseChoiceService;
 using MiniIeltsCloneServer.Services.ExerciseService;
 using MiniIeltsCloneServer.Services.QuestionChoiceService;
@@ -77,6 +78,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+builder.Services.Configure<AzureConfig>(builder.Configuration.GetSection("Azure"));
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -127,6 +129,7 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProv
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTestValidator>();
+builder.Services.AddSingleton<AzureBlobService>();
 // builder.Services.AddProblemDetails();
 
 
