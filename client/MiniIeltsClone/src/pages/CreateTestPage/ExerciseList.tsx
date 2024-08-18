@@ -8,6 +8,7 @@ import MatchingHeading from "./CreateExercise/MatchingHeadings/MatchingHeading";
 import MultipleChoice from "./CreateExercise/MultipleChoice/MultipleChoice";
 import SentenceCompletion from "./CreateExercise/Completion/SentenceCompletion";
 import SummaryCompletion from "./CreateExercise/Completion/SummaryCompletion/SummayCompletion";
+import Labelling from "./CreateExercise/Labelling";
 
 interface ExerciseListProps {}
 
@@ -35,6 +36,8 @@ const ExerciseList: FunctionComponent<ExerciseListProps> = () => {
           return <SentenceCompletion {...props} key={exercise.order} />;
         else if (exercise.exerciseType === QuestionTypeEnum.SummaryCompletion)
           return <SummaryCompletion {...props} key={exercise.order} />;
+        else if (exercise.exerciseType === QuestionTypeEnum.Labelling)
+          return <Labelling {...props} key={exercise.order} />;
       })}
     </>
   );
