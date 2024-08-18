@@ -4,7 +4,7 @@ import { QuestionTypeEnum } from "../../contants/questionType";
 import TFNG from "./CreateExercise/TFNG";
 import YNNG from "./CreateExercise/YNNG";
 import ABC from "./CreateExercise/ABC";
-import MatchingHeading from "./CreateExercise/MatchingHeading";
+import MatchingHeading from "./CreateExercise/MatchingHeadings/MatchingHeading";
 import MultipleChoice from "./CreateExercise/MultipleChoice/MultipleChoice";
 import SentenceCompletion from "./CreateExercise/Completion/SentenceCompletion";
 import SummaryCompletion from "./CreateExercise/Completion/SummaryCompletion/SummayCompletion";

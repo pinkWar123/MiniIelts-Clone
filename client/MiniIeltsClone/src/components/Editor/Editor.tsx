@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FORMATS, MODULES } from "./editor.config";
@@ -17,10 +17,6 @@ const Editor: FunctionComponent<EditorProps> = ({
   const handleChange = (html: string) => {
     setEditorHtml(html);
   };
-
-  useEffect(() => {
-    console.log("Change dependencies");
-  }, [editorHtml]);
   return (
     <div>
       <ReactQuill

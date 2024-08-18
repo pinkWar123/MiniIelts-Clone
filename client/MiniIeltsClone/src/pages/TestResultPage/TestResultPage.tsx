@@ -45,6 +45,7 @@ const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
 
     fetchTestResult();
   }, [id, location.search]);
+  console.log(testResult);
   if (!id) return <NotFound />;
   return (
     <>

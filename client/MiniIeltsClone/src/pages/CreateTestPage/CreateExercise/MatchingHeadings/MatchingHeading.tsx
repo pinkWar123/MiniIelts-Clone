@@ -1,12 +1,13 @@
 import { FunctionComponent, useState } from "react";
-import { IExerciseProps } from "./exerciseProps";
-import { QuestionTypeEnum } from "../../../contants/questionType";
+import { IExerciseProps } from "../exerciseProps";
+import { QuestionTypeEnum } from "../../../../contants/questionType";
 import TypedInputNumber from "antd/es/input-number";
-import { Divider, Form, Input } from "antd";
-import { MatchingHeadingsOptions } from "../../../contants/answerOptions";
-import Exercise from "./Exercise";
-import ExerciseDivider from "../../../components/create-test/ExerciseDivider";
-import { convertQuestionTypeEnumToDescription } from "../../../helpers/convertQuestionType";
+import { Divider, Form } from "antd";
+import { MatchingHeadingsOptions } from "../../../../contants/answerOptions";
+import Exercise from "../Exercise";
+import ExerciseDivider from "../../../../components/create-test/ExerciseDivider";
+import { convertQuestionTypeEnumToDescription } from "../../../../helpers/convertQuestionType";
+import HeadingEditor from "./HeadingEditor";
 
 interface MatchingHeadingProps extends IExerciseProps {}
 
@@ -38,11 +39,9 @@ const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
           onChange={(value) => setHeadingCount(value ?? 1)}
         />
       </Form.Item>
-      {generateOptions()?.map((option) => (
-        <>
-          {option}. <Input id={`m-${option}`} key={`option-${option}`} />
-        </>
-      ))}
+
+      <HeadingEditor exerciseOrder={exerciseOrder} />
+
       <Divider orientation="left">Answer:</Divider>
       <Exercise
         start={startQuestion}

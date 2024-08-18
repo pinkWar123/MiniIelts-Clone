@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 import Exercise from "./Exercise";
 import TypedInputNumber from "antd/es/input-number";
@@ -7,6 +7,10 @@ import { IExerciseProps } from "./exerciseProps";
 import ExerciseDivider from "../../../components/create-test/ExerciseDivider";
 import { QuestionTypeEnum } from "../../../contants/questionType";
 import { convertQuestionTypeEnumToDescription } from "../../../helpers/convertQuestionType";
+import Editor from "../../../components/Editor/Editor";
+import ReactQuill from "react-quill";
+import useTest from "../../../hooks/useTest";
+import { IExercise } from "../../../types/Model/Exercise";
 
 interface ABCProps extends IExerciseProps {}
 
@@ -16,6 +20,17 @@ const ABC: FunctionComponent<ABCProps> = ({
   exerciseOrder,
 }) => {
   const [numOfOptions, setNumOfQuestions] = useState<number>(0);
+  const quillRef = useRef<ReactQuill | null>(null);
+  const { findExercise, handleUpdateExercise } = useTest();
+  const getEditorHtml = () => {
+    return findExercise(exerciseOrder)?.content ?? "";
+  };
+  const handleChangeEditor = (value: string) => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return;
+    const newExercise: IExercise = { ...exercise, content: value };
+    handleUpdateExercise(newExercise, exerciseOrder);
+  };
   const generateOptions = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -40,6 +55,11 @@ const ABC: FunctionComponent<ABCProps> = ({
           onChange={(value) => setNumOfQuestions(value ?? 0)}
         />
       </Form.Item>
+      <Editor
+        quillRef={quillRef}
+        editorHtml={getEditorHtml()}
+        setEditorHtml={handleChangeEditor}
+      />
       <Exercise
         start={startQuestion}
         end={endQuestion}

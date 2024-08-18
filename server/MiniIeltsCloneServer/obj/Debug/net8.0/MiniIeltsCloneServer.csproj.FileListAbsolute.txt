@@ -153,3 +153,8 @@ D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\Flue
 D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\MediatR.dll
 D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\MediatR.Contracts.dll
 D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\obj\Debug\net8.0\MiniIeltsCloneServer.sourcelink.json
+D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\Azure.Storage.Common.dll
+D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\System.ClientModel.dll
+D:\coding-space\minielts-clone\server\MiniIeltsCloneServer\bin\Debug\net8.0\System.IO.Hashing.dll

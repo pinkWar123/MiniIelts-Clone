@@ -11,10 +11,16 @@ import { convertQuestionTypeEnumToDescription } from "../../helpers/convertQuest
 interface AddExerciseProps {}
 
 const AddExercise: FunctionComponent<AddExerciseProps> = () => {
-  const questionTypeOptions = Object.values(QuestionTypeEnum).map((value) => ({
-    value: value,
-    label: convertQuestionTypeEnumToDescription(value as QuestionTypeEnum),
-  }));
+  const questionTypeOptions = Object.keys(QuestionTypeEnum)
+    .filter((key) => isNaN(Number(key))) // Filters out numeric keys
+    .map((key) => ({
+      value: QuestionTypeEnum[key as keyof typeof QuestionTypeEnum],
+      label: convertQuestionTypeEnumToDescription(
+        QuestionTypeEnum[key as keyof typeof QuestionTypeEnum]
+      ),
+    }));
+
+  console.log(questionTypeOptions);
   const [numOfQuestions, setNumOfQuestions] = useState<number>(0);
   const [questionType, setQuestionType] = useState<QuestionTypeEnum>(
     QuestionTypeEnum.TFNG
@@ -25,7 +31,7 @@ const AddExercise: FunctionComponent<AddExerciseProps> = () => {
     if (numOfQuestions === 0) {
       message.error("Input number of questions");
       return;
-    } else if (!questionType) {
+    } else if (questionType === undefined) {
       message.error("Input type of question");
       return;
     }
@@ -77,7 +83,7 @@ const AddExercise: FunctionComponent<AddExerciseProps> = () => {
             required
             style={{ marginLeft: "80px" }}
           >
-            <Select<QuestionTypeEnum>
+            <Select
               options={questionTypeOptions}
               onChange={(value) => setQuestionType(value)}
               style={{ width: "200px" }}

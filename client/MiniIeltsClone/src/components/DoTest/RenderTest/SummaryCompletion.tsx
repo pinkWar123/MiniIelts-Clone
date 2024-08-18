@@ -13,7 +13,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
   showAnswer,
 }) => {
   const { handleUpdateAnswer } = useAnswers();
-  const convertToInputs = (htmlString) => {
+  const convertToInputs = (htmlString: string) => {
     // Regex để tìm tất cả các trường hợp `strong` có chứa `_____`
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
 
@@ -36,7 +36,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
         ) {
           const count: string = domNode.attribs["data-placeholder"];
           return (
-            <Flex>
+            <>
               <span>
                 <Input
                   key={count + startQuestion}
@@ -54,7 +54,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
                   <Answer answer={questions[parseInt(count)]?.answer} />
                 )}
               </span>
-            </Flex>
+            </>
           );
         }
       },
