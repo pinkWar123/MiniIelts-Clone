@@ -39,11 +39,7 @@ export const useUpload = (initialFiles?: UploadFile[]) => {
     fileList.forEach((file) => {
       formData.append("files", file as FileType);
     });
-    await uploadFiles(formData);
-    return fileList?.map(
-      (file) =>
-        `https://miniieltsbypinkwar.blob.core.windows.net/apiimages/${file.name}`
-    );
+    return await uploadFiles(formData);
   };
   return { handleUpload, onPreview, props, fileList };
 };

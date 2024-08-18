@@ -33,7 +33,7 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
       .reduce((sum, val) => sum + val, 0);
     const fakeValue: CreateTestDto = {
       ...value,
-      picture: images[0],
+      picture: images.data.fileNames[0],
       questionCount: questionCount,
       excercises: test?.exercises,
     };

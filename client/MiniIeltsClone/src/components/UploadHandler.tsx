@@ -16,11 +16,15 @@ const UploadHandler: FunctionComponent<UploadHandlerProps> = ({
     <ImgCrop zoomSlider aspect={100 / 150} quality={0.9} aspectSlider={true}>
       <Upload
         listType="picture-card"
-        maxCount={1}
         {...props}
         onPreview={onPreview}
+        maxCount={1}
       >
-        <button style={{ border: 0, background: "none" }} type="button">
+        <button
+          style={{ border: 0, background: "none" }}
+          type="button"
+          disabled={props.fileList && props.fileList?.length > 0}
+        >
           <PlusOutlined />
           <div style={{ marginTop: 8 }}>Upload</div>
         </button>
