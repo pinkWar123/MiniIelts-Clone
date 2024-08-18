@@ -9,6 +9,7 @@ import ChooseMany from "./ChooseMany";
 import { Typography } from "antd";
 import MatchingInformation from "./MatchingInformation";
 import YNNG from "./YNNG";
+import Labelling from "./Labelling";
 
 interface TestProps {
   exercises: IExercise[];
@@ -17,12 +18,14 @@ interface TestProps {
 
 const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
   const renderExercises = (exercise: IExercise, index: number) => {
-    const { startQuestion, endQuestion, questions, content } = exercise;
+    const { startQuestion, endQuestion, questions, content, description } =
+      exercise;
     const props: TestBase = {
       startQuestion,
       endQuestion,
       questions,
       content,
+      description,
       showAnswer,
     };
     const renderExercise = () => {
@@ -54,6 +57,8 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
               key={`Matching Information-${index}`}
             />
           );
+        case QuestionTypeEnum.Labelling:
+          return <Labelling {...props} key={`Labelling diagram-${index}`} />;
         default:
           return <></>;
       }

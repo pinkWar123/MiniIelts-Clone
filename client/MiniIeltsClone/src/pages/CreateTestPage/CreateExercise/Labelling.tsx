@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
 import { IExerciseProps } from "./exerciseProps";
 import ExerciseDivider from "../../../components/create-test/ExerciseDivider";
 import { convertQuestionTypeEnumToDescription } from "../../../helpers/convertQuestionType";
@@ -9,6 +9,8 @@ import { IQuestion } from "../../../types/Model/Question";
 import UploadHandler from "../../../components/UploadHandler";
 import { useUpload } from "../../../hooks/useUpload";
 import { IExercise } from "../../../types/Model/Exercise";
+import Editor from "../../../components/Editor/Editor";
+import ReactQuill from "react-quill";
 
 interface LabellingProps extends IExerciseProps {}
 // export interface IQuestion {
@@ -24,6 +26,7 @@ const Labelling: FunctionComponent<LabellingProps> = ({
   exerciseOrder,
 }) => {
   const { props, onPreview, handleUpload, fileList } = useUpload();
+  const quillRef = useRef<ReactQuill | null>(null);
   const { handleUpdateQuestion, handleUpdateExercise, findExercise } =
     useTest();
   const onQuestionChange = (index: number, answer: string) => {
@@ -35,6 +38,16 @@ const Labelling: FunctionComponent<LabellingProps> = ({
       content: "",
     };
     handleUpdateQuestion(newQuestion, exerciseOrder, questionOrder);
+  };
+
+  const handleDescriptionChange = (value: string) => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return;
+    const newExercise: IExercise = {
+      ...exercise,
+      description: value,
+    };
+    handleUpdateExercise(newExercise, exerciseOrder);
   };
 
   useEffect(() => {
@@ -60,6 +73,12 @@ const Labelling: FunctionComponent<LabellingProps> = ({
           QuestionTypeEnum.Labelling
         )}
         exerciseOrder={exerciseOrder}
+      />
+
+      <Editor
+        quillRef={quillRef}
+        editorHtml={findExercise(exerciseOrder)?.description ?? ""}
+        setEditorHtml={handleDescriptionChange}
       />
 
       <div style={{ marginBottom: "12px" }}>Diagram:</div>
