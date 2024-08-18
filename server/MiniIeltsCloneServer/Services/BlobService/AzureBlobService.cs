@@ -46,7 +46,7 @@ namespace MiniIeltsCloneServer.Services.BlobService
                 fileNameList.Add(newFileName);
             };
 
-            return fileNameList;
+            return fileNameList.Select(fileName => $"https://miniieltsbypinkwar.blob.core.windows.net/apiimages/{fileName}").ToList();
         }
 
         public async Task<List<BlobItem>> GetUploadedBlobs()
