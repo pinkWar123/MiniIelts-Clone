@@ -4,6 +4,7 @@ import SentenceCompletionQuestion from "../Question/SentenceCompletionQuestion";
 import ExerciseDivider from "../../../../components/create-test/ExerciseDivider";
 import { QuestionTypeEnum } from "../../../../contants/questionType";
 import { convertQuestionTypeEnumToDescription } from "../../../../helpers/convertQuestionType";
+import CancelButton from "../../../../components/create-test/CancelButton";
 
 interface SentenceCompletionProps extends IExerciseProps {}
 
@@ -34,6 +35,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
         exerciseOrder={exerciseOrder}
       />
       {renderQuestions()}
+      <CancelButton exerciseOrder={exerciseOrder} />
     </React.Fragment>
   );
 };

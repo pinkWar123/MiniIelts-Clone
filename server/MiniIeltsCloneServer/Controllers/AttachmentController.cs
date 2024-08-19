@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MiniIeltsCloneServer.Models.Dtos.Upload;
 using MiniIeltsCloneServer.Services.BlobService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Controllers
 {
@@ -22,9 +24,12 @@ namespace MiniIeltsCloneServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> UploadBlobs(List<IFormFile> files)
         {
-            Console.WriteLine("Hello");
             var response = await _service.UploadFiles(files);
-            return Ok(response);
+            var uploadResultDto = new UploadResultDto
+            {
+                FileNames = response
+            };
+            return Ok(new Response<UploadResultDto>(uploadResultDto));
         }
 
         [HttpGet]
