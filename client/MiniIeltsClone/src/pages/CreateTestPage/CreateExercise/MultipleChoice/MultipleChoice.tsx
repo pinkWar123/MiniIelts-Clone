@@ -1,10 +1,14 @@
 import { FunctionComponent, useState } from "react";
 import { IExerciseProps } from "../exerciseProps";
 import { Select } from "antd";
-import { MultipleChoiceEnum } from "../../../../contants/questionType";
+import {
+  MultipleChoiceEnum,
+  QuestionTypeDescriptionEnum,
+} from "../../../../contants/questionType";
 import ChooseOne from "./ChooseOne";
 import ChooseMany from "./ChooseMany";
 import CancelButton from "../../../../components/create-test/CancelButton";
+import ExerciseDivider from "../../../../components/create-test/ExerciseDivider";
 
 interface MultipleChoiceProps extends IExerciseProps {}
 
@@ -18,6 +22,10 @@ const MultipleChoice: FunctionComponent<MultipleChoiceProps> = ({
   );
   return (
     <>
+      <ExerciseDivider
+        exerciseName={QuestionTypeDescriptionEnum.MultipleChoice}
+        exerciseOrder={exerciseOrder}
+      />
       <Select
         options={[
           { value: MultipleChoiceEnum.ChooseOne, label: "Choose one" },

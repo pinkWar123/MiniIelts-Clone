@@ -20,9 +20,12 @@ const ChooseOneQuestion: FunctionComponent<ChooseOneQuestionProps> = ({
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return Array.from({ length: choiceCount }, (_, value) => {
       return (
-        <div key={`chooseone-${questionOrder}-${value}`}>
+        <div
+          key={`chooseone-${questionOrder}-${value}`}
+          style={{ margin: "12px 12px" }}
+        >
           <Radio value={letters[value]}>
-            <Flex gap={"small"}>
+            <Flex gap={"small"} style={{ marginTop: "8px" }}>
               {letters[value]}.{" "}
               <Input
                 id={`chooseone-${questionOrder}-${value}`}

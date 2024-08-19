@@ -13,7 +13,7 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
   showAnswer,
 }) => {
   const options = generateABCOptions(endQuestion - startQuestion + 1);
-  const {  handleUpdateAnswer } = useAnswers();
+  const { handleUpdateAnswer } = useAnswers();
   const [checkedIndex, setCheckedIndex] = useState<number[]>(
     Array.from({ length: endQuestion - startQuestion + 1 }, () => -1)
   );
@@ -41,7 +41,6 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
     }
   };
 
-  console.log(checkedIndex);
   return (
     <>
       <div>
