@@ -10,6 +10,7 @@ import { Typography } from "antd";
 import MatchingInformation from "./MatchingInformation";
 import YNNG from "./YNNG";
 import Labelling from "./Labelling";
+import ChooseOne from "./ChooseOne";
 
 interface TestProps {
   exercises: IExercise[];
@@ -43,6 +44,11 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
         case QuestionTypeEnum.YNNG:
           return <YNNG {...props} key={`YNNG-${index}`} />;
         case QuestionTypeEnum.MultipleChoice:
+          if (
+            !exercise.chooseManyChoices ||
+            exercise.chooseManyChoices.length === 0
+          )
+            return <ChooseOne {...props} key={`ChooseOne-${index}`} />;
           return (
             <ChooseMany
               {...props}
