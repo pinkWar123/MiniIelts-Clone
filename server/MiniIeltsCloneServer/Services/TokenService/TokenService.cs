@@ -47,14 +47,14 @@ namespace MiniIeltsCloneServer.Services.TokenService
             }.Union(userClaims).Union(roleClaims);
             var userRoles = await _userManager.GetRolesAsync(appUser);
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.SigningKey));
-            Console.WriteLine($"Key: {_jwt.SigningKey}");
+            Console.WriteLine($"Duration In Minute: {_jwt.DurationInMinutes}");
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

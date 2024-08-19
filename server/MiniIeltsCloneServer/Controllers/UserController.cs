@@ -65,7 +65,6 @@ namespace MiniIeltsCloneServer.Controllers
         [HttpGet("me")]
         public IActionResult GetCurrentUser()
         {
-            // return Ok(this.User.Claims.FirstOrDefault(c => c.Type == "jti")?.Value); 
             return Ok(_userService.GetCurrentUser());
         }
     }

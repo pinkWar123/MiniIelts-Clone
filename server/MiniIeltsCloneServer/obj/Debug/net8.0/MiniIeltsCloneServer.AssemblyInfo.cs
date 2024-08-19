@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniIeltsCloneServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fcc86298fb5728953f06ffeb5d7176b3e02bf73")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+050cbce6d4aaf932258b117b83ab6ab88f73b928")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniIeltsCloneServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniIeltsCloneServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
