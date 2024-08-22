@@ -21,7 +21,7 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
       {!user && (
         <Button
           icon={<LoginOutlined />}
-          onClick={() => navigate("./auth/register")}
+          onClick={() => navigate("/auth/login")}
         >
           Log in
         </Button>

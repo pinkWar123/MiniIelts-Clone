@@ -13,8 +13,12 @@ export const register = async (registerDto: RegisterDto) => {
   return await axiosInstance.post("/User/register", registerDto);
 };
 
-export const getUserByToken = async (
-  token: string
-): Promise<AxiosResponse<ILoginResponse>> => {
-  return await axiosInstance.get(`/User/${token}`);
+export const getUserByToken = async (): Promise<
+  AxiosResponse<ILoginResponse>
+> => {
+  return await axiosInstance.get(`/User/me`);
+};
+
+export const refreshTokens = async () => {
+  return (await axiosInstance.post<ILoginResponse>("/User/refresh-token")).data;
 };

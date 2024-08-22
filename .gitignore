@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+server/MiniIeltsCloneServer/appsettings.json
+server/MiniIeltsCloneServer/appsettings.json

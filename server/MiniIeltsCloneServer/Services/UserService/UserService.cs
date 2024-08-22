@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Authentication;
 using MiniIeltsCloneServer.Services.TokenService;
@@ -21,15 +22,18 @@ namespace MiniIeltsCloneServer.Services.UserService
 {
     public class UserService : IUserService
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly ITokenService _tokenService;
         public UserService(
+            ApplicationDbContext context,
         UserManager<AppUser> userManager,
         ITokenService tokenService,
         IHttpContextAccessor httpContextAccessor)
         {
+            _context = context;
             _userManager = userManager;
             _tokenService = tokenService;
             _httpContextAccessor = httpContextAccessor;
@@ -73,8 +77,23 @@ namespace MiniIeltsCloneServer.Services.UserService
         {
             var currentUserName = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserName == null) return null;
-            return await _userManager.FindByNameAsync(currentUserName);
+            var user = await _userManager.FindByNameAsync(currentUserName);
+           return user; 
+        }
 
+        public async Task<UserViewDto?> GetUserViewDto()
+        {
+            var user = await GetCurrentUser();
+            if(user == null) return null;
+            var roles = await _userManager.GetRolesAsync(user);
+            return new UserViewDto
+            {
+                Message = "Get current user",
+                IsAuthenticated = true,
+                Username = user.UserName,
+                Email = user.Email,
+                Roles = roles as List<string>
+            };
         }
 
         public async Task<UserViewDto> Login(LoginDto loginDto)
@@ -84,15 +103,34 @@ namespace MiniIeltsCloneServer.Services.UserService
             {
                 var token = await _tokenService.GenerateJwtToken(userExisted);
                 var roles = await _userManager.GetRolesAsync(userExisted);
-                return new UserViewDto
+
+                var userViewDto = new UserViewDto();
+
+
+                if(userExisted.RefreshTokens.Any(a => a.IsActive))
                 {
-                    Message = "Login successfully",
-                    IsAuthenticated = true,
-                    Username = userExisted.UserName,
-                    Email = userExisted.Email,
-                    Token = token,
-                    Roles = roles as List<string>
-                };
+                    var activeRefreshToken = userExisted.RefreshTokens.Where(a=> a.IsActive == true).FirstOrDefault();
+                    userViewDto.RefreshToken = activeRefreshToken.Token;
+                    userViewDto.RefreshTokenExpiration = activeRefreshToken.Expires;
+                }
+                else
+                {
+                    var newRefreshToken = _tokenService.GenerateRefreshToken();
+                    userViewDto.RefreshToken = newRefreshToken.Token;
+                    userViewDto.RefreshTokenExpiration = newRefreshToken.Expires;
+                    userExisted.RefreshTokens.Add(newRefreshToken);
+                    _context.Update(userExisted);
+                    await _context.SaveChangesAsync();
+                }
+
+                userViewDto.Message = "Login successfully";
+                userViewDto.IsAuthenticated = true;
+                userViewDto.Username = userExisted.UserName;
+                userViewDto.Email = userExisted.Email;
+                userViewDto.Token = token;
+                userViewDto.Roles = roles as List<string>;
+
+                return userViewDto;
             }
             return new UserViewDto
             {
@@ -132,6 +170,52 @@ namespace MiniIeltsCloneServer.Services.UserService
             {
                 Message = "User created failed",
                 IsAuthenticated = false
+            };
+        }
+
+        public async Task<UserViewDto> RefreshTokens(string refreshToken)
+        {
+            var userViewDto = new UserViewDto();
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(r => r.Token == refreshToken));
+
+            if(user == null)
+            {
+                return new UserViewDto
+                {
+                    IsAuthenticated = false,
+                    Message = "Refresh token does not match any users"
+                };
+            }
+
+            var currentRefreshToken = user.RefreshTokens.Single(r => r.Token == refreshToken);
+
+            if(!currentRefreshToken.IsActive)
+            {
+                return new UserViewDto
+                {
+                    IsAuthenticated = false,
+                    Message = "Refresh token is expired"
+                };
+            }
+
+            currentRefreshToken.Revoked = DateTime.UtcNow;
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+            user.RefreshTokens.Add(newRefreshToken);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            var token = await _tokenService.GenerateJwtToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new UserViewDto
+            {
+                IsAuthenticated = true,
+                Message = "Refresh tokens successfully",
+                Token = token,
+                Username = user.UserName,
+                Email = user.Email,
+                Roles = roles as List<string>,
+                RefreshToken = newRefreshToken.Token,
+                RefreshTokenExpiration = newRefreshToken.Expires
             };
         }
     }

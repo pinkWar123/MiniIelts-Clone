@@ -8,6 +8,6 @@ namespace MiniIeltsCloneServer.Models
 {
     public class AppUser : IdentityUser
     {
-
+        public List<RefreshToken> RefreshTokens { get; set; }
     }
 }

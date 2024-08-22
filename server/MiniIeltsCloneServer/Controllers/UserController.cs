@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Authentication;
+using MiniIeltsCloneServer.Services.TokenService;
 using MiniIeltsCloneServer.Services.UserService;
 using MiniIeltsCloneServer.Validators.Authentication;
 
@@ -18,9 +19,11 @@ namespace MiniIeltsCloneServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly ITokenService _tokenService;
+        public UserController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpGet("{token}")]
@@ -43,6 +46,7 @@ namespace MiniIeltsCloneServer.Controllers
                 return BadRequest(Results.ValidationProblem(validationResult.ToDictionary()));
             }
             var result = await _userService.Login(loginDto);
+            SetRefreshTokenInCookie(result.RefreshToken);
             if (result.IsAuthenticated) return Ok(result);
             return BadRequest(result);
         }
@@ -62,11 +66,36 @@ namespace MiniIeltsCloneServer.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("me")]
-        public IActionResult GetCurrentUser()
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken()
         {
-            // return Ok(this.User.Claims.FirstOrDefault(c => c.Type == "jti")?.Value); 
-            return Ok(_userService.GetCurrentUser());
+            var refreshToken = Request.Cookies["refreshToken"];
+            var response = await _userService.RefreshTokens(refreshToken);
+            if(!string.IsNullOrEmpty(response.RefreshToken))
+            {
+                SetRefreshTokenInCookie(response.RefreshToken);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var user = await _userService.GetUserViewDto();
+            return Ok(user);
+        }
+
+        private void SetRefreshTokenInCookie(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(10),
+            };
+
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }

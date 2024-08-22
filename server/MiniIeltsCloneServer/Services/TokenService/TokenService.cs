@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -18,11 +19,13 @@ namespace MiniIeltsCloneServer.Services.TokenService
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
-        public TokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jWT)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public TokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jWT, IHttpContextAccessor httpContextAccessor)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _jwt = jWT.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> GenerateJwtToken(AppUser appUser)
         {
@@ -47,18 +50,36 @@ namespace MiniIeltsCloneServer.Services.TokenService
             }.Union(userClaims).Union(roleClaims);
             var userRoles = await _userManager.GetRolesAsync(appUser);
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.SigningKey));
-            Console.WriteLine($"Key: {_jwt.SigningKey}");
+            Console.WriteLine($"Duration In Minute: {_jwt.DurationInMinutes}");
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public RefreshToken GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using(var generator = RandomNumberGenerator.Create())
+            {
+                generator.GetBytes(randomNumber);
+                return new RefreshToken
+                {
+                    Token = Convert.ToBase64String(randomNumber),
+                    Expires = DateTime.UtcNow.AddDays(10),
+                    Created = DateTime.UtcNow
+                };
+            }
+        }
+
+        
+
         public string GetUserIdFromToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
