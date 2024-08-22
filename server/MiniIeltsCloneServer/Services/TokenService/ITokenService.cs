@@ -8,7 +8,8 @@ namespace MiniIeltsCloneServer.Services.TokenService
 {
     public interface ITokenService
     {
-        string GetUserIdFromToken(string token);
-        Task<string> GenerateJwtToken(AppUser appUser);
+        public string GetUserIdFromToken(string token);
+        public Task<string> GenerateJwtToken(AppUser appUser);
+        RefreshToken GenerateRefreshToken();
     }
 }
