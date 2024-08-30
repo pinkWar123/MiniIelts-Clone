@@ -4,12 +4,12 @@ import parse from "html-react-parser";
 import SelectQuestion from "../Question/SelectQuestion";
 import { generateABCOptions } from "../../../helpers/generateQuestionOptions";
 interface MatchingInformationProps extends TestBase {}
-
+import SelectAnswer from "../Answer/SelectAnswer";
 const MatchingInformation: FunctionComponent<MatchingInformationProps> = ({
   startQuestion,
-  endQuestion,
   content,
   questions,
+  showAnswer,
 }) => {
   console.log(questions);
   const extractABC = (htmlString: string) => {
@@ -28,12 +28,18 @@ const MatchingInformation: FunctionComponent<MatchingInformationProps> = ({
       {parse(content ?? "")}
       <div style={{ marginTop: "20px" }}>
         {questions.map((question, index) => (
-          <SelectQuestion
-            key={`matching-heading-${index + startQuestion}`}
-            order={startQuestion + index}
-            options={generateABCOptions(extractABC(content))}
-            content={question.content ?? ""}
-          />
+          <>
+            <SelectQuestion
+              key={`matching-heading-${index + startQuestion}`}
+              order={startQuestion + index}
+              options={generateABCOptions(extractABC(content ?? ""))}
+              content={question.content ?? ""}
+              showAnswer={showAnswer}
+            />
+            {showAnswer && (
+              <SelectAnswer order={question.order} answer={question.answer} />
+            )}
+          </>
         ))}
       </div>
     </>

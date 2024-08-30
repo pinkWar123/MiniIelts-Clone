@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { TestBase } from "./base";
 import parse from "html-react-parser";
-import { Flex, Input } from "antd";
+import { Input } from "antd";
 import useAnswers from "../../../hooks/useAnswers";
 import Answer from "../../Answer/Answer";
 interface SummaryCompletionProps extends TestBase {}
@@ -39,6 +39,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
             <>
               <span>
                 <Input
+                  disabled={showAnswer}
                   key={count + startQuestion}
                   style={{ width: "100px" }}
                   onChange={(e) => {

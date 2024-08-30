@@ -5,7 +5,7 @@ import { generateTFNGDescription } from "../../../helpers/generateDescription";
 import SelectQuestion from "../Question/SelectQuestion";
 import { generateTFNGOptions } from "../../../helpers/generateQuestionOptions";
 import { formatText } from "../../../helpers/text";
-import Answer from "../../Answer/Answer";
+import SelectAnswer from "../Answer/SelectAnswer";
 
 interface TFNGProps extends TestBase {}
 
@@ -23,11 +23,15 @@ const TFNG: FunctionComponent<TFNGProps> = ({
       {questions.map((question) => (
         <div key={question.order}>
           <SelectQuestion
+            showAnswer={showAnswer}
             order={question.order}
             content={question.content ?? ""}
             options={generateTFNGOptions()}
           />
-          {showAnswer && <Answer answer={question.answer} />}
+
+          {showAnswer && (
+            <SelectAnswer order={question.order} answer={question.answer} />
+          )}
         </div>
       ))}
     </>
