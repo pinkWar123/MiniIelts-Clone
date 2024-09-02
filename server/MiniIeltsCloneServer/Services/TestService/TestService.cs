@@ -11,8 +11,12 @@ using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Dtos.Answer;
+using MiniIeltsCloneServer.Models.Dtos.Result;
 using MiniIeltsCloneServer.Models.Dtos.Test;
+using MiniIeltsCloneServer.Services.AnswerService;
 using MiniIeltsCloneServer.Services.ExerciseService;
+using MiniIeltsCloneServer.Services.ResultService;
 using MiniIeltsCloneServer.Services.UserService;
 
 namespace MiniIeltsCloneServer.Services.TestService
@@ -20,7 +24,9 @@ namespace MiniIeltsCloneServer.Services.TestService
     public class TestService : GenericService, ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IResultService _resultService;
         private readonly IExerciseService _exerciseService;
+        private readonly IAnswerService _answerService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -29,6 +35,8 @@ namespace MiniIeltsCloneServer.Services.TestService
             IMapper mapper,
             IUnitOfWork unitOfWork,
             IExerciseService exerciseService,
+            IResultService resultService,
+            IAnswerService answerService,
             IUserService userService,
             UserManager<AppUser> userManager,
             IHttpContextAccessor httpContextAccessor
@@ -36,6 +44,8 @@ namespace MiniIeltsCloneServer.Services.TestService
         {
             _unitOfWork = unitOfWork;
             _exerciseService = exerciseService;
+            _resultService = resultService;
+            _answerService = answerService;
             _userService = userService;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
@@ -51,6 +61,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                     var user = await _userService.GetCurrentUser();
                     test.AppUserId = user?.Id;
                     await _unitOfWork.TestRepository.AddAsync(test);
+                    await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
                 }
                 catch (System.Exception)
@@ -134,6 +145,73 @@ namespace MiniIeltsCloneServer.Services.TestService
             testResultDto.Marks = GetTestMark(correct, test.QuestionCount);
 
             return testResultDto;
+        }
+
+        public async Task<TestResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto)
+        {
+            var result = await GetTestResult(testId, testSubmitDto);
+            var userName = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if(user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            Console.WriteLine(user.Id);
+            using (var transaction = await _unitOfWork.BeginTransactionAsync())
+            {
+                try
+                {       
+                    var testResult = new Result
+                    {
+                        TestId = testId,
+                        Score = result?.Marks ?? 0,
+                        CreatedOn = DateTime.UtcNow,
+                        CreatedBy = userName,
+                        AppUserId = user.Id
+                    };
+                    await _unitOfWork.ResultRepository.AddAsync(testResult);
+                    await _unitOfWork.SaveChangesAsync();
+                    var answers = new List<Answer>();
+                    foreach(var questionSubmitDto in testSubmitDto.QuestionSubmitDtos)
+                    {
+                        var createAnswerDto = new CreateAnswerDto
+                        {
+                            IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
+                            Value = questionSubmitDto.Value,
+                            ResultId = testResult.Id
+                        };
+                        await _answerService.CreateNewAnswer(createAnswerDto);
+                        var answer = new Answer
+                        {
+                            IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
+                            Value = questionSubmitDto.Value,
+                            ResultId = testResult.Id,
+                            CreatedOn = DateTime.UtcNow,
+                            CreatedBy = userName,
+                            AppUserId = user.Id
+                        };
+                        answers.Add(_mapper.Map<Answer>(answer));
+                    }
+
+                    testResult.Answers = answers;
+
+                    await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.CommitAsync();
+                }
+                catch (System.Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            return result;
         }
     }
 }

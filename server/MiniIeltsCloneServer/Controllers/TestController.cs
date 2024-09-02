@@ -74,6 +74,19 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(new Response<TestViewDto>(test));
         }
 
+        [HttpPost("{id}/submit")]
+        public async Task<IActionResult> SubmitTest([FromRoute] int id, [FromBody] TestSubmitDto testSubmitDto)
+        {
+            var result = await _testService.SubmitTest(id, testSubmitDto);
+            var validator = new TestSubmitValidator();
+            var validatorResult = validator.ValidateAsync(testSubmitDto).Result;
+            if(!validatorResult.IsValid)
+            {
+                throw new ValidationException(validatorResult.ToDictionary().ToString());
+            }
+            return Ok(new Response<TestResultDto>(result));
+        }
+
         [HttpPost("{id}/result")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTestResult([FromRoute] int id, [FromBody] TestSubmitDto testSubmitDto)

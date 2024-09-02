@@ -15,6 +15,8 @@ namespace MiniIeltsCloneServer.Data
         IGenericRepository<Question> QuestionRepository { get; }
         IGenericRepository<ExerciseChoice> ExerciseChoiceRepository { get; }
         IGenericRepository<QuestionChoice> QuestionChoiceRepository { get; }
+        IGenericRepository<Result> ResultRepository { get; }
+        IGenericRepository<Answer> AnswerRepository { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();

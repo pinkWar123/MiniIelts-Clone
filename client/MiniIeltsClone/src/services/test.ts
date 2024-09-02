@@ -27,3 +27,12 @@ export const getTestResult = async (
 ): Promise<AxiosResponse<IResponse<TestResultDto>>> => {
   return await axiosInstance.post(`Test/${id}/result`, testSubmitDto);
 };
+
+export const submitTest = async (id: number, testSubmitDto: TestSubmitDto) => {
+  return (
+    await axiosInstance.post<IResponse<TestResultDto>>(
+      `Test/${id}/submit`,
+      testSubmitDto
+    )
+  ).data;
+};

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiniIeltsCloneServer.Models
+namespace MiniIeltsCloneServer.Models.Dtos.Result
 {
-    public class Result : Base
+    public class ResultViewDto : Base
     {
         public int TestId { get; set; }
-        public Test? Test { get; set; }
-        public List<Answer> Answers { get; set; } = new List<Answer>();
+        public List<Models.Answer> Answers { get; set; } = new List<Models.Answer>();
         public double Score { get; set; }
-
     }
 }

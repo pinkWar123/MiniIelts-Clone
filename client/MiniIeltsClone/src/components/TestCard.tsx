@@ -25,7 +25,7 @@ const TestCard: FunctionComponent<TestCardProps> = ({
   };
   return (
     <Card
-      style={{ marginTop: "10px" }}
+      style={{ marginTop: "10px", height: "420px" }}
       hoverable
       cover={
         <img
@@ -37,12 +37,14 @@ const TestCard: FunctionComponent<TestCardProps> = ({
               ? "https://miniieltsbypinkwar.blob.core.windows.net/apiimages/52271514743_a574519057_o.png"
               : picture
           }
-          style={{ height: "150px" }}
+          style={{ height: "200px", objectFit: "cover" }}
         />
       }
     >
-      <div style={{ marginTop: "-20px" }}>
-        <Typography.Link>{title}</Typography.Link>
+      <div style={{ marginTop: "-20px", height: "50px" }}>
+        <Typography.Paragraph ellipsis={{ rows: 2 }}>
+          {title}
+        </Typography.Paragraph>
       </div>
       <Tag color="green">{CategoryEnum[category]}</Tag>
       <Flex
@@ -66,6 +68,7 @@ const TestCard: FunctionComponent<TestCardProps> = ({
       <Button
         icon={<KeyOutlined />}
         style={{ width: "100%", marginTop: "10px", backgroundColor: "#f0ad4e" }}
+        onClick={() => navigate(`/test/${id}/view-solution`)}
       >
         View solution
       </Button>

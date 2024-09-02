@@ -1,6 +1,9 @@
 import React, { createContext, useState, ReactNode } from "react";
 import { IDoTestAnswer } from "../types/Model/Answer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { submitTest } from "../services/test";
+import { TestSubmitDto } from "../types/Request/Test";
+import { message } from "antd";
 
 export interface AnswersContextProps {
   answers: IDoTestAnswer[] | null;
@@ -18,6 +21,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [answers, setAnswers] = useState<IDoTestAnswer[] | null>(null);
+  const { id } = useParams();
   const navigate = useNavigate();
   const handleUpdateAnswer = (order: number, newValue: string) => {
     setAnswers((prev) => {
@@ -33,10 +37,24 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
   const handleSubmit = async () => {
-    let url = "./result?";
-    answers?.forEach((answer) => (url += `a=${answer.value}&`));
-    url = url.slice(0, -1);
-    navigate(url);
+    if (!id) return;
+    const testSubmitDto: TestSubmitDto = {
+      questionSubmitDtos: [],
+    };
+    let order = 1;
+    answers?.forEach((answer) =>
+      testSubmitDto.questionSubmitDtos.push({
+        order: order++,
+        value: answer.value,
+      })
+    );
+    const res = await submitTest(parseInt(id), testSubmitDto);
+    if (res.data) {
+      let url = "./result?";
+      answers?.forEach((answer) => (url += `a=${answer.value}&`));
+      url = url.slice(0, -1);
+      navigate(url);
+    } else message.error({ content: "Submit test failed" });
   };
 
   const getAnswerByOrder = (order: number) => {
