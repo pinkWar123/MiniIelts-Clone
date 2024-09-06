@@ -2,8 +2,6 @@ import { FunctionComponent, useEffect, useState } from "react";
 import MainHeader from "../../components/Header/Header";
 import { useLocation, useParams } from "react-router-dom";
 import { Flex, Typography } from "antd";
-import { getTestResult } from "../../services/test";
-import { TestSubmitDto } from "../../types/Request/Test";
 import NotFound from "../NotFound/NotFound";
 import { TestResultDto } from "../../types/Responses/Test";
 import Performance from "./Performance/Performance";
@@ -12,6 +10,8 @@ import styles from "./TestResultPage.module.scss";
 import AnswerTable from "./AnswerTable/AnswerTable";
 import ExamReview from "./ExamReview/ExamReview";
 import useAnswers from "../../hooks/useAnswers";
+import { callGetResultById } from "../../services/result";
+import { IDoTestAnswer } from "../../types/Model/Answer";
 interface TestResultPageProps {}
 
 const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
@@ -20,26 +20,22 @@ const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
   const [testResult, setTestResult] = useState<TestResultDto>();
   const { setAnswers } = useAnswers();
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
     const fetchTestResult = async () => {
       if (!id) return;
-      const testSubmitDto: TestSubmitDto = {
-        questionSubmitDtos: [],
-      };
 
-      const answers = query.getAll("a");
-      let order = 1;
-      answers.forEach((answer) =>
-        testSubmitDto.questionSubmitDtos.push({ order: order++, value: answer })
-      );
+      const res = await callGetResultById(parseInt(id));
 
-      setAnswers(testSubmitDto.questionSubmitDtos);
-
-      const res = await getTestResult(parseInt(id), testSubmitDto);
-
-      if (res.status === 200) {
-        console.log(res.data.data);
-        setTestResult(res.data.data);
+      if (res.succeeded) {
+        const answers = res.data.questionResults.map(
+          (answer) =>
+            ({
+              order: answer.order,
+              value: answer.userAnswer,
+              questionType: 0,
+            } as IDoTestAnswer)
+        );
+        setAnswers(answers);
+        setTestResult(res.data);
       }
     };
 
@@ -72,7 +68,7 @@ const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
           </div>
         </Flex>
       </Flex>
-      <ExamReview id={id} />
+      <ExamReview id={testResult?.testId?.toString() ?? ""} />
     </>
   );
 };

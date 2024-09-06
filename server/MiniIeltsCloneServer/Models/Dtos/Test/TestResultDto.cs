@@ -8,6 +8,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.Test
 {
     public class TestResultDto
     {
+        public int TestId { get; set; }
 
         public required string Title { get; set; }
         public double Marks { get; set; }

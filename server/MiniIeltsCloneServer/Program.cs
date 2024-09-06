@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MiniIeltsCloneServer.Data;
+using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Data.Seeding;
 using MiniIeltsCloneServer.Exceptions;
@@ -15,6 +16,7 @@ using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.AnswerService;
 using MiniIeltsCloneServer.Services.BlobService;
+using MiniIeltsCloneServer.Services.DashboardService;
 using MiniIeltsCloneServer.Services.ExerciseChoiceService;
 using MiniIeltsCloneServer.Services.ExerciseService;
 using MiniIeltsCloneServer.Services.QuestionChoiceService;
@@ -123,6 +125,7 @@ builder.Services.AddSingleton<IUriService>(o =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITestRepository, TestRepository>();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -136,6 +139,7 @@ builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTestValidator>();
 builder.Services.AddSingleton<AzureBlobService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 // builder.Services.AddProblemDetails();
 
 

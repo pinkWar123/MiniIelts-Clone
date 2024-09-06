@@ -1,4 +1,5 @@
 import { CategoryEnum } from "../../contants/categories";
+import { QuestionTypeEnum } from "../../contants/questionType";
 import { CreateExerciseDto } from "./Exercise";
 
 export interface CreateTestDto {
@@ -13,6 +14,7 @@ export interface CreateTestDto {
 export interface QuestionSubmitDto {
   order: number;
   value: string;
+  questionType: QuestionTypeEnum;
 }
 
 export interface TestSubmitDto {

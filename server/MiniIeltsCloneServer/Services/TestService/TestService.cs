@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Data;
-using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Answer;
-using MiniIeltsCloneServer.Models.Dtos.Result;
 using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Services.AnswerService;
-using MiniIeltsCloneServer.Services.ExerciseService;
-using MiniIeltsCloneServer.Services.ResultService;
 using MiniIeltsCloneServer.Services.UserService;
 
 namespace MiniIeltsCloneServer.Services.TestService
@@ -24,8 +15,6 @@ namespace MiniIeltsCloneServer.Services.TestService
     public class TestService : GenericService, ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IResultService _resultService;
-        private readonly IExerciseService _exerciseService;
         private readonly IAnswerService _answerService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
@@ -34,8 +23,6 @@ namespace MiniIeltsCloneServer.Services.TestService
         public TestService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            IExerciseService exerciseService,
-            IResultService resultService,
             IAnswerService answerService,
             IUserService userService,
             UserManager<AppUser> userManager,
@@ -43,8 +30,6 @@ namespace MiniIeltsCloneServer.Services.TestService
             ) : base(mapper)
         {
             _unitOfWork = unitOfWork;
-            _exerciseService = exerciseService;
-            _resultService = resultService;
             _answerService = answerService;
             _userService = userService;
             _userManager = userManager;
@@ -163,10 +148,14 @@ namespace MiniIeltsCloneServer.Services.TestService
             }
 
             Console.WriteLine(user.Id);
+            Console.WriteLine("Before loop--------------------------------------");
+
             using (var transaction = await _unitOfWork.BeginTransactionAsync())
             {
                 try
-                {       
+                {
+                    Console.WriteLine("Inside loop--------------------------------------");
+
                     var testResult = new Result
                     {
                         TestId = testId,
@@ -184,28 +173,37 @@ namespace MiniIeltsCloneServer.Services.TestService
                         {
                             IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
                             Value = questionSubmitDto.Value,
-                            ResultId = testResult.Id
-                        };
-                        await _answerService.CreateNewAnswer(createAnswerDto);
-                        var answer = new Answer
-                        {
-                            IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
-                            Value = questionSubmitDto.Value,
                             ResultId = testResult.Id,
+                            QuestionType = questionSubmitDto.QuestionType,
                             CreatedOn = DateTime.UtcNow,
                             CreatedBy = userName,
                             AppUserId = user.Id
+
                         };
-                        answers.Add(_mapper.Map<Answer>(answer));
+                        await _answerService.CreateNewAnswer(createAnswerDto);
+                        // var answer = new Answer
+                        // {
+                        //     IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
+                        //     Value = questionSubmitDto.Value,
+                        //     ResultId = testResult.Id,
+                        //     CreatedOn = DateTime.UtcNow,
+                        //     CreatedBy = userName,
+                        //     AppUserId = user.Id,
+                        //     QuestionType = questionSubmitDto.QuestionType
+                        // };
+                        // answers.Add(_mapper.Map<Answer>(answer));
                     }
 
-                    testResult.Answers = answers;
+                    // testResult.Answers = answers;
 
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
+                    Console.WriteLine("End loop--------------------------------------");
+
                 }
                 catch (System.Exception)
                 {
+                    Console.WriteLine("Lỗi nè--------------------------------------");
                     await transaction.RollbackAsync();
                     throw;
                 }

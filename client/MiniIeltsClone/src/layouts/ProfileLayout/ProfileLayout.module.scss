@@ -1,0 +1,28 @@
+.container {
+  width: 80%;
+  margin-top: 50px;
+
+  .first-col {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 0px !important;
+    height: 100px !important;
+  }
+}
+
+.nav-item-container {
+  //   width: 100%;
+  //   margin-left: 20px;
+  padding: 10px 0;
+  .icon {
+    margin-left: 20px;
+  }
+
+  .title {
+    margin-left: 20px;
+  }
+  &.active {
+    background-color: #e8f2fc;
+    color: #2e4662;
+    font-weight: 700;
+  }
+}

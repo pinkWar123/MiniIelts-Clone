@@ -1,7 +1,6 @@
 import { QuestionTypeEnum } from "../../contants/questionType";
 
-export interface IDoTestAnswer {
-  order: number;
-  value: string;
+export interface QuestionStatistics {
   questionType: QuestionTypeEnum;
+  accuracy: number;
 }

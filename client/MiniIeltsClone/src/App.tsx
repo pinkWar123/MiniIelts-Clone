@@ -16,6 +16,8 @@ import TestResultPage from "./pages/TestResultPage/TestResultPage";
 import { App as AntdApp } from "antd";
 import axiosInstance from "./services/axiosConfig";
 import ViewSolutionPage from "./pages/TestResultPage/ViewSolutionPage";
+import ProfileLayout from "./layouts/ProfileLayout/ProfileLayout";
+import Dashboard from "./pages/ProfilePage/Dashboard/Dashboard";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -122,6 +124,17 @@ function App() {
               </AnswersProvider>
             }
           />
+          <Route
+            path="result/:id"
+            element={
+              <AnswersProvider>
+                <TestResultPage />
+              </AnswersProvider>
+            }
+          />
+          <Route path="profile" element={<ProfileLayout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
         </Routes>
       </>
     </>

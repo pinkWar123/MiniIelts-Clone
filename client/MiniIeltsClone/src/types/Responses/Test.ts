@@ -6,6 +6,7 @@ export interface QuestionResultDto {
 }
 
 export interface TestResultDto {
+  testId: number;
   questionCount: number;
   title: string;
   marks: number;

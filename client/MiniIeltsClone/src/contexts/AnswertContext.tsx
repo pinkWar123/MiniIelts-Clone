@@ -42,12 +42,15 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       questionSubmitDtos: [],
     };
     let order = 1;
+    console.log(answers);
     answers?.forEach((answer) =>
       testSubmitDto.questionSubmitDtos.push({
         order: order++,
         value: answer.value,
+        questionType: answer.questionType,
       })
     );
+    console.log(testSubmitDto);
     const res = await submitTest(parseInt(id), testSubmitDto);
     if (res.data) {
       let url = "./result?";
