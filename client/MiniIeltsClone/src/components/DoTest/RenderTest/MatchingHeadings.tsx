@@ -3,7 +3,7 @@ import { TestBase } from "./base";
 import parse from "html-react-parser";
 import SelectQuestion from "../Question/SelectQuestion";
 import { generateMatchingHeadingsOptions } from "../../../helpers/generateQuestionOptions";
-
+import SelectAnswer from "../Answer/SelectAnswer";
 interface MatchingHeadingProps extends TestBase {}
 const extractRomanNumerals = (htmlString: string) => {
   // Sử dụng DOMParser để phân tích cú pháp HTML
@@ -29,9 +29,9 @@ const extractRomanNumerals = (htmlString: string) => {
 };
 const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
   startQuestion,
-  endQuestion,
   content,
   questions,
+  showAnswer,
 }) => {
   console.log(extractRomanNumerals(content ?? ""));
   console.log(content);
@@ -40,14 +40,20 @@ const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
       {parse(content ?? "")}
       <div style={{ marginTop: "20px" }}>
         {questions.map((question, index) => (
-          <SelectQuestion
-            key={`matching-heading-${index + startQuestion}`}
-            order={startQuestion + index}
-            options={generateMatchingHeadingsOptions(
-              extractRomanNumerals(content ?? "")?.length ?? 1
+          <>
+            <SelectQuestion
+              key={`matching-heading-${index + startQuestion}`}
+              order={startQuestion + index}
+              options={generateMatchingHeadingsOptions(
+                extractRomanNumerals(content ?? "")?.length ?? 1
+              )}
+              content={question.content ?? ""}
+              showAnswer={showAnswer}
+            />
+            {showAnswer && (
+              <SelectAnswer order={question.order} answer={question.answer} />
             )}
-            content={question.content ?? ""}
-          />
+          </>
         ))}
       </div>
     </>

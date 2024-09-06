@@ -175,6 +175,9 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
+                    b.Property<int>("QuestionType")
+                        .HasColumnType("int");
+
                     b.Property<int>("ResultId")
                         .HasColumnType("int");
 
@@ -439,8 +442,8 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
 
                     b.Property<int>("TestId")
                         .HasColumnType("int");

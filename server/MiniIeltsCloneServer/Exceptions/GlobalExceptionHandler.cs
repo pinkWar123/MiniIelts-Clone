@@ -64,6 +64,11 @@ namespace MiniIeltsCloneServer.Exceptions
                 problemDetails.Status = (int)e.StatusCode;
                 problemDetails.Title = e.Message;
             }
+            else if(exception is Exception ex)
+            {
+                problemDetails.Status = (int)ex.HResult;
+                problemDetails.Title = ex.Message;
+            }
 
             _logger.LogError("{ProblemDetailsTitle}", problemDetails.Title);
 

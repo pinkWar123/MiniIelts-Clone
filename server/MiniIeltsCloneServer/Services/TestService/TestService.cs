@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Data;
-using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Dtos.Answer;
 using MiniIeltsCloneServer.Models.Dtos.Test;
-using MiniIeltsCloneServer.Services.ExerciseService;
+using MiniIeltsCloneServer.Services.AnswerService;
 using MiniIeltsCloneServer.Services.UserService;
 
 namespace MiniIeltsCloneServer.Services.TestService
@@ -20,7 +15,7 @@ namespace MiniIeltsCloneServer.Services.TestService
     public class TestService : GenericService, ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IExerciseService _exerciseService;
+        private readonly IAnswerService _answerService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -28,14 +23,14 @@ namespace MiniIeltsCloneServer.Services.TestService
         public TestService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            IExerciseService exerciseService,
+            IAnswerService answerService,
             IUserService userService,
             UserManager<AppUser> userManager,
             IHttpContextAccessor httpContextAccessor
             ) : base(mapper)
         {
             _unitOfWork = unitOfWork;
-            _exerciseService = exerciseService;
+            _answerService = answerService;
             _userService = userService;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
@@ -51,6 +46,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                     var user = await _userService.GetCurrentUser();
                     test.AppUserId = user?.Id;
                     await _unitOfWork.TestRepository.AddAsync(test);
+                    await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
                 }
                 catch (System.Exception)
@@ -134,6 +130,86 @@ namespace MiniIeltsCloneServer.Services.TestService
             testResultDto.Marks = GetTestMark(correct, test.QuestionCount);
 
             return testResultDto;
+        }
+
+        public async Task<TestResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto)
+        {
+            var result = await GetTestResult(testId, testSubmitDto);
+            var userName = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if(user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            Console.WriteLine(user.Id);
+            Console.WriteLine("Before loop--------------------------------------");
+
+            using (var transaction = await _unitOfWork.BeginTransactionAsync())
+            {
+                try
+                {
+                    Console.WriteLine("Inside loop--------------------------------------");
+
+                    var testResult = new Result
+                    {
+                        TestId = testId,
+                        Score = result?.Marks ?? 0,
+                        CreatedOn = DateTime.UtcNow,
+                        CreatedBy = userName,
+                        AppUserId = user.Id
+                    };
+                    await _unitOfWork.ResultRepository.AddAsync(testResult);
+                    await _unitOfWork.SaveChangesAsync();
+                    var answers = new List<Answer>();
+                    foreach(var questionSubmitDto in testSubmitDto.QuestionSubmitDtos)
+                    {
+                        var createAnswerDto = new CreateAnswerDto
+                        {
+                            IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
+                            Value = questionSubmitDto.Value,
+                            ResultId = testResult.Id,
+                            QuestionType = questionSubmitDto.QuestionType,
+                            CreatedOn = DateTime.UtcNow,
+                            CreatedBy = userName,
+                            AppUserId = user.Id
+
+                        };
+                        await _answerService.CreateNewAnswer(createAnswerDto);
+                        // var answer = new Answer
+                        // {
+                        //     IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
+                        //     Value = questionSubmitDto.Value,
+                        //     ResultId = testResult.Id,
+                        //     CreatedOn = DateTime.UtcNow,
+                        //     CreatedBy = userName,
+                        //     AppUserId = user.Id,
+                        //     QuestionType = questionSubmitDto.QuestionType
+                        // };
+                        // answers.Add(_mapper.Map<Answer>(answer));
+                    }
+
+                    // testResult.Answers = answers;
+
+                    await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.CommitAsync();
+                    Console.WriteLine("End loop--------------------------------------");
+
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Lỗi nè--------------------------------------");
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            return result;
         }
     }
 }

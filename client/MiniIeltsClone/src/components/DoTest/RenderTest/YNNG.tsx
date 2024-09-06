@@ -5,7 +5,7 @@ import { generateYNNGDescription } from "../../../helpers/generateDescription";
 import { formatText } from "../../../helpers/text";
 import SelectQuestion from "../Question/SelectQuestion";
 import { generateYNNGOptions } from "../../../helpers/generateQuestionOptions";
-import Answer from "../../Answer/Answer";
+import SelectAnswer from "../Answer/SelectAnswer";
 
 interface YNNGProps extends TestBase {}
 
@@ -23,11 +23,14 @@ const YNNG: FunctionComponent<YNNGProps> = ({
       {questions.map((question) => (
         <div key={question.order}>
           <SelectQuestion
+            showAnswer={showAnswer}
             order={question.order}
             content={question.content ?? ""}
             options={generateYNNGOptions()}
           />
-          {showAnswer && <Answer answer={question.answer} />}
+          {showAnswer && (
+            <SelectAnswer order={question.order} answer={question.answer} />
+          )}
         </div>
       ))}
     </>

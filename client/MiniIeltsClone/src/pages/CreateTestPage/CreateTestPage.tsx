@@ -27,7 +27,7 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
   const handleSubmit = async (value) => {
     console.log(value);
     const images = await handleUpload();
-    console.log("exercises:", test?.exercises);
+    console.log(images);
     const questionCount = test?.exercises
       .map((e) => e.questionCount)
       .reduce((sum, val) => sum + val, 0);

@@ -31,7 +31,10 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
           <div className={styles["username"]}>Welcome {user.username}</div>
           <AdminGuard>
             <div>
-              <Button className={styles["text"]}>
+              <Button
+                className={styles["text"]}
+                onClick={() => navigate("/create-test")}
+              >
                 <EditOutlined /> Create test
               </Button>
             </div>

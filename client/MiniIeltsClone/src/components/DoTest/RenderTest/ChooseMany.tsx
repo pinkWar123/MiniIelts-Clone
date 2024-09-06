@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { TestBase } from "./base";
 import { generateABCOptions } from "../../../helpers/generateQuestionOptions";
 import { Checkbox } from "antd";
@@ -10,10 +10,11 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
   startQuestion,
   endQuestion,
   chooseManyChoices,
+  questions,
   showAnswer,
 }) => {
   const options = generateABCOptions(endQuestion - startQuestion + 1);
-  const { handleUpdateAnswer } = useAnswers();
+  const { handleUpdateAnswer, getAnswerByOrder } = useAnswers();
   const [checkedIndex, setCheckedIndex] = useState<number[]>(
     Array.from({ length: endQuestion - startQuestion + 1 }, () => -1)
   );
@@ -41,28 +42,72 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
     }
   };
 
+  const renderQuestions = () => {
+    return chooseManyChoices?.map((choice, index) => {
+      if (!showAnswer)
+        return (
+          <div key={`choosemanydiv-${index}`} style={{ marginBottom: "10px" }}>
+            <Checkbox
+              disabled={
+                checkedIndex.filter((i) => i !== -1).length >=
+                  endQuestion - startQuestion + 1 &&
+                !checkedIndex.includes(index)
+              }
+              key={`choosemany-${index}`}
+              onChange={(e) =>
+                handleCheckboxChange(e.target.checked, choice.value, index)
+              }
+            >
+              <strong>{choice.value}.</strong> {choice.content}
+            </Checkbox>
+          </div>
+        );
+
+      const questionIndexes = Array.from(
+        { length: endQuestion - startQuestion + 1 },
+        (_, index) => index + startQuestion
+      );
+      const clientAnswers = questionIndexes.map((index) =>
+        getAnswerByOrder(index)
+      );
+      console.log(clientAnswers);
+      return (
+        <div key={`choosemanydiv-${index}`} style={{ marginBottom: "10px" }}>
+          <Checkbox
+            disabled
+            key={`choosemany-${index}`}
+            checked={clientAnswers
+              .map((answer) => answer?.value)
+              .includes(choice.value)}
+          >
+            <strong>{choice.value}.</strong> {choice.content}
+          </Checkbox>
+        </div>
+      );
+    });
+  };
+
+  const renderAnswers = () => {
+    if (!showAnswer) return;
+    const question = questions[0];
+    return question.answer.split("").map((answer, index) => (
+      <div
+        key={`choose-many-answer-${index}`}
+        style={{ color: "red", fontWeight: "500" }}
+      >
+        {index + startQuestion}. Answer: {answer}
+      </div>
+    ));
+  };
+
   return (
     <>
       <div>
         Choose {endQuestion - startQuestion + 1} letters, {options[0].value}-
         {options[options.length - 1].value}
       </div>
-      {chooseManyChoices?.map((choice, index) => (
-        <div key={`choosemanydiv-${index}`} style={{ marginBottom: "10px" }}>
-          <Checkbox
-            disabled={
-              checkedIndex.filter((i) => i !== -1).length >=
-                endQuestion - startQuestion + 1 && !checkedIndex.includes(index)
-            }
-            key={`choosemany-${index}`}
-            onChange={(e) =>
-              handleCheckboxChange(e.target.checked, choice.value, index)
-            }
-          >
-            <strong>{choice.value}.</strong> {choice.content}
-          </Checkbox>
-        </div>
-      ))}
+      {renderQuestions()}
+      {renderAnswers()}
     </>
   );
 };

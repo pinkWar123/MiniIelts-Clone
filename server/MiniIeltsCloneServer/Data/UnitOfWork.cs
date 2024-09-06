@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
+using MiniIeltsCloneServer.Data.Repositories.AnswerRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
+using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
@@ -22,6 +24,8 @@ namespace MiniIeltsCloneServer.Data
         private IQuestionRepository _questionRepo;
         private IExerciseChoiceRepository _exerciseChoiceRepo;
         private IQuestionChoiceRepository _questionChoiceRepo;
+        private IResultRepository _resultRepo;
+        private IAnswerRepository _answerRepo;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -42,6 +46,10 @@ namespace MiniIeltsCloneServer.Data
 
         public IGenericRepository<QuestionChoice> QuestionChoiceRepository
         => _questionChoiceRepo ??= new QuestionChoiceRepository(_context);
+        public IGenericRepository<Result> ResultRepository
+        => _resultRepo ??= new ResultRepository(_context);
+        public IGenericRepository<Answer> AnswerRepository
+        => _answerRepo ??= new AnswerRepository(_context);
 
         public void Dispose()
         {
@@ -64,7 +72,6 @@ namespace MiniIeltsCloneServer.Data
 
         public async Task CommitAsync()
         {
-            await _context.SaveChangesAsync();
             if (_transaction != null)
             {
                 await _transaction.CommitAsync();
