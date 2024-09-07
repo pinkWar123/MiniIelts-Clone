@@ -8,13 +8,14 @@ using MiniIeltsCloneServer.Models.Dtos.Result;
 using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.DashboardService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
 {
     public interface IResultRepository: IGenericRepository<Result>
     {
         public Task<Performance> GetOverallResult(string userId);
-        public Task<List<TestHistory>> GetTestHistory(string userId, DashboardQueryObject @object);
+        public Task<PagedData<TestHistory>> GetTestHistory(string userId, DashboardQueryObject @object);
         public Task<List<QuestionStatistics>> GetQuestionStatistics(string userId);
         public Task<TestResultDto> GetResultById(int resultId);
     }

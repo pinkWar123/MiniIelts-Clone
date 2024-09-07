@@ -26,8 +26,6 @@ namespace MiniIeltsCloneServer.Controllers
             _uriService = uriService;
         }
 
-
-
         [HttpGet("overall-result")]
         [Authorize]
         public async Task<IActionResult> GetOverallResult()
@@ -41,7 +39,7 @@ namespace MiniIeltsCloneServer.Controllers
         public async Task<IActionResult> GetTestHistory([FromQuery] DashboardQueryObject @object)
         {
             var result = await _dashboardService.GetTestHistory(@object);
-            var pagedResponse = PaginationHelper.CreatePagedResponse(result, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request.Path.Value);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(result.Value, result.TotalRecords, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request?.Path.Value ?? "");
             return Ok(pagedResponse);
         }
 

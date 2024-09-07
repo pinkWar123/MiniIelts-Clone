@@ -7,6 +7,7 @@ using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
 using MiniIeltsCloneServer.Models.Dtos.Dashboard;
 using MiniIeltsCloneServer.Services.DashboardService;
 using MiniIeltsCloneServer.Services.UserService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.DashboardService
 {
@@ -39,7 +40,7 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             return statistics;
         }
 
-        public async Task<List<TestHistory>> GetTestHistory(DashboardQueryObject @object)
+        public async Task<PagedData<TestHistory>> GetTestHistory(DashboardQueryObject @object)
         {
             var user = await _userService.GetCurrentUser();
             if(user == null)

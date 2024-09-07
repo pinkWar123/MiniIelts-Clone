@@ -12,6 +12,7 @@ using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.DashboardService;
 using MiniIeltsCloneServer.Services.TestService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
 {
@@ -99,8 +100,9 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
 
         }
 
-        public async Task<List<TestHistory>> GetTestHistory(string userId, DashboardQueryObject @object)
+        public async Task<PagedData<TestHistory>> GetTestHistory(string userId, DashboardQueryObject @object)
         {
+            var historyCount = await _context.Results.Where(r => r.AppUserId == userId).CountAsync();
             var query = (from result in _context.Results
                             where result.AppUserId == userId
                             join test in _context.Tests
@@ -118,7 +120,11 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
                             .Take(@object.PageSize);
             
             var history = await query.ToListAsync();
-            return history;
+            return new PagedData<TestHistory>
+            {
+                TotalRecords = historyCount,
+                Value = history
+            };
         }
 
         

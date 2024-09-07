@@ -18,6 +18,7 @@ import axiosInstance from "./services/axiosConfig";
 import ViewSolutionPage from "./pages/TestResultPage/ViewSolutionPage";
 import ProfileLayout from "./layouts/ProfileLayout/ProfileLayout";
 import Dashboard from "./pages/ProfilePage/Dashboard/Dashboard";
+import TestHistoryComponent from "./pages/ProfilePage/TestHistory";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -134,6 +135,7 @@ function App() {
           />
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="history" element={<TestHistoryComponent />} />
           </Route>
         </Routes>
       </>

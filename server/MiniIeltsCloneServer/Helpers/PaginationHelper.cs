@@ -10,10 +10,9 @@ namespace MiniIeltsCloneServer.Helpers
 {
     public static class PaginationHelper
     {
-        public static PagedResponse<List<T>> CreatePagedResponse<T>(List<T> pagedData, PaginationFilter validFilter, IUriService uriService, string route)
+        public static PagedResponse<List<T>> CreatePagedResponse<T>(List<T> pagedData,int totalRecords, PaginationFilter validFilter, IUriService uriService, string route)
         {
             var respose = new PagedResponse<List<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize, null, null, null);
-            var totalRecords = pagedData.Count;
             var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
             int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
             respose.NextPage =
