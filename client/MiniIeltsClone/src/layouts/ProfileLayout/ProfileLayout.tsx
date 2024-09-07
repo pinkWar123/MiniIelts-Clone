@@ -4,11 +4,12 @@ import { Col, Flex, Row } from "antd";
 import styles from "./ProfileLayout.module.scss";
 import { navigateItems } from "./navigateItems";
 import NavigateItem from "./NavigateItem";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 interface ProfileLayoutProps {}
 
 const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const profileString = location.pathname.split("/").pop();
   const isActive = (title: string) => {
     return (
@@ -23,7 +24,11 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
         <Row gutter={50} className={styles["container"]}>
           <Col span={5} className={styles["first-col"]}>
             {navigateItems.map((item) => (
-              <NavigateItem {...item} active={isActive(item.title)} />
+              <NavigateItem
+                {...item}
+                active={isActive(item.title)}
+                onClick={() => navigate(`./${item.url}`)}
+              />
             ))}
           </Col>
           <Col span={19}>

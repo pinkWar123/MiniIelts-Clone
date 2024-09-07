@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Models.Dtos.Answer;
 using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Services.AnswerService;
 using MiniIeltsCloneServer.Services.UserService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.TestService
 {
@@ -57,10 +58,11 @@ namespace MiniIeltsCloneServer.Services.TestService
             }
         }
 
-        public async Task<List<TestViewDto>?> GetAllTestsAsync(TestQueryObject queryObject)
+        public async Task<PagedData<TestViewDto>?> GetAllTestsAsync(TestQueryObject queryObject)
         {
             var tests = _unitOfWork.TestRepository.GetValuesByQuery(queryObject);
             if (tests == null) return null;
+            var testCount = await tests.CountAsync();
             var res = await
             tests
                 .Include(x => x.Excercises)
@@ -70,7 +72,11 @@ namespace MiniIeltsCloneServer.Services.TestService
                         .ThenInclude(x => x.Choices)
                 // .Select(x => _mapper.Map<TestViewDto>(x))
                 .ToListAsync();
-            return res.Select(x => _mapper.Map<TestViewDto>(x)).ToList();
+            return new PagedData<TestViewDto>
+            {
+                Value = res.Select(x => _mapper.Map<TestViewDto>(x)).ToList(),
+                TotalRecords = testCount
+            }; 
         }
 
         public async Task<TestViewDto?> GetTestById(int id)

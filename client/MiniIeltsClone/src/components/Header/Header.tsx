@@ -1,11 +1,15 @@
 import { Header } from "antd/es/layout/layout";
 import { FunctionComponent } from "react";
 import styles from "./Header.module.scss";
-import { Button, Flex } from "antd";
-import { EditOutlined, LoginOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Button, Dropdown, MenuProps } from "antd";
+import {
+  EditOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
-import AdminGuard from "../guards/AdminGuard";
 interface HeaderProps {}
 
 const MainHeader: FunctionComponent<HeaderProps> = () => {
@@ -15,9 +19,31 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
     setUser(null);
     localStorage.removeItem("token");
   };
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      icon: <ProfileOutlined />,
+      label: <a>Profile</a>,
+      onClick: () => navigate("/profile/dashboard"),
+    },
+    {
+      key: "2",
+      icon: <EditOutlined />,
+      label: <a>Create test</a>,
+      onClick: () => navigate("/create-test"),
+    },
+    {
+      key: "3",
+      icon: <LogoutOutlined />,
+      label: <a>Log out</a>,
+      onClick: handleLogOut,
+    },
+  ];
   return (
     <Header className={styles["header"]}>
-      <div className={styles["logo"]}>MiniIelts</div>
+      <div className={styles["logo"]} onClick={() => navigate("/")}>
+        MiniIelts
+      </div>
       {!user && (
         <Button
           icon={<LoginOutlined />}
@@ -26,25 +52,30 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
           Log in
         </Button>
       )}
+      {/* {user && (
+            <Flex gap={"large"}>
+              <div className={styles["username"]}>Welcome {user.username}</div>
+              <AdminGuard>
+                <div>
+                  <Button
+                    className={styles["text"]}
+                    onClick={() => navigate("/create-test")}
+                  >
+                    <EditOutlined /> Create test
+                  </Button>
+                </div>
+              </AdminGuard>
+              <div>
+                <Button icon={<LogoutOutlined />} onClick={handleLogOut}>
+                  Log out
+                </Button>
+              </div>
+            </Flex>
+          )} */}
       {user && (
-        <Flex gap={"large"}>
-          <div className={styles["username"]}>Welcome {user.username}</div>
-          <AdminGuard>
-            <div>
-              <Button
-                className={styles["text"]}
-                onClick={() => navigate("/create-test")}
-              >
-                <EditOutlined /> Create test
-              </Button>
-            </div>
-          </AdminGuard>
-          <div>
-            <Button icon={<LogoutOutlined />} onClick={handleLogOut}>
-              Log out
-            </Button>
-          </div>
-        </Flex>
+        <Dropdown menu={{ items }} placement="bottom" arrow>
+          <div className={styles["dropdown"]}>Welcome {user.username}</div>
+        </Dropdown>
       )}
     </Header>
   );

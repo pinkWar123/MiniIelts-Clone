@@ -5,15 +5,18 @@ export interface NavigateItemProps {
   icon: React.ReactElement;
   title: string;
   active: boolean;
+  onClick: () => void;
 }
 
 const NavigateItem: FunctionComponent<NavigateItemProps> = ({
   icon,
   title,
   active,
+  onClick,
 }) => {
   return (
     <Flex
+      onClick={onClick}
       key={`navigate-item-${title}`}
       className={`${styles["nav-item-container"]} ${
         active && styles["active"]
