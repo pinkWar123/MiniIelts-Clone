@@ -51,7 +51,7 @@ namespace MiniIeltsCloneServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllTests([FromQuery] TestQueryObject testQueryObject)
         {
-            var tests = await _testService.GetAllTestsAsync(testQueryObject);
+            var tests = await _testService.GetAllTestSearch(testQueryObject);
             var pagedResponse = PaginationHelper.CreatePagedResponse(tests.Value, tests.TotalRecords, new Wrappers.Filter.PaginationFilter(testQueryObject.PageNumber, testQueryObject.PageSize), _uriService, Request.Path.Value);
             return Ok(pagedResponse);
         }
