@@ -11,8 +11,14 @@ export const createTest = async (
   return await axiosInstance.post("/Test", createTestDto);
 };
 
-export const getAllTests = async (): Promise<IPagedResponse<ITest[]>> => {
-  return (await axiosInstance.get("/Test?pageNumber=1&pageSize=10")).data;
+export const getAllTests = async (
+  queries: Record<string, string | number | null | string[]>
+): Promise<IPagedResponse<ITest[]>> => {
+  return (
+    await axiosInstance.get("/Test", {
+      params: queries,
+    })
+  ).data;
 };
 
 export const getTestById = async (

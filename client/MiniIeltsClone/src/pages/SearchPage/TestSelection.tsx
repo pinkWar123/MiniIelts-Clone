@@ -4,14 +4,27 @@ import TestCard from "../../components/TestCard";
 import PaddingContainer from "../../components/PaddingContainer";
 import { ITest } from "../../types/Model/Test";
 import { getAllTests } from "../../services/test";
+import useQueryParams from "../../hooks/useQueryParam";
+import { usePagination } from "../../hooks/usePagination";
 
 interface TestSelectionProps {}
 
 const TestSelection: FunctionComponent<TestSelectionProps> = () => {
   const [tests, setTests] = useState<ITest[]>();
+  const { pagination } = usePagination();
+  const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
+    useQueryParams();
   useEffect(() => {
     const fetchTests = async () => {
-      const res = await getAllTests();
+      const questionTypes = getQueryParamWithMultipleValues("questionTypes");
+      const sort = getQueryParamWithSingleValue("sort");
+      const queries = {
+        pageNumber: pagination.pageNumber,
+        pageSize: pagination.pageSize,
+        sort,
+        questionTypes,
+      };
+      const res = await getAllTests(queries);
       setTests(res.data);
       console.log(res.data);
     };

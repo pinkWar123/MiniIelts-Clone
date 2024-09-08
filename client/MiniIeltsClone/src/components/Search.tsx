@@ -1,89 +1,139 @@
 import { Button, Checkbox, Divider, Radio } from "antd";
 import Search from "antd/es/input/Search";
 import PaddingContainer from "./PaddingContainer";
+import { QuestionTypeEnum } from "../contants/questionType";
+import { QuestionSortEnum } from "../contants/sort";
+import { SearchQuery } from "../pages/SearchPage/search";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useQueryParams from "../hooks/useQueryParam";
+import {
+  convertStringToQuestionTypeEnum,
+  convertStringToSortEnum,
+} from "../helpers/convertEnum";
 
 const questionTypes = [
   {
     name: "Matching Headings",
-    value: 1,
+    value: QuestionTypeEnum.MatchingHeadings,
   },
   {
     name: "Matching Information",
-    value: 2,
+    value: QuestionTypeEnum.MatchingInformation,
   },
   {
     name: "Multiple Choice",
-    value: 3,
+    value: QuestionTypeEnum.MultipleChoice,
   },
   {
     name: "Plan, map, diagram labelling",
-    value: 4,
+    value: QuestionTypeEnum.Labelling,
   },
   {
     name: "Sentence Completion",
-    value: 5,
+    value: QuestionTypeEnum.SentenceCompletion,
   },
   {
     name: "Summary, form completion",
-    value: 6,
+    value: QuestionTypeEnum.SummaryCompletion,
   },
   {
     name: "TRUE-FALSE-NOT GIVEN",
-    value: 7,
+    value: QuestionTypeEnum.TFNG,
   },
   {
     name: "YES-NO-NOT GIVEN",
-    value: 8,
+    value: QuestionTypeEnum.YNNG,
   },
 ];
 
 const sortTypes = [
   {
     name: "Newest",
-    value: 1,
+    value: QuestionSortEnum.Newest,
   },
   {
     name: "Oldest",
-    value: 2,
+    value: QuestionSortEnum.Oldest,
   },
   {
     name: "Name A-Z",
-    value: 3,
+    value: QuestionSortEnum.NameAZ,
   },
   {
     name: "Name Z-A",
-    value: 4,
+    value: QuestionSortEnum.NameZA,
   },
   {
     name: "Most viewed",
-    value: 5,
+    value: QuestionSortEnum.MostViewed,
   },
 ];
 
-export default function SearchBox() {
+interface SearchBoxProps {}
+
+const SearchBox: React.FC<SearchBoxProps> = () => {
+  const [searchQuery, setSearchQuery] = useState<SearchQuery>({
+    questionType: [],
+    sort: QuestionSortEnum.MostViewed,
+  });
+  const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
+    useQueryParams();
+  useEffect(() => {
+    const sort = getQueryParamWithSingleValue("sort");
+
+    const questionType = getQueryParamWithMultipleValues("questionType")?.map(
+      (type) => convertStringToQuestionTypeEnum(type)
+    );
+
+    setSearchQuery((prev) => ({
+      questionType: questionType
+        ? questionType.filter((i) => i !== null)
+        : prev.questionType,
+      sort: (sort && convertStringToSortEnum(sort)) || prev.sort,
+    }));
+  }, [getQueryParamWithSingleValue, getQueryParamWithMultipleValues]);
+  console.log(searchQuery);
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    let qs: string = "questionType=";
+    searchQuery.questionType?.forEach((type) => (qs += `${type},`));
+    qs = qs.slice(0, qs.length - 1);
+    qs += `&sort=${searchQuery.sort}`;
+    navigate(`?${qs}`);
+  };
   return (
     <PaddingContainer padding={20}>
       <Search placeholder="What are you looking for?" />
       <p>Question type</p>
       <ul>
-        {questionTypes.map((questionType, index) => (
-          <li key={index} style={{ padding: "3px 0" }}>
-            <Checkbox>
+        <Checkbox.Group
+          onChange={(value) =>
+            setSearchQuery((prev) => ({ ...prev, questionType: value }))
+          }
+          value={searchQuery.questionType}
+        >
+          {questionTypes.map((questionType, index) => (
+            <Checkbox value={questionType.value} key={`question-type-${index}`}>
               <span style={{ fontSize: "12px" }}>{questionType.name}</span>
             </Checkbox>
-          </li>
-        ))}
+          ))}
+        </Checkbox.Group>
       </ul>
       <Divider />
       <strong>Sort</strong>
-      <Radio.Group style={{ marginTop: "5px" }}>
+      <Radio.Group defaultValue={searchQuery.sort} style={{ marginTop: "5px" }}>
         {sortTypes.map((sortType, index) => (
           <Radio key={index} value={sortType.value}>
             <span style={{ fontSize: "12px" }}>{sortType.name}</span>
           </Radio>
         ))}
       </Radio.Group>
-      <Button style={{ width: "100%", marginTop: "10px" }} type="primary">
+      <Button
+        style={{ width: "100%", marginTop: "10px" }}
+        type="primary"
+        onClick={handleSearch}
+      >
         Search
       </Button>
       <Button
@@ -93,4 +143,6 @@ export default function SearchBox() {
       </Button>
     </PaddingContainer>
   );
-}
+};
+
+export default SearchBox;
