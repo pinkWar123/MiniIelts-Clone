@@ -81,7 +81,10 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     useQueryParams();
   useEffect(() => {
     const sort = getQueryParamWithSingleValue("sort");
-
+    let sortParam: QuestionSortEnum | null = searchQuery?.sort ?? null;
+    if (sort !== null) {
+      sortParam = convertStringToSortEnum(sort);
+    }
     const questionType = getQueryParamWithMultipleValues("questionType")?.map(
       (type) => convertStringToQuestionTypeEnum(type)
     );
@@ -90,14 +93,15 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       questionType: questionType
         ? questionType.filter((i) => i !== null)
         : prev.questionType,
-      sort: (sort && convertStringToSortEnum(sort)) || prev.sort,
+      sort: sortParam || prev.sort,
     }));
   }, [getQueryParamWithSingleValue, getQueryParamWithMultipleValues]);
-  console.log(searchQuery);
   const navigate = useNavigate();
   const handleSearch = () => {
-    let qs: string = "questionType=";
-    searchQuery.questionType?.forEach((type) => (qs += `${type},`));
+    let qs: string = "";
+    searchQuery.questionType?.forEach(
+      (type) => type && (qs += `questionType=${type}&`)
+    );
     qs = qs.slice(0, qs.length - 1);
     qs += `&sort=${searchQuery.sort}`;
     navigate(`?${qs}`);
@@ -122,7 +126,13 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       </ul>
       <Divider />
       <strong>Sort</strong>
-      <Radio.Group defaultValue={searchQuery.sort} style={{ marginTop: "5px" }}>
+      <Radio.Group
+        value={searchQuery.sort}
+        style={{ marginTop: "5px" }}
+        onChange={(e) =>
+          setSearchQuery((prev) => ({ ...prev, sort: e.target.value }))
+        }
+      >
         {sortTypes.map((sortType, index) => (
           <Radio key={index} value={sortType.value}>
             <span style={{ fontSize: "12px" }}>{sortType.name}</span>
@@ -138,6 +148,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       </Button>
       <Button
         style={{ width: "100%", marginTop: "10px", backgroundColor: "#d9534f" }}
+        onClick={() => setSearchQuery({ questionType: [], sort: undefined })}
       >
         Reset
       </Button>
