@@ -94,6 +94,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
         ? questionType.filter((i) => i !== null)
         : prev.questionType,
       sort: sortParam || prev.sort,
+      title: getQueryParamWithSingleValue("title") ?? "",
     }));
   }, [getQueryParamWithSingleValue, getQueryParamWithMultipleValues]);
   const navigate = useNavigate();
@@ -103,12 +104,21 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       (type) => type && (qs += `questionType=${type}&`)
     );
     qs = qs.slice(0, qs.length - 1);
-    qs += `&sort=${searchQuery.sort}`;
+    if (searchQuery.sort) qs += `&sort=${searchQuery.sort}`;
+    if (searchQuery.title) {
+      qs += `&title=${searchQuery.title}`;
+    }
     navigate(`?${qs}`);
   };
   return (
     <PaddingContainer padding={20}>
-      <Search placeholder="What are you looking for?" />
+      <Search
+        placeholder="What are you looking for?"
+        value={searchQuery.title}
+        onChange={(e) =>
+          setSearchQuery((prev) => ({ ...prev, title: e.target.value }))
+        }
+      />
       <p>Question type</p>
       <ul>
         <Checkbox.Group

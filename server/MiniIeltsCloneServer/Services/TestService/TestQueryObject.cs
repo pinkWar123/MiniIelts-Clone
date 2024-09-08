@@ -11,5 +11,6 @@ namespace MiniIeltsCloneServer.Services.TestService
     {
         public List<QuestionTypeEnum>? QuestionType { get; set; } = new List<QuestionTypeEnum>();
         public QuestionSortEnum? QuestionSort { get; set; }
+        public string? Title { get; set; }
     }
 }

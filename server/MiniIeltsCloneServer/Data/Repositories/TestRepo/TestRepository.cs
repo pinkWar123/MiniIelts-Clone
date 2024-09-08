@@ -30,14 +30,19 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
             var query = GetContext()
                             .Include(x => x.Excercises)
                             .AsQueryable();
+
+            if(@object?.Title != null && !String.IsNullOrEmpty(@object.Title))
+            {
+                query = query.Where(q => q.Title.Contains(@object.Title));
+            }
             
-            if(@object.QuestionType != null && @object.QuestionType.Count > 0)
+            if(@object?.QuestionType != null && @object.QuestionType.Count > 0)
             {
                 query = query.Where(q => q.Excercises
                                 .Any(e => @object.QuestionType.Contains(e.ExerciseType)));
             }
 
-            if(@object.QuestionSort != null)
+            if(@object?.QuestionSort != null)
             {
                 switch (@object.QuestionSort)
                 {
