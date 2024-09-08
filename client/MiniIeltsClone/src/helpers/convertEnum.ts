@@ -26,17 +26,19 @@ export const convertStringToQuestionTypeEnum = (value: string) => {
 };
 
 export const convertStringToSortEnum = (value: string) => {
-  switch (value) {
-    case "newest":
+  const numValue = parseInt(value);
+  switch (numValue) {
+    case 0:
       return QuestionSortEnum.Newest;
-    case "most-viewed":
-      return QuestionSortEnum.MostViewed;
-    case "namea-z":
-      return QuestionSortEnum.NameAZ;
-    case "namez-a":
-      return QuestionSortEnum.NameZA;
-    case "oldest":
+    case 1:
       return QuestionSortEnum.Oldest;
+    case 4:
+      return QuestionSortEnum.MostViewed;
+    case 2:
+      return QuestionSortEnum.NameAZ;
+    case 3:
+      return QuestionSortEnum.NameZA;
+
     default:
       return null;
   }

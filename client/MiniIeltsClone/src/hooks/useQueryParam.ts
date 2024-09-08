@@ -16,10 +16,10 @@ const useQueryParams = () => {
   const getQueryParamWithMultipleValues = useCallback(
     (key: string): string[] | null => {
       const queryParams = new URLSearchParams(location.search);
-      const paramValue = queryParams.get(key);
-      if (paramValue === null) return null;
+      const paramValues = queryParams.getAll(key); // Use getAll to retrieve all values for the key
 
-      return paramValue.split(",");
+      // Return null if no values found, otherwise return the array of values
+      return paramValues.length > 0 ? paramValues : null;
     },
     [location.search]
   );

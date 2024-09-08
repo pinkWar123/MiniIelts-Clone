@@ -26,6 +26,7 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
 
         public async Task<PagedData<Test>> GetTestSearchViews(TestQueryObject @object)
         {
+            Console.WriteLine(@object?.QuestionType?.Count());
             var query = GetContext()
                             .Include(x => x.Excercises)
                             .AsQueryable();
