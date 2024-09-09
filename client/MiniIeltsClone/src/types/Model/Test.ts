@@ -12,6 +12,14 @@ export interface ITest {
   exercises: IExercise[];
 }
 
+export interface TestSearchViewDto {
+  id: string;
+  title: string;
+  picture?: string;
+  viewCount: number;
+  questionCount: number;
+}
+
 export interface IResponseTest {
   id: string;
   title: string;

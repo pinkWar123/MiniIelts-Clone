@@ -8,6 +8,7 @@ namespace MiniIeltsCloneServer.Services.TestService
     {
         Task CreateTestAsync(CreateTestDto createTestDto);
         Task<PagedData<TestViewDto>?> GetAllTestsAsync(TestQueryObject queryObject);
+        Task<PagedData<TestSearchViewDto>> GetAllTestSearch(TestQueryObject queryObject);
         Task<TestViewDto?> GetTestById(int id);
         Task<TestResultDto?> GetTestResult(int testId, TestSubmitDto testSubmitDto);
         Task<TestResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto);        

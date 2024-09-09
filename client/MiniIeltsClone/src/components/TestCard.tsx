@@ -1,7 +1,6 @@
 import { EditOutlined, EyeOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Card, Flex, Tag, Typography } from "antd";
+import { Button, Card, Flex, Typography } from "antd";
 import { FunctionComponent } from "react";
-import { CategoryEnum } from "../contants/categories";
 import { useNavigate } from "react-router-dom";
 
 interface TestCardProps {
@@ -9,7 +8,6 @@ interface TestCardProps {
   picture?: string;
   title: string;
   viewCount: number;
-  category: number;
 }
 
 const TestCard: FunctionComponent<TestCardProps> = ({
@@ -17,7 +15,6 @@ const TestCard: FunctionComponent<TestCardProps> = ({
   picture,
   title,
   viewCount,
-  category,
 }) => {
   const navigate = useNavigate();
   const handleTaskTest = () => {
@@ -46,7 +43,7 @@ const TestCard: FunctionComponent<TestCardProps> = ({
           {title}
         </Typography.Paragraph>
       </div>
-      <Tag color="green">{CategoryEnum[category]}</Tag>
+
       <Flex
         justify="space-between"
         style={{ fontSize: "12px", marginTop: "10px" }}

@@ -15,24 +15,26 @@ interface IPagination {
 export const usePagination = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const getPageNumber = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const param = searchParams.get("pageNumber");
+    if (!param) return DEFAULT_PAGE_NUMBER;
+    return parseInt(param);
+  };
+  const getPageSize = () => {
+    const searchParams = new URLSearchParams(location.search);
+
+    const param = searchParams.get("pageSize");
+    if (!param) return DEFAULT_PAGE_SIZE;
+    return parseInt(param);
+  };
   const [pagination, setPagination] = useState<IPagination>({
-    pageNumber: DEFAULT_PAGE_NUMBER,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageNumber: getPageNumber(),
+    pageSize: getPageSize(),
     totalRecords: DEFAULT_TOTAL_RECORDS,
   });
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const getPageNumber = () => {
-      const param = searchParams.get("pageNumber");
-      if (!param) return DEFAULT_PAGE_NUMBER;
-      return parseInt(param);
-    };
-    const getPageSize = () => {
-      const param = searchParams.get("pageSize");
-      if (!param) return DEFAULT_PAGE_SIZE;
-      return parseInt(param);
-    };
     setPagination((prev) => ({
       ...prev,
       pageNumber: getPageNumber(),
@@ -46,14 +48,17 @@ export const usePagination = () => {
 
       // Update the pageNumber parameter
       searchParams.set("pageNumber", pageNumber.toString());
-      searchParams.set("pageSize", DEFAULT_PAGE_SIZE.toString());
+      searchParams.set(
+        "pageSize",
+        pagination.pageSize.toString() || DEFAULT_PAGE_SIZE.toString()
+      );
       // Navigate to the new URL with the updated pageNumber
       navigate({
         pathname: location.pathname,
         search: searchParams.toString(),
       });
     },
-    [location.pathname, location.search, navigate]
+    [location.pathname, location.search, navigate, pagination.pageSize]
   );
 
   return { pagination, setPagination, handleChangePage };

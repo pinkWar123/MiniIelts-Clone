@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Data;
+using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Answer;
@@ -16,6 +17,7 @@ namespace MiniIeltsCloneServer.Services.TestService
     public class TestService : GenericService, ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITestRepository _testRepo;
         private readonly IAnswerService _answerService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
@@ -24,6 +26,7 @@ namespace MiniIeltsCloneServer.Services.TestService
         public TestService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
+            ITestRepository testRepo,
             IAnswerService answerService,
             IUserService userService,
             UserManager<AppUser> userManager,
@@ -32,6 +35,7 @@ namespace MiniIeltsCloneServer.Services.TestService
         {
             _unitOfWork = unitOfWork;
             _answerService = answerService;
+            _testRepo = testRepo;
             _userService = userService;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
@@ -77,6 +81,16 @@ namespace MiniIeltsCloneServer.Services.TestService
                 Value = res.Select(x => _mapper.Map<TestViewDto>(x)).ToList(),
                 TotalRecords = testCount
             }; 
+        }
+
+        public async Task<PagedData<TestSearchViewDto>> GetAllTestSearch(TestQueryObject queryObject)
+        {
+            var result = await _testRepo.GetTestSearchViews(queryObject);
+            return new PagedData<TestSearchViewDto>
+            {
+                TotalRecords = result.TotalRecords,
+                Value = result.Value.Select(r => _mapper.Map<TestSearchViewDto>(r)).ToList()
+            };
         }
 
         public async Task<TestViewDto?> GetTestById(int id)
@@ -153,14 +167,10 @@ namespace MiniIeltsCloneServer.Services.TestService
                 throw new UnauthorizedAccessException();
             }
 
-            Console.WriteLine(user.Id);
-            Console.WriteLine("Before loop--------------------------------------");
-
             using (var transaction = await _unitOfWork.BeginTransactionAsync())
             {
                 try
                 {
-                    Console.WriteLine("Inside loop--------------------------------------");
 
                     var testResult = new Result
                     {
@@ -187,29 +197,15 @@ namespace MiniIeltsCloneServer.Services.TestService
 
                         };
                         await _answerService.CreateNewAnswer(createAnswerDto);
-                        // var answer = new Answer
-                        // {
-                        //     IsCorrect = result?.QuestionResults?.FirstOrDefault(x => x.Order == questionSubmitDto.Order)?.IsTrue ?? false,
-                        //     Value = questionSubmitDto.Value,
-                        //     ResultId = testResult.Id,
-                        //     CreatedOn = DateTime.UtcNow,
-                        //     CreatedBy = userName,
-                        //     AppUserId = user.Id,
-                        //     QuestionType = questionSubmitDto.QuestionType
-                        // };
-                        // answers.Add(_mapper.Map<Answer>(answer));
                     }
 
-                    // testResult.Answers = answers;
 
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
-                    Console.WriteLine("End loop--------------------------------------");
 
                 }
                 catch (System.Exception)
                 {
-                    Console.WriteLine("Lỗi nè--------------------------------------");
                     await transaction.RollbackAsync();
                     throw;
                 }

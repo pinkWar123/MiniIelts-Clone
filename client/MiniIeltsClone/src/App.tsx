@@ -33,6 +33,7 @@ function App() {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        console.log(config);
         return config;
       },
       (error) => {
@@ -88,7 +89,7 @@ function App() {
       {contextHolder[1]}
       <>
         <Routes>
-          <Route path="/" element={<SearchPage />} />
+          <Route path="/home" element={<SearchPage />} />
           <Route path="auth" element={<AuthLayout />}>
             <Route path="register" element={<RegisterPage />} />
             <Route path="login" element={<LoginPage />} />
