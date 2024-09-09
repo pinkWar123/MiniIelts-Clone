@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
 import { Button, Flex, Typography } from "antd";
 import Circle from "../../../components/Circle/Circle";
@@ -6,6 +6,7 @@ import Clock from "./Clock";
 import { GroupOutlined, KeyOutlined, SendOutlined } from "@ant-design/icons";
 import useAnswers from "../../../hooks/useAnswers";
 import QuestionCircle from "./QuestionCircle";
+import useStartTest from "../../../hooks/useStartTest";
 interface BottomPanelProps {
   id: number;
 }
@@ -17,7 +18,7 @@ export interface TestTime {
 
 const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
   const { answers, handleSubmit } = useAnswers();
-  const [time, setTime] = useState<TestTime>({ minute: 0, second: 0 });
+  const { time } = useStartTest();
   return (
     <div className={styles["wrapper"]}>
       <Flex gap="middle">
@@ -52,7 +53,7 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
         </div>
 
         <div>
-          <Clock time={time} setTime={setTime} />
+          <Clock />
         </div>
 
         <div className={styles["btn-wrapper"]}>

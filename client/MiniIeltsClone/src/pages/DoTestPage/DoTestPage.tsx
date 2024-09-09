@@ -8,6 +8,7 @@ import Test from "../../components/DoTest/RenderTest/Test";
 import BottomPanel from "./BottomPanel/BottomPanel";
 import useAnswers from "../../hooks/useAnswers";
 import { QuestionTypeEnum } from "../../contants/questionType";
+import { StartTestProvider } from "../../contexts/StartTestContext";
 
 interface DoTestPageProps {}
 
@@ -52,13 +53,15 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
   }, [id, navigate]);
   if (!id || !test) return <></>;
   return (
-    <>
-      <DoTestLayout
-        essay={<Essay title={test.title} content={test.essay} />}
-        test={<Test exercises={test.excercises} />}
-      />
-      <BottomPanel id={parseInt(id)} />
-    </>
+    <StartTestProvider>
+      <>
+        <DoTestLayout
+          essay={<Essay title={test.title} content={test.essay} />}
+          test={<Test exercises={test.excercises} />}
+        />
+        <BottomPanel id={parseInt(id)} />
+      </>
+    </StartTestProvider>
   );
 };
 

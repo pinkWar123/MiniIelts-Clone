@@ -22,3 +22,7 @@ export const getUserByToken = async (): Promise<
 export const refreshTokens = async () => {
   return (await axiosInstance.post<ILoginResponse>("/User/refresh-token")).data;
 };
+
+export const logout = async () => {
+  return await axiosInstance.post("/User/logout");
+};

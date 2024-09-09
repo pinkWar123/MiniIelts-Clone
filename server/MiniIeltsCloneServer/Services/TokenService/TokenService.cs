@@ -7,8 +7,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Settings;
 
@@ -18,12 +20,14 @@ namespace MiniIeltsCloneServer.Services.TokenService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
         private readonly JWT _jwt;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public TokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jWT, IHttpContextAccessor httpContextAccessor)
+        public TokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, IOptions<JWT> jWT, IHttpContextAccessor httpContextAccessor)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
             _jwt = jWT.Value;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -90,6 +94,22 @@ namespace MiniIeltsCloneServer.Services.TokenService
 
             var userIdClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
             return userIdClaim?.Value;
+        }
+
+        public async Task<bool> RevokeToken(string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(r => r.Token == token));
+            if (user == null) return false;
+
+            var refreshToken = user.RefreshTokens.SingleOrDefault(r => r.Token == token);
+
+            if(refreshToken == null || !refreshToken.IsActive) return false;
+
+            refreshToken.Revoked = DateTime.UtcNow;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

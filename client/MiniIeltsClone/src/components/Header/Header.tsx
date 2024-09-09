@@ -10,14 +10,16 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
+import { logout } from "../../services/authentication";
 interface HeaderProps {}
 
 const MainHeader: FunctionComponent<HeaderProps> = () => {
   const navigate = useNavigate();
   const { setUser, user } = useUser();
   const handleLogOut = async () => {
-    setUser(null);
     localStorage.removeItem("token");
+    await logout();
+    setUser(null);
   };
   const items: MenuProps["items"] = [
     {
@@ -41,7 +43,7 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
   ];
   return (
     <Header className={styles["header"]}>
-      <div className={styles["logo"]} onClick={() => navigate("/")}>
+      <div className={styles["logo"]} onClick={() => navigate("/home")}>
         MiniIelts
       </div>
       {!user && (

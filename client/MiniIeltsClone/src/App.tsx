@@ -55,7 +55,7 @@ function App() {
           try {
             const user = await refreshTokens();
             console.log(user);
-            if (user) {
+            if (user.isAuthenticated) {
               localStorage.setItem("access_token", user.token);
               setUser(user);
               modal.success({ content: "refresh success" });

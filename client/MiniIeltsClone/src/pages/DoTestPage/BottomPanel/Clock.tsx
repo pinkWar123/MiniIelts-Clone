@@ -1,27 +1,10 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
-import { TestTime } from "./BottomPanel";
-interface ClockProps {
-  time: TestTime;
-  setTime: React.Dispatch<React.SetStateAction<TestTime>>;
-}
+import useStartTest from "../../../hooks/useStartTest";
+interface ClockProps {}
 
-const Clock: FunctionComponent<ClockProps> = ({ time, setTime }) => {
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prev) => {
-        const newTime: TestTime = { ...prev };
-        if (prev.second < 59) newTime.second += 1;
-        else if (prev.second === 59) {
-          prev.second = 0;
-          prev.minute += 1;
-        }
-        return newTime;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [time, setTime]);
+const Clock: FunctionComponent<ClockProps> = () => {
+  const { time } = useStartTest();
 
   return (
     <div className={styles["clock"]}>
