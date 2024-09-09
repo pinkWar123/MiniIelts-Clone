@@ -9,7 +9,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.Test
     public class TestResultDto
     {
         public int TestId { get; set; }
-
         public required string Title { get; set; }
         public double Marks { get; set; }
         public int Correct { get; set; }
@@ -17,5 +16,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.Test
         public int Unanswered { get; set; }
         public int QuestionCount { get; set; }
         public List<QuestionResultDto> QuestionResults { get; set; } = new List<QuestionResultDto>();
+        public int Time { get; set; }
     }
 }

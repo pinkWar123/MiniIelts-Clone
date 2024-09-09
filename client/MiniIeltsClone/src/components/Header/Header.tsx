@@ -18,6 +18,7 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
   const { setUser, user } = useUser();
   const handleLogOut = async () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     await logout();
     setUser(null);
   };

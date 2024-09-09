@@ -90,7 +90,8 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
                         UserAnswer = answer.Value,
                         Answer = data.question.Answer,  // Handle multiple questions if needed
                         IsTrue = answer.IsCorrect
-                    }).ToList()
+                    }).ToList(),
+                    Time = data.result.Time
                 };
 
                 return testResultDto;

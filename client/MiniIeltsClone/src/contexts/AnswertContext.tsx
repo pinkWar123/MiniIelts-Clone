@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { submitTest } from "../services/test";
 import { TestSubmitDto } from "../types/Request/Test";
 import { message } from "antd";
+import useUser from "../hooks/useUser";
 
 export interface AnswersContextProps {
   answers: IDoTestAnswer[] | null;
@@ -21,6 +22,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [answers, setAnswers] = useState<IDoTestAnswer[] | null>(null);
+  const { user } = useUser();
   const { id } = useParams();
   const navigate = useNavigate();
   const handleUpdateAnswer = (order: number, newValue: string) => {
@@ -43,7 +45,6 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       time,
     };
     let order = 1;
-    console.log(answers);
     answers?.forEach((answer) =>
       testSubmitDto.questionSubmitDtos.push({
         order: order++,
@@ -51,13 +52,19 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
         questionType: answer.questionType,
       })
     );
-    const res = await submitTest(parseInt(id), testSubmitDto);
-    if (res.data) {
-      let url = "./result?";
-      answers?.forEach((answer) => (url += `a=${answer.value}&`));
-      url = url.slice(0, -1);
-      navigate(url);
-    } else message.error({ content: "Submit test failed" });
+    if (user) {
+      const res = await submitTest(parseInt(id), testSubmitDto);
+      if (res.data) {
+        console.log(res.data);
+        navigate(`/result/${res.data.resultId}`);
+      } else message.error({ content: "Submit test failed" });
+      return;
+    }
+    let url = "./result?";
+    answers?.forEach((answer) => (url += `a=${answer.value}&`));
+    url = url.slice(0, -1);
+    url += `&time=${testSubmitDto.time}`;
+    navigate(url);
   };
 
   const getAnswerByOrder = (order: number) => {

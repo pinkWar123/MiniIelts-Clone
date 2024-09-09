@@ -152,7 +152,7 @@ namespace MiniIeltsCloneServer.Services.TestService
             return testResultDto;
         }
 
-        public async Task<TestResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto)
+        public async Task<TestSubmitResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto)
         {
             var result = await GetTestResult(testId, testSubmitDto);
             var userName = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -204,7 +204,10 @@ namespace MiniIeltsCloneServer.Services.TestService
 
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
-
+                    return new TestSubmitResultDto
+                    {
+                        ResultId = testResult.Id,
+                    } ;
                 }
                 catch (System.Exception)
                 {
@@ -213,7 +216,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                 }
             }
 
-            return result;
+            
         }
     }
 }

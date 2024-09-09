@@ -14,4 +14,10 @@ export interface TestResultDto {
   incorrect: number;
   unanswered: number;
   questionResults: QuestionResultDto[];
+  time: number;
+}
+
+export interface TestSubmitResultDto {
+  resultId: number;
+  time: number;
 }
