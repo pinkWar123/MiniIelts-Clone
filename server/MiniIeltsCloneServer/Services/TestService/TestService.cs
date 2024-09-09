@@ -178,7 +178,9 @@ namespace MiniIeltsCloneServer.Services.TestService
                         Score = result?.Marks ?? 0,
                         CreatedOn = DateTime.UtcNow,
                         CreatedBy = userName,
-                        AppUserId = user.Id
+                        AppUserId = user.Id,
+                        Time = testSubmitDto.Time
+                        
                     };
                     await _unitOfWork.ResultRepository.AddAsync(testResult);
                     await _unitOfWork.SaveChangesAsync();

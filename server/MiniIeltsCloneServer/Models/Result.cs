@@ -11,6 +11,7 @@ namespace MiniIeltsCloneServer.Models
         public Test? Test { get; set; }
         public List<Answer> Answers { get; set; } = new List<Answer>();
         public double Score { get; set; }
+        public int Time { get; set; }
 
     }
 }

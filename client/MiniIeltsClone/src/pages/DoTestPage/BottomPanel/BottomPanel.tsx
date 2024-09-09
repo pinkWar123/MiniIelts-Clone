@@ -61,7 +61,7 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
               <Button
                 icon={<SendOutlined />}
                 className={styles["submit-btn"]}
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(time.minute * 60 + time.second)}
               >
                 Submit
               </Button>

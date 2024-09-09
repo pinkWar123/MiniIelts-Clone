@@ -9,7 +9,7 @@ export interface AnswersContextProps {
   answers: IDoTestAnswer[] | null;
   setAnswers: React.Dispatch<React.SetStateAction<IDoTestAnswer[] | null>>;
   handleUpdateAnswer: (order: number, newValue: string) => void;
-  handleSubmit: () => void;
+  handleSubmit: (time: number) => void;
   getAnswerByOrder: (order: number) => IDoTestAnswer | undefined;
 }
 
@@ -36,10 +36,11 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       );
     });
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (time: number) => {
     if (!id) return;
     const testSubmitDto: TestSubmitDto = {
       questionSubmitDtos: [],
+      time,
     };
     let order = 1;
     console.log(answers);
@@ -50,7 +51,6 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
         questionType: answer.questionType,
       })
     );
-    console.log(testSubmitDto);
     const res = await submitTest(parseInt(id), testSubmitDto);
     if (res.data) {
       let url = "./result?";

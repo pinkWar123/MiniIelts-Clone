@@ -13,6 +13,9 @@ namespace MiniIeltsCloneServer.Validators.Authentication
         {
             RuleForEach(x => x.QuestionSubmitDtos)
                 .SetValidator(new QuestionSubmitValidator());
+            RuleFor(x => x.Time)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Time taken must be greater than or equal to 0");
         }
     }
 }
