@@ -11,9 +11,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { logout } from "../../services/authentication";
-interface HeaderProps {}
+interface HeaderProps {
+  canLogOut?: boolean;
+}
 
-const MainHeader: FunctionComponent<HeaderProps> = () => {
+const MainHeader: FunctionComponent<HeaderProps> = ({ canLogOut = true }) => {
   const navigate = useNavigate();
   const { setUser, user } = useUser();
   const handleLogOut = async () => {
@@ -47,7 +49,7 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
       <div className={styles["logo"]} onClick={() => navigate("/home")}>
         MiniIelts
       </div>
-      {!user && (
+      {!user && canLogOut && (
         <Button
           icon={<LoginOutlined />}
           onClick={() => navigate("/auth/login")}
@@ -55,30 +57,13 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
           Log in
         </Button>
       )}
-      {/* {user && (
-            <Flex gap={"large"}>
-              <div className={styles["username"]}>Welcome {user.username}</div>
-              <AdminGuard>
-                <div>
-                  <Button
-                    className={styles["text"]}
-                    onClick={() => navigate("/create-test")}
-                  >
-                    <EditOutlined /> Create test
-                  </Button>
-                </div>
-              </AdminGuard>
-              <div>
-                <Button icon={<LogoutOutlined />} onClick={handleLogOut}>
-                  Log out
-                </Button>
-              </div>
-            </Flex>
-          )} */}
-      {user && (
+      {user && canLogOut && (
         <Dropdown menu={{ items }} placement="bottom" arrow>
           <div className={styles["dropdown"]}>Welcome {user.username}</div>
         </Dropdown>
+      )}
+      {user && !canLogOut && (
+        <div className={styles["dropdown"]}>Welcome {user.username}</div>
       )}
     </Header>
   );

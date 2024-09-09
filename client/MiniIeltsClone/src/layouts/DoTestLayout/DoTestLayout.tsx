@@ -52,7 +52,7 @@ const DoTestLayout: FunctionComponent<DoTestLayoutProps> = ({
           </Button>
         </Modal>
       )}
-      <MainHeader />
+      <MainHeader canLogOut={false} />
       <TestDisplay essay={essay} test={test} />
     </>
   );
