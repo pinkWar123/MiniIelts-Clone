@@ -12,33 +12,47 @@ import { TestProvider } from "./contexts/TestContext";
 import useMessage from "antd/es/message/useMessage";
 import DoTestPage from "./pages/DoTestPage/DoTestPage";
 import { AnswersProvider } from "./contexts/AnswertContext";
-import TestResultPage from "./pages/TestResultPage/TestResultPage";
-import { App as AntdApp } from "antd";
+import { App as AntdApp, Button, Flex } from "antd";
 import axiosInstance from "./services/axiosConfig";
 import ViewSolutionPage from "./pages/TestResultPage/ViewSolutionPage";
 import ProfileLayout from "./layouts/ProfileLayout/ProfileLayout";
 import Dashboard from "./pages/ProfilePage/Dashboard/Dashboard";
 import TestHistoryComponent from "./pages/ProfilePage/TestHistory";
+import GuestTestResultPage from "./pages/TestResultPage/GuestTestResultPage";
+import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTestResultPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
   const { modal } = AntdApp.useApp();
   const navigate = useNavigate();
   useEffect(() => {
+    let isRefreshing = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let failedQueue: any[] = [];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const processQueue = (error: any, token: string | null = null) => {
+      failedQueue.forEach((prom) => {
+        if (error) {
+          prom.reject(error);
+        } else {
+          prom.resolve(token);
+        }
+      });
+      failedQueue = [];
+    };
+
     const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
-        // You can modify the config before the request is sent
-        // For example, attach an authorization token
-        const token = localStorage.getItem("token");
+        // Attach the authorization token if available
+        const token = localStorage.getItem("access_token");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log(config);
         return config;
       },
       (error) => {
-        // Do something with request error
-        console.log(error);
+        // Handle request error
         return Promise.reject(error);
       }
     );
@@ -48,36 +62,89 @@ function App() {
         return response;
       },
       async (error) => {
-        console.log(error);
         const originalRequest = error.config;
-        console.log(originalRequest);
-        if (error.response.status === 401) {
-          try {
-            const user = await refreshTokens();
-            console.log(user);
-            if (user.isAuthenticated) {
-              localStorage.setItem("access_token", user.token);
-              setUser(user);
-              modal.success({ content: "refresh success" });
-              return Promise.resolve();
-            }
-          } catch (error) {
-            modal.warning({
-              content:
-                "Phiên đăng nhập của bạn đã hết, vui lòng đăng nhập lại!",
-              onOk: () => {
-                navigate("/auth/login", { replace: true });
-              },
-            });
+
+        if (error.response.status === 401 && !originalRequest._retry) {
+          if (isRefreshing) {
+            // Queue the request while token is refreshing
+            return new Promise(function (resolve, reject) {
+              failedQueue.push({ resolve, reject });
+            })
+              .then((token) => {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+                return axiosInstance(originalRequest);
+              })
+              .catch((err) => {
+                return Promise.reject(err);
+              });
           }
 
-          return Promise.reject(error);
+          originalRequest._retry = true;
+          isRefreshing = true;
+
+          // eslint-disable-next-line no-async-promise-executor
+          return new Promise(async (resolve, reject) => {
+            try {
+              const user = await refreshTokens(); // Assume this refreshes tokens
+              if (user.isAuthenticated) {
+                localStorage.setItem("access_token", user.token);
+                setUser(user); // Assuming setUser updates global state
+                originalRequest.headers.Authorization = `Bearer ${user.token}`;
+                processQueue(null, user.token); // Retry queued requests
+                resolve(axiosInstance(originalRequest)); // Retry original request
+                modal.success({ content: "Token refreshed successfully!" });
+              } else {
+                throw new Error("User is not authenticated");
+              }
+            } catch (err) {
+              processQueue(err, null); // Reject all queued requests
+              modal.warning({
+                content: (
+                  <div>
+                    Log in to enjoy our full features!
+                    <div>
+                      By logging in, you can review the results of your exams
+                      and track your progress!
+                    </div>
+                  </div>
+                ),
+                closable: true,
+                closeIcon: true,
+                footer: (
+                  <Flex
+                    gap="middle"
+                    justify="flex-end"
+                    style={{ marginTop: "20px" }}
+                  >
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        navigate("/auth/login", { replace: true });
+                      }}
+                    >
+                      Go to login page
+                    </Button>
+                  </Flex>
+                ),
+                onOk: () => {
+                  navigate("/auth/login", { replace: true });
+                },
+                cancelText: "No, thanks!",
+                okText: "Yes, sure!",
+                onCancel: () => {},
+              });
+              reject(err);
+            } finally {
+              isRefreshing = false;
+            }
+          });
         }
+
         return Promise.reject(error);
       }
     );
 
-    // Return cleanup function to remove interceptors if necessary
+    // Cleanup function to eject interceptors when component unmounts
     return () => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
       axiosInstance.interceptors.response.eject(responseInterceptor);
@@ -114,7 +181,7 @@ function App() {
             path="test/:id/result"
             element={
               <AnswersProvider>
-                <TestResultPage />
+                <GuestTestResultPage />
               </AnswersProvider>
             }
           />
@@ -130,7 +197,7 @@ function App() {
             path="result/:id"
             element={
               <AnswersProvider>
-                <TestResultPage />
+                <AuthenticatedTestResultPage />
               </AnswersProvider>
             }
           />
