@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
 import useStartTest from "../../../hooks/useStartTest";
+import { convertSecondsToMinuteAndSecond } from "../../../helpers/time";
 interface ClockProps {}
 
 const Clock: FunctionComponent<ClockProps> = () => {
@@ -9,7 +10,7 @@ const Clock: FunctionComponent<ClockProps> = () => {
   return (
     <div className={styles["clock"]}>
       <div className={styles["text"]}>
-        {time.minute} : {time.second}
+        {convertSecondsToMinuteAndSecond(time.minute * 60 + time.second)}
       </div>
     </div>
   );

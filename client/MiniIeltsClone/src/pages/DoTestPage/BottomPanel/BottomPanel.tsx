@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
-import { Button, Flex, Typography } from "antd";
+import { App, Button, Col, Flex, Row, Typography } from "antd";
 import Circle from "../../../components/Circle/Circle";
 import Clock from "./Clock";
 import { GroupOutlined, KeyOutlined, SendOutlined } from "@ant-design/icons";
@@ -19,6 +19,31 @@ export interface TestTime {
 const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
   const { answers, handleSubmit } = useAnswers();
   const { time } = useStartTest();
+  const { modal } = App.useApp();
+  const handleOpenPreview = () => {
+    modal.info({
+      title: "Preview answers",
+      width: "50%",
+      closeIcon: true,
+      closable: true,
+      content: (
+        <>
+          This is just to preview answers. You cannot directly modify your
+          answer within it.
+          <div className={styles["question-grid"]}>
+            {answers?.map((answer, index) => (
+              <div
+                className={styles["question"]}
+                key={`preview-question-${index}`}
+              >
+                <strong>Q{index + 1}. </strong> {answer.value}
+              </div>
+            ))}
+          </div>
+        </>
+      ),
+    });
+  };
   return (
     <div className={styles["wrapper"]}>
       <Flex gap="middle">
@@ -67,7 +92,11 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
                 Submit
               </Button>
             </div>
-            <Button icon={<GroupOutlined />} className={styles["review-btn"]}>
+            <Button
+              icon={<GroupOutlined />}
+              className={styles["review-btn"]}
+              onClick={handleOpenPreview}
+            >
               Review
             </Button>
             <Button icon={<KeyOutlined />} className={styles["solution-btn"]}>
