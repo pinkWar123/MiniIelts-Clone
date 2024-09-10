@@ -5,12 +5,13 @@ import { submitTest } from "../services/test";
 import { TestSubmitDto } from "../types/Request/Test";
 import { message } from "antd";
 import useUser from "../hooks/useUser";
+import useStartTest from "../hooks/useStartTest";
 
 export interface AnswersContextProps {
   answers: IDoTestAnswer[] | null;
   setAnswers: React.Dispatch<React.SetStateAction<IDoTestAnswer[] | null>>;
   handleUpdateAnswer: (order: number, newValue: string) => void;
-  handleSubmit: (time: number) => void;
+  handleSubmit: () => Promise<void>;
   getAnswerByOrder: (order: number) => IDoTestAnswer | undefined;
 }
 
@@ -22,6 +23,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [answers, setAnswers] = useState<IDoTestAnswer[] | null>(null);
+  const { time } = useStartTest();
   const { user } = useUser();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,11 +40,11 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       );
     });
   };
-  const handleSubmit = async (time: number) => {
+  const handleSubmit = async () => {
     if (!id) return;
     const testSubmitDto: TestSubmitDto = {
       questionSubmitDtos: [],
-      time,
+      time: time.minute * 60 + time.second,
     };
     let order = 1;
     answers?.forEach((answer) =>
@@ -63,7 +65,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
     let url = "./result?";
     answers?.forEach((answer) => (url += `a=${answer.value}&`));
     url = url.slice(0, -1);
-    url += `&time=${testSubmitDto.time}`;
+    url += `&time=${time}`;
     navigate(url);
   };
 

@@ -1,0 +1,40 @@
+.btn-wrapper {
+  color: #fff !important;
+
+  &:hover {
+    color: #fff !important;
+  }
+
+  .submit-btn {
+    background-color: #5cb85c !important;
+
+    &:hover {
+      background-color: #449d44 !important;
+    }
+  }
+
+  .review-btn {
+    background-color: #337ab7 !important;
+
+    &:hover {
+      background-color: #286090;
+    }
+  }
+
+  .solution-btn {
+    background-color: #f0ad4e;
+
+    &:hover {
+      background-color: #ec971f !important;
+    }
+  }
+
+  .submit-btn,
+  .review-btn,
+  .solution-btn {
+    color: #fff !important;
+    &:hover {
+      color: #fff !important;
+    }
+  }
+}

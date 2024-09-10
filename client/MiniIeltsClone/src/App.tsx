@@ -20,6 +20,7 @@ import Dashboard from "./pages/ProfilePage/Dashboard/Dashboard";
 import TestHistoryComponent from "./pages/ProfilePage/TestHistory";
 import GuestTestResultPage from "./pages/TestResultPage/GuestTestResultPage";
 import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTestResultPage";
+import { StartTestProvider } from "./contexts/StartTestContext";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -149,7 +150,7 @@ function App() {
       axiosInstance.interceptors.request.eject(requestInterceptor);
       axiosInstance.interceptors.response.eject(responseInterceptor);
     };
-  }, [navigate]);
+  }, [navigate, modal, setUser]);
 
   return (
     <>
@@ -171,34 +172,42 @@ function App() {
           />
           <Route
             element={
-              <AnswersProvider>
-                <DoTestPage />
-              </AnswersProvider>
+              <StartTestProvider>
+                <AnswersProvider>
+                  <DoTestPage />
+                </AnswersProvider>
+              </StartTestProvider>
             }
             path="test/:id"
           ></Route>
           <Route
             path="test/:id/result"
             element={
-              <AnswersProvider>
-                <GuestTestResultPage />
-              </AnswersProvider>
+              <StartTestProvider>
+                <AnswersProvider>
+                  <GuestTestResultPage />
+                </AnswersProvider>
+              </StartTestProvider>
             }
           />
           <Route
             path="test/:id/view-solution"
             element={
-              <AnswersProvider>
-                <ViewSolutionPage />
-              </AnswersProvider>
+              <StartTestProvider>
+                <AnswersProvider>
+                  <ViewSolutionPage />
+                </AnswersProvider>
+              </StartTestProvider>
             }
           />
           <Route
             path="result/:id"
             element={
-              <AnswersProvider>
-                <AuthenticatedTestResultPage />
-              </AnswersProvider>
+              <StartTestProvider>
+                <AnswersProvider>
+                  <AuthenticatedTestResultPage />
+                </AnswersProvider>
+              </StartTestProvider>
             }
           />
           <Route path="profile" element={<ProfileLayout />}>

@@ -1,12 +1,12 @@
 import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
-import { App, Button, Col, Flex, Row, Typography } from "antd";
+import { App, Button, Flex, Typography } from "antd";
 import Circle from "../../../components/Circle/Circle";
 import Clock from "./Clock";
-import { GroupOutlined, KeyOutlined, SendOutlined } from "@ant-design/icons";
+import { GroupOutlined, KeyOutlined } from "@ant-design/icons";
 import useAnswers from "../../../hooks/useAnswers";
 import QuestionCircle from "./QuestionCircle";
-import useStartTest from "../../../hooks/useStartTest";
+import SubmitButton from "../../../components/Buttons/SubmitButton";
 interface BottomPanelProps {
   id: number;
 }
@@ -18,7 +18,6 @@ export interface TestTime {
 
 const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
   const { answers, handleSubmit } = useAnswers();
-  const { time } = useStartTest();
   const { modal } = App.useApp();
   const handleOpenPreview = () => {
     modal.info({
@@ -84,13 +83,7 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
         <div className={styles["btn-wrapper"]}>
           <Flex gap={"small"}>
             <div>
-              <Button
-                icon={<SendOutlined />}
-                className={styles["submit-btn"]}
-                onClick={() => handleSubmit(time.minute * 60 + time.second)}
-              >
-                Submit
-              </Button>
+              <SubmitButton onClick={handleSubmit} />
             </div>
             <Button
               icon={<GroupOutlined />}

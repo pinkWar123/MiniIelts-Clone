@@ -79,7 +79,7 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
     );
   };
   return (
-    <div style={{ paddingBottom: "150px" }}>
+    <div>
       {exercises?.map((exercise, index) => renderExercises(exercise, index))}
     </div>
   );
