@@ -12,7 +12,7 @@ interface IPagination {
   totalRecords: number;
 }
 
-export const usePagination = () => {
+export const usePagination = (defaultPageSize?: number) => {
   const location = useLocation();
   const navigate = useNavigate();
   const getPageNumber = () => {
@@ -25,12 +25,12 @@ export const usePagination = () => {
     const searchParams = new URLSearchParams(location.search);
 
     const param = searchParams.get("pageSize");
-    if (!param) return DEFAULT_PAGE_SIZE;
+    if (!param) return defaultPageSize ?? DEFAULT_PAGE_SIZE;
     return parseInt(param);
   };
   const [pagination, setPagination] = useState<IPagination>({
     pageNumber: getPageNumber(),
-    pageSize: getPageSize(),
+    pageSize: defaultPageSize ?? getPageSize(),
     totalRecords: DEFAULT_TOTAL_RECORDS,
   });
 

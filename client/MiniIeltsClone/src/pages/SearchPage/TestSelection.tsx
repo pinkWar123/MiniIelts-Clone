@@ -11,7 +11,7 @@ interface TestSelectionProps {}
 
 const TestSelection: FunctionComponent<TestSelectionProps> = () => {
   const [tests, setTests] = useState<TestSearchViewDto[]>();
-  const { pagination, handleChangePage, setPagination } = usePagination();
+  const { pagination, handleChangePage, setPagination } = usePagination(8);
   const [isEmpty, setEmpty] = useState<boolean>(false);
   const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
     useQueryParams();
