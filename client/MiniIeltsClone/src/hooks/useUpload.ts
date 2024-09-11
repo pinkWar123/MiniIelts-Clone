@@ -37,7 +37,7 @@ export const useUpload = (initialFiles?: UploadFile[]) => {
     console.log(fileList);
     const formData = new FormData();
     fileList.forEach((file) => {
-      formData.append("files", file as FileType);
+      formData.append("file", file as FileType);
     });
     return await uploadFiles(formData);
   };
