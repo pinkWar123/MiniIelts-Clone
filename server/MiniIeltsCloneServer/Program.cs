@@ -66,6 +66,8 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<Amazon.S3.IAmazonS3>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -83,6 +85,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<AzureConfig>(builder.Configuration.GetSection("Azure"));
+builder.Services.Configure<AWS>(builder.Configuration.GetSection("AWS"));
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
