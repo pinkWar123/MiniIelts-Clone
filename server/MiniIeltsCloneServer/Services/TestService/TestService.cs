@@ -48,6 +48,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                 {
                     Console.WriteLine(createTestDto);
                     var test = _mapper.Map<Test>(createTestDto);
+                    test.CreatedOn = DateTime.UtcNow;
                     var user = await _userService.GetCurrentUser();
                     test.AppUserId = user?.Id;
                     await _unitOfWork.TestRepository.AddAsync(test);

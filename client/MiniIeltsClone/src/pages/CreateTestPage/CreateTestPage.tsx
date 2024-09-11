@@ -1,4 +1,4 @@
-import { Button, Form, Input, Typography } from "antd";
+import { App, Button, Form, Input, message, Typography } from "antd";
 import { FunctionComponent } from "react";
 import styles from "./CreateTestPage.module.scss";
 import AddExercise from "./AddExercise";
@@ -22,7 +22,8 @@ const formItemLayout = {
 };
 
 const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
-  const { test } = useTest();
+  const { test, setTest } = useTest();
+  const { modal } = App.useApp();
   const { handleUpload, props, onPreview } = useUpload();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (value: any) => {
@@ -40,7 +41,12 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
     };
     console.log("data to send:", fakeValue);
     const res = await createTest(fakeValue);
-    console.log(res);
+    modal.success({
+      content: "Create test successfully. Do you want to refresh the page?",
+      onOk: () => setTest(null),
+      closable: true,
+      closeIcon: true,
+    });
   };
   return (
     <div className={styles["background"]}>

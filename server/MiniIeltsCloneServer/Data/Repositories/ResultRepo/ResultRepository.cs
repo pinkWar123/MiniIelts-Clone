@@ -113,7 +113,7 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
                             {
                                 TestTitle = test.Title ?? "",
                                 Score = result.Score,
-                                Time = 0,
+                                Time = result.Time,
                                 TestTakenDate = result.CreatedOn,
                                 ResultId = result.Id
                             })
