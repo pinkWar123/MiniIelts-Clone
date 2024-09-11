@@ -1,36 +1,36 @@
 import { FunctionComponent } from "react";
 import { TestBase } from "./base";
+import useAnswers from "../../../hooks/useAnswers";
 import parse, {
   DOMNode,
   Element,
   HTMLReactParserOptions,
 } from "html-react-parser";
 import { Input } from "antd";
-import useAnswers from "../../../hooks/useAnswers";
 import Answer from "../../Answer/Answer";
-interface SummaryCompletionProps extends TestBase {}
 
-const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
+interface SentenceCompletionProps extends TestBase {}
+
+const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
   questions,
-  content,
   startQuestion,
   showAnswer,
 }) => {
   const { handleUpdateAnswer } = useAnswers();
-  const convertToInputs = (htmlString: string) => {
-    // Regex để tìm tất cả các trường hợp `strong` có chứa `_____`
+  const convertSentenceToInputs = (htmlString: string) => {
+    // Normalize the string by replacing &nbsp; with spaces
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
 
-    // Regex để tìm tất cả các trường hợp strong có chứa số và _____ có hoặc không có khoảng trắng
-    const regex = /<strong>\s*(\d+)\s*<\/strong>\s*_____\s*/g;
+    // Regex to find all instances of `_____` (with or without spaces around it)
+    const regex = /_____+/g;
 
-    // Thay thế các trường hợp `strong` có chứa `_____` bằng placeholder
+    // Replace `_____` with placeholder
     let count = 0;
-    const placeholders = normalizedHtmlString.replace(regex, (_, p1) => {
-      return `<strong>${p1}</strong><input data-placeholder="${count++}" />`;
+    const placeholders = normalizedHtmlString.replace(regex, () => {
+      return `<input data-placeholder="${count++}" />`;
     });
 
-    // Chuyển đổi HTML có placeholder thành các phần tử React
+    // Convert HTML with placeholders into React elements
     const options: HTMLReactParserOptions = {
       replace: (domNode: DOMNode) => {
         // Type guard to check if domNode is an Element
@@ -77,7 +77,16 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
     return parse(placeholders, options);
   };
 
-  return <>{convertToInputs(content ?? "")}</>;
+  return (
+    <>
+      {questions.map((q, index) => (
+        <div key={`sentence-completion-${index + startQuestion}`}>
+          <strong>{index + startQuestion}. </strong>
+          {convertSentenceToInputs(q.content ?? "")}
+        </div>
+      ))}{" "}
+    </>
+  );
 };
 
-export default SummaryCompletion;
+export default SentenceCompletion;

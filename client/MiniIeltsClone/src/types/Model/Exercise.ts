@@ -9,6 +9,7 @@ export interface IExercise {
   endQuestion: number;
   description?: string;
   content: string;
+  choiceCount?: number;
   exerciseType: QuestionTypeEnum;
   questions: IQuestion[];
   chooseManyChoices?: IChoice[]; // This field is only used for choose many exercise

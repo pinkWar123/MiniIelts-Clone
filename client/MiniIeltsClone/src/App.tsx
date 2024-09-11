@@ -21,6 +21,9 @@ import TestHistoryComponent from "./pages/ProfilePage/TestHistory";
 import GuestTestResultPage from "./pages/TestResultPage/GuestTestResultPage";
 import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTestResultPage";
 import { StartTestProvider } from "./contexts/StartTestContext";
+import AdminLayout from "./layouts/AdminLayout/AdminLayout";
+import Statistics from "./pages/AdminPage/Statistics";
+import Test from "./pages/AdminPage/Test";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -213,6 +216,11 @@ function App() {
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="history" element={<TestHistoryComponent />} />
+          </Route>
+
+          <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<Statistics />} />
+            <Route path="test" element={<Test />} />
           </Route>
         </Routes>
       </>

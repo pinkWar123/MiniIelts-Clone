@@ -5,35 +5,14 @@ import SelectQuestion from "../Question/SelectQuestion";
 import { generateMatchingHeadingsOptions } from "../../../helpers/generateQuestionOptions";
 import SelectAnswer from "../Answer/SelectAnswer";
 interface MatchingHeadingProps extends TestBase {}
-const extractRomanNumerals = (htmlString: string) => {
-  // Sử dụng DOMParser để phân tích cú pháp HTML
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, "text/html");
-
-  // Lấy tất cả các thẻ <strong>
-  const strongTags = doc.querySelectorAll("strong");
-
-  // Lưu trữ các số La Mã
-  const romanNumerals: string[] = [];
-
-  // Duyệt qua tất cả các thẻ <strong> và trích xuất các số La Mã
-  strongTags.forEach((tag) => {
-    const text = tag?.textContent?.trim();
-    if (!text) return [];
-    if (/^[ivx]+$/i.test(text.replace(/ /g, ""))) {
-      romanNumerals.push(text.replace(/ /g, ""));
-    }
-  });
-
-  return romanNumerals;
-};
 const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
   startQuestion,
   content,
   questions,
   showAnswer,
+  choiceCount,
 }) => {
-  console.log(extractRomanNumerals(content ?? ""));
+  console.log(generateMatchingHeadingsOptions(choiceCount ?? 0));
   console.log(content);
   return (
     <>
@@ -44,9 +23,7 @@ const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
             <SelectQuestion
               key={`matching-heading-${index + startQuestion}`}
               order={startQuestion + index}
-              options={generateMatchingHeadingsOptions(
-                extractRomanNumerals(content ?? "")?.length ?? 1
-              )}
+              options={generateMatchingHeadingsOptions(choiceCount ?? 0)}
               content={question.content ?? ""}
               showAnswer={showAnswer}
             />

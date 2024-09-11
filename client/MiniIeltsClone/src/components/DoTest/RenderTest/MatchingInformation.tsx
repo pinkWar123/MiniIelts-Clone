@@ -10,19 +10,8 @@ const MatchingInformation: FunctionComponent<MatchingInformationProps> = ({
   content,
   questions,
   showAnswer,
+  choiceCount,
 }) => {
-  console.log(questions);
-  const extractABC = (htmlString: string) => {
-    // Sử dụng DOMParser để phân tích cú pháp HTML
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, "text/html");
-
-    // Lấy tất cả các thẻ <strong>
-    const strongTags = doc.querySelectorAll("strong");
-
-    // Lưu trữ các số La Mã
-    return strongTags.length;
-  };
   return (
     <>
       {parse(content ?? "")}
@@ -32,7 +21,7 @@ const MatchingInformation: FunctionComponent<MatchingInformationProps> = ({
             <SelectQuestion
               key={`matching-heading-${index + startQuestion}`}
               order={startQuestion + index}
-              options={generateABCOptions(extractABC(content ?? ""))}
+              options={generateABCOptions(choiceCount ?? 0)}
               content={question.content ?? ""}
               showAnswer={showAnswer}
             />

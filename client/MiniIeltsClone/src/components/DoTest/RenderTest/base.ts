@@ -7,6 +7,7 @@ export interface TestBase {
   questions: IQuestion[];
   chooseManyChoices?: IChoice[];
   content?: string;
+  choiceCount?: number;
   description?: string;
   showAnswer?: boolean;
 }

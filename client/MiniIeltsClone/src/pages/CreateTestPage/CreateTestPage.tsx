@@ -24,7 +24,8 @@ const formItemLayout = {
 const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
   const { test } = useTest();
   const { handleUpload, props, onPreview } = useUpload();
-  const handleSubmit = async (value) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = async (value: any) => {
     console.log(value);
     const images = await handleUpload();
     console.log(images);

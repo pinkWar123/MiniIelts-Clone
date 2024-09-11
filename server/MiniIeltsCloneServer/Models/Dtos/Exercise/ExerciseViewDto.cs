@@ -18,6 +18,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.Exercise
         public int EndQuestion { get; set; }
         public string? Description { get; set; }
         public string? Content { get; set; }
+        public int ChoiceCount { get; set; }
         public List<QuestionViewDto> Questions { get; set; } = new List<QuestionViewDto>();
         public List<ExerciseChoiceViewDto> ChooseManyChoices { get; set; } = new List<ExerciseChoiceViewDto>();
     }

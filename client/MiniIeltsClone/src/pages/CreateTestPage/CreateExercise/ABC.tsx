@@ -1,5 +1,4 @@
 import { FunctionComponent, useRef, useState } from "react";
-
 import Exercise from "./Exercise";
 import TypedInputNumber from "antd/es/input-number";
 import { Form } from "antd";
@@ -19,7 +18,7 @@ const ABC: FunctionComponent<ABCProps> = ({
   endQuestion,
   exerciseOrder,
 }) => {
-  const [numOfOptions, setNumOfQuestions] = useState<number>(0);
+  const [numOfOptions, setNumOfOptions] = useState<number>(0);
   const quillRef = useRef<ReactQuill | null>(null);
   const { findExercise, handleUpdateExercise } = useTest();
   const getEditorHtml = () => {
@@ -29,6 +28,12 @@ const ABC: FunctionComponent<ABCProps> = ({
     const exercise = findExercise(exerciseOrder);
     if (!exercise) return;
     const newExercise: IExercise = { ...exercise, content: value };
+    handleUpdateExercise(newExercise, exerciseOrder);
+  };
+  const handleChangeChoiceCount = (value: number) => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return;
+    const newExercise: IExercise = { ...exercise, choiceCount: value };
     handleUpdateExercise(newExercise, exerciseOrder);
   };
   const generateOptions = () => {
@@ -52,7 +57,12 @@ const ABC: FunctionComponent<ABCProps> = ({
       />
       <Form.Item required label="Number of options: ">
         <TypedInputNumber<number>
-          onChange={(value) => setNumOfQuestions(value ?? 0)}
+          onChange={(value) => {
+            if (value !== null) {
+              setNumOfOptions(value);
+              handleChangeChoiceCount(value);
+            }
+          }}
         />
       </Form.Item>
       <Editor
