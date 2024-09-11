@@ -11,5 +11,6 @@ namespace MiniIeltsCloneServer.Services.TokenService
         public string GetUserIdFromToken(string token);
         public Task<string> GenerateJwtToken(AppUser appUser);
         RefreshToken GenerateRefreshToken();
+        Task<bool> RevokeToken(string token);
     }
 }

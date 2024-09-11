@@ -77,14 +77,14 @@ namespace MiniIeltsCloneServer.Controllers
         [HttpPost("{id}/submit")]
         public async Task<IActionResult> SubmitTest([FromRoute] int id, [FromBody] TestSubmitDto testSubmitDto)
         {
-            var result = await _testService.SubmitTest(id, testSubmitDto);
             var validator = new TestSubmitValidator();
             var validatorResult = validator.ValidateAsync(testSubmitDto).Result;
             if(!validatorResult.IsValid)
             {
                 throw new ValidationException(validatorResult.ToDictionary().ToString());
             }
-            return Ok(new Response<TestResultDto>(result));
+            var result = await _testService.SubmitTest(id, testSubmitDto);
+            return Ok(new Response<TestSubmitResultDto>(result));
         }
 
         [HttpPost("{id}/result")]

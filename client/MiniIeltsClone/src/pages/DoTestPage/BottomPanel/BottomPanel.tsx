@@ -1,11 +1,12 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import styles from "./BottomPanel.module.scss";
-import { Button, Flex, Typography } from "antd";
+import { App, Button, Flex, Typography } from "antd";
 import Circle from "../../../components/Circle/Circle";
 import Clock from "./Clock";
-import { GroupOutlined, KeyOutlined, SendOutlined } from "@ant-design/icons";
+import { GroupOutlined, KeyOutlined } from "@ant-design/icons";
 import useAnswers from "../../../hooks/useAnswers";
 import QuestionCircle from "./QuestionCircle";
+import SubmitButton from "../../../components/Buttons/SubmitButton";
 interface BottomPanelProps {
   id: number;
 }
@@ -17,7 +18,31 @@ export interface TestTime {
 
 const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
   const { answers, handleSubmit } = useAnswers();
-  const [time, setTime] = useState<TestTime>({ minute: 0, second: 0 });
+  const { modal } = App.useApp();
+  const handleOpenPreview = () => {
+    modal.info({
+      title: "Preview answers",
+      width: "50%",
+      closeIcon: true,
+      closable: true,
+      content: (
+        <>
+          This is just to preview answers. You cannot directly modify your
+          answer within it.
+          <div className={styles["question-grid"]}>
+            {answers?.map((answer, index) => (
+              <div
+                className={styles["question"]}
+                key={`preview-question-${index}`}
+              >
+                <strong>Q{index + 1}. </strong> {answer.value}
+              </div>
+            ))}
+          </div>
+        </>
+      ),
+    });
+  };
   return (
     <div className={styles["wrapper"]}>
       <Flex gap="middle">
@@ -52,21 +77,19 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = () => {
         </div>
 
         <div>
-          <Clock time={time} setTime={setTime} />
+          <Clock />
         </div>
 
         <div className={styles["btn-wrapper"]}>
           <Flex gap={"small"}>
             <div>
-              <Button
-                icon={<SendOutlined />}
-                className={styles["submit-btn"]}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
+              <SubmitButton onClick={handleSubmit} />
             </div>
-            <Button icon={<GroupOutlined />} className={styles["review-btn"]}>
+            <Button
+              icon={<GroupOutlined />}
+              className={styles["review-btn"]}
+              onClick={handleOpenPreview}
+            >
               Review
             </Button>
             <Button icon={<KeyOutlined />} className={styles["solution-btn"]}>

@@ -19,4 +19,5 @@ export interface QuestionSubmitDto {
 
 export interface TestSubmitDto {
   questionSubmitDtos: QuestionSubmitDto[];
+  time: number;
 }

@@ -17,5 +17,6 @@ namespace MiniIeltsCloneServer.Services.UserService
         Task<UserViewDto> RefreshTokens(string refreshToken);
         Task<AppUser?> GetCurrentUser();
         Task<UserViewDto?> GetUserViewDto();
+        Task Logout();
     }
 }

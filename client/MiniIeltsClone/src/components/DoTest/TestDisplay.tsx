@@ -1,12 +1,16 @@
 import { FunctionComponent } from "react";
 import styles from "./DoTest.module.scss";
 import { Resizable } from "re-resizable";
+import { Divider, Flex, Typography } from "antd";
+import SubmitButton from "../Buttons/SubmitButton";
+import useAnswers from "../../hooks/useAnswers";
 interface TestDisplayProps {
   essay: React.ReactElement;
   test: React.ReactElement;
 }
 
 const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
+  const { handleSubmit } = useAnswers();
   return (
     <>
       <div className={styles["wrapper"]}>
@@ -28,7 +32,23 @@ const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
         >
           {essay}
         </Resizable>
-        <div className={styles["right-container"]}>{test}</div>
+        <div className={styles["right-container"]}>
+          {test}
+          <div>
+            <Divider />
+            <Flex justify="center">
+              <Typography.Title level={3}>End of the test</Typography.Title>
+            </Flex>
+            <Flex justify="center">
+              <Typography.Title level={5}>
+                Please submit to view your score and solutions
+              </Typography.Title>
+            </Flex>
+            <Flex justify="center">
+              <SubmitButton onClick={handleSubmit} />
+            </Flex>
+          </div>
+        </div>
       </div>
     </>
   );

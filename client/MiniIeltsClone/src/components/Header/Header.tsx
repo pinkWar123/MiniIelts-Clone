@@ -10,14 +10,19 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
-interface HeaderProps {}
+import { logout } from "../../services/authentication";
+interface HeaderProps {
+  canLogOut?: boolean;
+}
 
-const MainHeader: FunctionComponent<HeaderProps> = () => {
+const MainHeader: FunctionComponent<HeaderProps> = ({ canLogOut = true }) => {
   const navigate = useNavigate();
   const { setUser, user } = useUser();
   const handleLogOut = async () => {
-    setUser(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
+    await logout();
+    setUser(null);
   };
   const items: MenuProps["items"] = [
     {
@@ -41,10 +46,10 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
   ];
   return (
     <Header className={styles["header"]}>
-      <div className={styles["logo"]} onClick={() => navigate("/")}>
+      <div className={styles["logo"]} onClick={() => navigate("/home")}>
         MiniIelts
       </div>
-      {!user && (
+      {!user && canLogOut && (
         <Button
           icon={<LoginOutlined />}
           onClick={() => navigate("/auth/login")}
@@ -52,30 +57,13 @@ const MainHeader: FunctionComponent<HeaderProps> = () => {
           Log in
         </Button>
       )}
-      {/* {user && (
-            <Flex gap={"large"}>
-              <div className={styles["username"]}>Welcome {user.username}</div>
-              <AdminGuard>
-                <div>
-                  <Button
-                    className={styles["text"]}
-                    onClick={() => navigate("/create-test")}
-                  >
-                    <EditOutlined /> Create test
-                  </Button>
-                </div>
-              </AdminGuard>
-              <div>
-                <Button icon={<LogoutOutlined />} onClick={handleLogOut}>
-                  Log out
-                </Button>
-              </div>
-            </Flex>
-          )} */}
-      {user && (
+      {user && canLogOut && (
         <Dropdown menu={{ items }} placement="bottom" arrow>
           <div className={styles["dropdown"]}>Welcome {user.username}</div>
         </Dropdown>
+      )}
+      {user && !canLogOut && (
+        <div className={styles["dropdown"]}>Welcome {user.username}</div>
       )}
     </Header>
   );

@@ -218,5 +218,10 @@ namespace MiniIeltsCloneServer.Services.UserService
                 RefreshTokenExpiration = newRefreshToken.Expires
             };
         }
+
+        public Task Logout()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

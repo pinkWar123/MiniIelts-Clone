@@ -13,7 +13,6 @@ interface DoTestPageProps {}
 
 const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
   const [test, setTest] = useState<IResponseTest>();
-  console.log(test);
   const { setAnswers } = useAnswers();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -49,7 +48,7 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
       }
     };
     fetchTest();
-  }, [id, navigate]);
+  }, [id, navigate, setAnswers]);
   if (!id || !test) return <></>;
   return (
     <>

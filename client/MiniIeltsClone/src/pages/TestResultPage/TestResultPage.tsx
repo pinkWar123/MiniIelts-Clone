@@ -1,48 +1,20 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import MainHeader from "../../components/Header/Header";
-import { useLocation, useParams } from "react-router-dom";
 import { Flex, Typography } from "antd";
-import NotFound from "../NotFound/NotFound";
 import { TestResultDto } from "../../types/Responses/Test";
 import Performance from "./Performance/Performance";
 import BandScoreDisplay from "./BandScoreDisplay/BandScoreDisplay";
 import styles from "./TestResultPage.module.scss";
 import AnswerTable from "./AnswerTable/AnswerTable";
 import ExamReview from "./ExamReview/ExamReview";
-import useAnswers from "../../hooks/useAnswers";
-import { callGetResultById } from "../../services/result";
-import { IDoTestAnswer } from "../../types/Model/Answer";
-interface TestResultPageProps {}
+import { convertSecondsToMinuteAndSecond } from "../../helpers/time";
+interface TestResultPageProps {
+  testResult?: TestResultDto;
+}
 
-const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
-  const { id } = useParams();
-  const location = useLocation();
-  const [testResult, setTestResult] = useState<TestResultDto>();
-  const { setAnswers } = useAnswers();
-  useEffect(() => {
-    const fetchTestResult = async () => {
-      if (!id) return;
-
-      const res = await callGetResultById(parseInt(id));
-
-      if (res.succeeded) {
-        const answers = res.data.questionResults.map(
-          (answer) =>
-            ({
-              order: answer.order,
-              value: answer.userAnswer,
-              questionType: 0,
-            } as IDoTestAnswer)
-        );
-        setAnswers(answers);
-        setTestResult(res.data);
-      }
-    };
-
-    fetchTestResult();
-  }, [id, location.search]);
-  console.log(testResult);
-  if (!id) return <NotFound />;
+const TestResultPage: FunctionComponent<TestResultPageProps> = ({
+  testResult,
+}) => {
   return (
     <>
       <MainHeader />
@@ -59,7 +31,7 @@ const TestResultPage: FunctionComponent<TestResultPageProps> = () => {
               unanswered={testResult?.unanswered ?? 0}
               questionCount={testResult?.questionCount ?? 0}
               marks={testResult?.marks ?? 0}
-              timeTaken={"13:00"}
+              timeTaken={convertSecondsToMinuteAndSecond(testResult?.time ?? 0)}
             />
             <AnswerTable questionResults={testResult?.questionResults} />
           </div>

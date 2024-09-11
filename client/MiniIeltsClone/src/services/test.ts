@@ -3,7 +3,7 @@ import { CreateTestDto, TestSubmitDto } from "../types/Request/Test";
 import { IResponseTest, ITest, TestSearchViewDto } from "../types/Model/Test";
 import axiosInstance from "./axiosConfig";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
-import { TestResultDto } from "../types/Responses/Test";
+import { TestSubmitResultDto } from "../types/Responses/Test";
 
 export const createTest = async (
   createTestDto: CreateTestDto
@@ -36,13 +36,13 @@ export const getTestById = async (
 export const getTestResult = async (
   id: number,
   testSubmitDto: TestSubmitDto
-): Promise<AxiosResponse<IResponse<TestResultDto>>> => {
-  return await axiosInstance.post(`Test/${id}/result`, testSubmitDto);
+) => {
+  return (await axiosInstance.post(`Test/${id}/result`, testSubmitDto)).data;
 };
 
 export const submitTest = async (id: number, testSubmitDto: TestSubmitDto) => {
   return (
-    await axiosInstance.post<IResponse<TestResultDto>>(
+    await axiosInstance.post<IResponse<TestSubmitResultDto>>(
       `Test/${id}/submit`,
       testSubmitDto
     )

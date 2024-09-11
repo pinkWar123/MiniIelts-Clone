@@ -87,6 +87,16 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(user);
         }
 
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            Console.WriteLine($"------------------------ Refresh Token: {refreshToken} -------------------------------");
+            if(refreshToken != null) await _tokenService.RevokeToken(refreshToken);
+            return NoContent();
+        }
+
         private void SetRefreshTokenInCookie(string refreshToken)
         {
             var cookieOptions = new CookieOptions
