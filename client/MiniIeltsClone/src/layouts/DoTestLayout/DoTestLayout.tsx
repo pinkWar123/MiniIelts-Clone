@@ -1,10 +1,13 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import MainHeader from "../../components/Header/Header";
+
 import TestDisplay from "../../components/DoTest/TestDisplay";
 import useUser from "../../hooks/useUser";
 import { Button, Flex, Modal, Typography } from "antd";
 import LoginForm from "../../components/AuthForm/LoginForm";
 import useStartTest from "../../hooks/useStartTest";
+import { ADMIN_ROLE } from "../../contants/roles";
+import AdminHeader from "../../components/Header/AdminHeader";
+import NormalHeader from "../../components/Header/NormalHeader";
 interface DoTestLayoutProps {
   essay: React.ReactElement;
   test: React.ReactElement;
@@ -52,7 +55,11 @@ const DoTestLayout: FunctionComponent<DoTestLayoutProps> = ({
           </Button>
         </Modal>
       )}
-      <MainHeader canLogOut={false} />
+      {user && user.roles.includes(ADMIN_ROLE) ? (
+        <AdminHeader canLogOut={false} />
+      ) : (
+        <NormalHeader canLogOut={false} />
+      )}
       <TestDisplay essay={essay} test={test} />
     </>
   );

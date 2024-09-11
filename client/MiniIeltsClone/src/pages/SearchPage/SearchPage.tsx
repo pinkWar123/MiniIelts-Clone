@@ -5,11 +5,19 @@ import SearchBox from "../../components/Search";
 import Category from "../../components/Category";
 import TestSelection from "./TestSelection";
 import styles from "./SearchPage.module.scss";
-import MainHeader from "../../components/Header/Header";
+import useUser from "../../hooks/useUser";
+import { ADMIN_ROLE } from "../../contants/roles";
+import AdminHeader from "../../components/Header/AdminHeader";
+import NormalHeader from "../../components/Header/NormalHeader";
 const SearchPage: React.FC = () => {
+  const { user } = useUser();
   return (
     <Layout>
-      <MainHeader />
+      {user && user?.roles.includes(ADMIN_ROLE) ? (
+        <AdminHeader />
+      ) : (
+        <NormalHeader />
+      )}
       <Layout className={styles["main-layout"]}>
         <Sider className={styles["sider"]} width="250px">
           <SearchBox />
