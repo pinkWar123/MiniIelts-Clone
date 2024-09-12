@@ -104,7 +104,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       (type) => type && (qs += `questionType=${type}&`)
     );
     qs = qs.slice(0, qs.length - 1);
-    if (searchQuery.sort) qs += `&sort=${searchQuery.sort}`;
+    if (searchQuery.sort !== undefined) qs += `&sort=${searchQuery.sort}`;
     if (searchQuery.title) {
       qs += `&title=${searchQuery.title}`;
     }
