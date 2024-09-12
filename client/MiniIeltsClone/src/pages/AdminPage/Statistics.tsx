@@ -1,10 +1,10 @@
-import { Card, Col, Row, Statistic } from "antd";
+import { Card, Col, Row } from "antd";
 import { FunctionComponent } from "react";
+import TotalStatistics from "./TotalStatistics";
 import AccuracyBarChart from "./Accuracy";
 import QuestionProportionPieChart from "./QuestionProportion";
 import ScoreDistributionChart from "./ScoreDistribution";
-import TopTests from "./TopTests";
-import TopUsers from "./TopUser";
+import TopStatistics from "./TopStatistics/TopStatistics";
 
 interface StatisticsProps {}
 
@@ -12,21 +12,7 @@ const Statistics: FunctionComponent<StatisticsProps> = () => {
   return (
     <>
       <Row gutter={32}>
-        <Col span={8}>
-          <Card>
-            <Statistic value={123} title="Total users" />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic value={123} title="Total test" />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic value={123} title="Total test taken times" />
-          </Card>
-        </Col>
+        <TotalStatistics />
       </Row>
 
       <Row gutter={8}>
@@ -48,16 +34,7 @@ const Statistics: FunctionComponent<StatisticsProps> = () => {
       </Row>
 
       <Row>
-        <Col span={12}>
-          <Card>
-            <TopTests />
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card>
-            <TopUsers />
-          </Card>
-        </Col>
+        <TopStatistics />
       </Row>
     </>
   );

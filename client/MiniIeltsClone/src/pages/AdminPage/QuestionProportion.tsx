@@ -1,25 +1,31 @@
-import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
+import { useEffect, useState } from "react";
+import { QuestionDistribution } from "../../types/Responses/statistic";
+import { getQuestionDistribution } from "../../services/statistic";
+import { convertQuestionTypeEnumToDescription } from "../../helpers/convertQuestionType";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const QuestionProportionPieChart = () => {
+  const [stat, setStat] = useState<QuestionDistribution>();
+  useEffect(() => {
+    const fetchStat = async () => {
+      const res = await getQuestionDistribution();
+      setStat(res.data);
+    };
+    fetchStat();
+  }, []);
   const data = {
-    labels: [
-      "Matching Headings",
-      "Matching Information",
-      "Multiple Choice",
-      "Labelling",
-      "Sentence Completion",
-      "Summary Completion",
-      "TFNG",
-      "YNNG",
-    ],
+    labels: stat?.questionDistributionDetails.map((q) =>
+      convertQuestionTypeEnumToDescription(q.questionType)
+    ),
     datasets: [
       {
         label: "Question Type Distribution",
-        data: [10, 15, 20, 5, 10, 10, 15, 15], // Adjust the values based on your data
+        data: stat?.questionDistributionDetails.map(
+          (q) => q.distribution * 100
+        ), // Adjust the values based on your data
         backgroundColor: [
           "rgba(255, 99, 132, 0.6)",
           "rgba(54, 162, 235, 0.6)",

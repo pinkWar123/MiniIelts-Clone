@@ -8,6 +8,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useEffect, useState } from "react";
+import { getQuestionAccuracies } from "../../services/statistic";
+import { Accuracy } from "../../types/Responses/statistic";
+import { convertQuestionTypeEnumToDescription } from "../../helpers/convertQuestionType";
 
 // Register the necessary components
 ChartJS.register(
@@ -20,22 +24,23 @@ ChartJS.register(
 );
 
 const AccuracyBarChart = () => {
-  // Data for accuracy of each question type
+  const [stat, setStat] = useState<Accuracy>();
+  useEffect(() => {
+    const fetchStat = async () => {
+      const res = await getQuestionAccuracies();
+      setStat(res.data);
+    };
+    fetchStat();
+  }, []);
   const data = {
-    labels: [
-      "Matching Headings",
-      "Matching Information",
-      "Multiple Choice",
-      "Labelling",
-      "Sentence Completion",
-      "Summary Completion",
-      "TFNG",
-      "YNNG",
-    ],
+    labels: stat?.questionAccuracies.map((q) =>
+      convertQuestionTypeEnumToDescription(q.questionType)
+    ),
+
     datasets: [
       {
         label: "Accuracy (%)",
-        data: [85, 78, 92, 60, 70, 65, 88, 76], // Sample accuracy data
+        data: stat?.questionAccuracies.map((q) => q.accuracy * 100), // Sample accuracy data
         backgroundColor: "rgba(75, 192, 192, 0.6)", // Bar color
         borderColor: "rgba(75, 192, 192, 1)", // Border color
         borderWidth: 1,

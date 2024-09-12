@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
@@ -11,6 +12,13 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
         public TestRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
             
+        }
+
+        public async Task<int> CountAsync(Expression<Func<Test, bool>>? predicate)
+        {
+            if(predicate != null)
+                return await GetContext().CountAsync(predicate);
+            else return await GetContext().CountAsync();
         }
 
         public override async Task<Test?> GetByIdAsync(int id)

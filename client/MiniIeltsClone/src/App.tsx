@@ -22,8 +22,8 @@ import GuestTestResultPage from "./pages/TestResultPage/GuestTestResultPage";
 import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTestResultPage";
 import { StartTestProvider } from "./contexts/StartTestContext";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
-import Statistics from "./pages/AdminPage/Statistics";
 import Test from "./pages/AdminPage/Test";
+import Statistics from "./pages/AdminPage/Statistics";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
