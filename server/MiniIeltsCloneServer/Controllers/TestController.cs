@@ -87,6 +87,14 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(new Response<TestSubmitResultDto>(result));
         }
 
+        [HttpPost("{id}/increment-viewcount")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IncrementTestViewCount([FromRoute] int id)
+        {
+            await _testService.IncrementTestViewCount(id);
+            return Accepted();
+        }
+
         [HttpPost("{id}/result")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTestResult([FromRoute] int id, [FromBody] TestSubmitDto testSubmitDto)

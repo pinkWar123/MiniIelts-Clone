@@ -11,7 +11,7 @@ interface TestSelectionProps {}
 
 const TestSelection: FunctionComponent<TestSelectionProps> = () => {
   const [tests, setTests] = useState<TestSearchViewDto[]>();
-  const { pagination, handleChangePage, setPagination } = usePagination();
+  const { pagination, handleChangePage, setPagination } = usePagination(8);
   const [isEmpty, setEmpty] = useState<boolean>(false);
   const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
     useQueryParams();
@@ -49,12 +49,7 @@ const TestSelection: FunctionComponent<TestSelectionProps> = () => {
         <Row gutter={16}>
           {tests?.map((test, index) => (
             <Col xs={24} md={6} lg={6} id={`test-${index}`}>
-              <TestCard
-                title={test.title}
-                viewCount={test.viewCount}
-                picture={test.picture}
-                id={test.id}
-              />
+              <TestCard {...test} />
             </Col>
           ))}
         </Row>

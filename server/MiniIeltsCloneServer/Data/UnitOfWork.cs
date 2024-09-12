@@ -19,37 +19,31 @@ namespace MiniIeltsCloneServer.Data
     {
         private readonly ApplicationDbContext _context;
         private IDbContextTransaction _transaction;
-        private ITestRepository _testRepo;
-        private IExerciseRepository _exerciseRepo;
-        private IQuestionRepository _questionRepo;
-        private IExerciseChoiceRepository _exerciseChoiceRepo;
-        private IQuestionChoiceRepository _questionChoiceRepo;
-        private IResultRepository _resultRepo;
-        private IAnswerRepository _answerRepo;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
+            TestRepository = new TestRepository(_context);
+            ExerciseRepository = new ExerciseRepository(_context);
+            QuestionRepository = new QuestionRepository(_context);
+            ExerciseChoiceRepository = new ExerciseChoiceRepository(_context);
+            QuestionChoiceRepository = new QuestionChoiceRepository(_context);
+            ResultRepository = new ResultRepository(_context);
+            AnswerRepository = new AnswerRepository(_context);
         }
 
-        public IGenericRepository<Test> TestRepository
-        => _testRepo ??= new TestRepository(_context);
+        public ITestRepository TestRepository { get; private set; }
+        public IExerciseRepository ExerciseRepository {get; private set; }
 
-        public IGenericRepository<Excercise> ExerciseRepository
-        => _exerciseRepo ??= new ExerciseRepository(_context);
+        public IQuestionRepository QuestionRepository { get; private set;}
 
-        public IGenericRepository<Question> QuestionRepository
-        => _questionRepo ??= new QuestionRepository(_context);
+        public IExerciseChoiceRepository ExerciseChoiceRepository { get; private set;}
 
-        public IGenericRepository<ExerciseChoice> ExerciseChoiceRepository
-        => _exerciseChoiceRepo ??= new ExerciseChoiceRepository(_context);
+        public IQuestionChoiceRepository QuestionChoiceRepository { get; private set;}
 
-        public IGenericRepository<QuestionChoice> QuestionChoiceRepository
-        => _questionChoiceRepo ??= new QuestionChoiceRepository(_context);
-        public IGenericRepository<Result> ResultRepository
-        => _resultRepo ??= new ResultRepository(_context);
-        public IGenericRepository<Answer> AnswerRepository
-        => _answerRepo ??= new AnswerRepository(_context);
+        public IResultRepository ResultRepository { get; private set;}
+
+        public IAnswerRepository AnswerRepository { get; private set;}
 
         public void Dispose()
         {

@@ -7,6 +7,7 @@ interface ExerciseProps {
   end: number;
   exerciseOrder: number;
   type: "input" | "select";
+  choiceCount?: number;
   options: { label: string; value: string }[];
 }
 

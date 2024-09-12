@@ -11,6 +11,7 @@ import MatchingInformation from "./MatchingInformation";
 import YNNG from "./YNNG";
 import Labelling from "./Labelling";
 import ChooseOne from "./ChooseOne";
+import SentenceCompletion from "./SentenceCompletion";
 
 interface TestProps {
   exercises: IExercise[];
@@ -19,8 +20,14 @@ interface TestProps {
 
 const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
   const renderExercises = (exercise: IExercise, index: number) => {
-    const { startQuestion, endQuestion, questions, content, description } =
-      exercise;
+    const {
+      startQuestion,
+      endQuestion,
+      questions,
+      content,
+      description,
+      choiceCount,
+    } = exercise;
     const props: TestBase = {
       startQuestion,
       endQuestion,
@@ -28,6 +35,7 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
       content,
       description,
       showAnswer,
+      choiceCount,
     };
     const renderExercise = () => {
       switch (exercise.exerciseType) {
@@ -65,6 +73,14 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
           );
         case QuestionTypeEnum.Labelling:
           return <Labelling {...props} key={`Labelling diagram-${index}`} />;
+
+        case QuestionTypeEnum.SentenceCompletion:
+          return (
+            <SentenceCompletion
+              {...props}
+              key={`Sentence Completion-${index}`}
+            />
+          );
         default:
           return <></>;
       }

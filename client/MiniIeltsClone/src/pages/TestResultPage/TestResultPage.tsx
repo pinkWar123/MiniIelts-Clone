@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import MainHeader from "../../components/Header/Header";
 import { Flex, Typography } from "antd";
 import { TestResultDto } from "../../types/Responses/Test";
 import Performance from "./Performance/Performance";
@@ -8,6 +7,10 @@ import styles from "./TestResultPage.module.scss";
 import AnswerTable from "./AnswerTable/AnswerTable";
 import ExamReview from "./ExamReview/ExamReview";
 import { convertSecondsToMinuteAndSecond } from "../../helpers/time";
+import useUser from "../../hooks/useUser";
+import { ADMIN_ROLE } from "../../contants/roles";
+import AdminHeader from "../../components/Header/AdminHeader";
+import NormalHeader from "../../components/Header/NormalHeader";
 interface TestResultPageProps {
   testResult?: TestResultDto;
 }
@@ -15,9 +18,14 @@ interface TestResultPageProps {
 const TestResultPage: FunctionComponent<TestResultPageProps> = ({
   testResult,
 }) => {
+  const { user } = useUser();
   return (
     <>
-      <MainHeader />
+      {user && user.roles.includes(ADMIN_ROLE) ? (
+        <AdminHeader />
+      ) : (
+        <NormalHeader />
+      )}
       <Flex justify="center" className={styles["content"]}>
         <Flex style={{ width: "80%" }} gap="large">
           <div style={{ width: "66.7%" }}>

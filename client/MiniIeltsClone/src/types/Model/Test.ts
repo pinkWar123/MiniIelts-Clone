@@ -18,6 +18,7 @@ export interface TestSearchViewDto {
   picture?: string;
   viewCount: number;
   questionCount: number;
+  createdOn: string;
 }
 
 export interface IResponseTest {

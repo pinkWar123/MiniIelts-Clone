@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode } from "react";
 import { IDoTestAnswer } from "../types/Model/Answer";
 import { useNavigate, useParams } from "react-router-dom";
-import { submitTest } from "../services/test";
+import { incrementTestViewCount, submitTest } from "../services/test";
 import { TestSubmitDto } from "../types/Request/Test";
 import { message } from "antd";
 import useUser from "../hooks/useUser";
@@ -62,10 +62,11 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       } else message.error({ content: "Submit test failed" });
       return;
     }
+    await incrementTestViewCount(parseInt(id));
     let url = "./result?";
     answers?.forEach((answer) => (url += `a=${answer.value}&`));
     url = url.slice(0, -1);
-    url += `&time=${time}`;
+    url += `&time=${time.minute * 60 + time.second}`;
     navigate(url);
   };
 

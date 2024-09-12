@@ -48,3 +48,7 @@ export const submitTest = async (id: number, testSubmitDto: TestSubmitDto) => {
     )
   ).data;
 };
+
+export const incrementTestViewCount = async (id: number) => {
+  return await axiosInstance.post(`Test/${id}/increment-viewcount`);
+};

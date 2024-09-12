@@ -1,13 +1,15 @@
 import { EditOutlined, EyeOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Card, Flex, Typography } from "antd";
+import { Button, Card, Flex, Tooltip, Typography } from "antd";
 import { FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatTimestampToDateMonthYear } from "../helpers/time";
 
 interface TestCardProps {
   id: string;
   picture?: string;
   title: string;
   viewCount: number;
+  createdOn: string;
 }
 
 const TestCard: FunctionComponent<TestCardProps> = ({
@@ -15,6 +17,7 @@ const TestCard: FunctionComponent<TestCardProps> = ({
   picture,
   title,
   viewCount,
+  createdOn,
 }) => {
   const navigate = useNavigate();
   const handleTaskTest = () => {
@@ -48,11 +51,13 @@ const TestCard: FunctionComponent<TestCardProps> = ({
         justify="space-between"
         style={{ fontSize: "12px", marginTop: "10px" }}
       >
-        <Flex>
-          <EyeOutlined />
-          {viewCount}
-        </Flex>
-        17-may-19
+        <Tooltip title="View count">
+          <Flex gap="small">
+            <EyeOutlined />
+            {viewCount}
+          </Flex>
+        </Tooltip>
+        <a>{formatTimestampToDateMonthYear(createdOn)}</a>
       </Flex>
       <Button
         icon={<EditOutlined />}

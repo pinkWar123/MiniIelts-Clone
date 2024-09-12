@@ -1,17 +1,16 @@
 using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.StatisticRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Data.Seeding;
 using MiniIeltsCloneServer.Exceptions;
-using MiniIeltsCloneServer.Middleware.Permission;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.AnswerService;
@@ -21,6 +20,7 @@ using MiniIeltsCloneServer.Services.ExerciseChoiceService;
 using MiniIeltsCloneServer.Services.ExerciseService;
 using MiniIeltsCloneServer.Services.QuestionChoiceService;
 using MiniIeltsCloneServer.Services.ResultService;
+using MiniIeltsCloneServer.Services.StatisticService;
 using MiniIeltsCloneServer.Services.TestService;
 using MiniIeltsCloneServer.Services.TokenService;
 using MiniIeltsCloneServer.Services.UriService;
@@ -83,6 +83,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost";
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+    {
+        AbortOnConnectFail = true,
+        EndPoints = { options.Configuration }
+    };
+});
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<AzureConfig>(builder.Configuration.GetSection("Azure"));
 builder.Services.Configure<AWS>(builder.Configuration.GetSection("AWS"));
@@ -129,6 +138,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
+builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -137,8 +147,9 @@ builder.Services.AddScoped<IQuestionChoiceService, QuestionChoiceService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IResultService, ResultService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
+// builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+// builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTestValidator>();
 builder.Services.AddSingleton<AzureBlobService>();

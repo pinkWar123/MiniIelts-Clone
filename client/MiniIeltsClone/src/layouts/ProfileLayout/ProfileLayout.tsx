@@ -1,14 +1,18 @@
 import { FunctionComponent } from "react";
-import MainHeader from "../../components/Header/Header";
 import { Col, Flex, Row } from "antd";
 import styles from "./ProfileLayout.module.scss";
 import { navigateItems } from "./navigateItems";
 import NavigateItem from "./NavigateItem";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import useUser from "../../hooks/useUser";
+import { ADMIN_ROLE } from "../../contants/roles";
+import AdminHeader from "../../components/Header/AdminHeader";
+import NormalHeader from "../../components/Header/NormalHeader";
 interface ProfileLayoutProps {}
 
 const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
   const location = useLocation();
+  const { user } = useUser();
   const navigate = useNavigate();
   const profileString = location.pathname.split("/").pop();
   const isActive = (title: string) => {
@@ -19,7 +23,11 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
   };
   return (
     <>
-      <MainHeader />
+      {user && user.roles.includes(ADMIN_ROLE) ? (
+        <AdminHeader />
+      ) : (
+        <NormalHeader />
+      )}
       <Flex justify="center">
         <Row gutter={50} className={styles["container"]}>
           <Col span={5} className={styles["first-col"]}>

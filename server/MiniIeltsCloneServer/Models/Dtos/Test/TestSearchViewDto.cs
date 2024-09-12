@@ -12,5 +12,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.Test
         public string? Picture { get; set; }
         public int ViewCount { get; set; }
         public int QuestionCount { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
