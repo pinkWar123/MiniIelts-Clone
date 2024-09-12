@@ -13,5 +13,6 @@ namespace MiniIeltsCloneServer.Services.TestService
         Task<TestResultDto?> GetTestResult(int testId, TestSubmitDto testSubmitDto);
         Task<TestSubmitResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto);        
         double GetTestMark(int correct, int questionCount);
+        Task IncrementTestViewCount(int testId);
     }
 }

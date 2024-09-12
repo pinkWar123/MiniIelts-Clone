@@ -153,6 +153,15 @@ namespace MiniIeltsCloneServer.Services.TestService
             return testResultDto;
         }
 
+        public async Task IncrementTestViewCount(int testId)
+        {
+            var test = await _unitOfWork.TestRepository.GetByIdAsync(testId);
+            if(test == null) throw new TestNotFoundException($"Can't find test with id ${testId}");
+            test.ViewCount++;
+            await _unitOfWork.TestRepository.UpdateAsync(testId, test);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<TestSubmitResultDto?> SubmitTest(int testId, TestSubmitDto testSubmitDto)
         {
             var result = await GetTestResult(testId, testSubmitDto);
@@ -205,6 +214,7 @@ namespace MiniIeltsCloneServer.Services.TestService
 
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
+                    await IncrementTestViewCount(testId);
                     return new TestSubmitResultDto
                     {
                         ResultId = testResult.Id,
