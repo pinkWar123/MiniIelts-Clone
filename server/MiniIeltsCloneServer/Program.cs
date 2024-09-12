@@ -83,6 +83,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost";
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+    {
+        AbortOnConnectFail = true,
+        EndPoints = { options.Configuration }
+    };
+});
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<AzureConfig>(builder.Configuration.GetSection("Azure"));
 builder.Services.Configure<AWS>(builder.Configuration.GetSection("AWS"));
