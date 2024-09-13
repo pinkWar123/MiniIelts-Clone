@@ -137,9 +137,9 @@ namespace MiniIeltsCloneServer.Services.TestService
                 testResultDto.QuestionResults.Add(new Models.Dtos.Question.QuestionResultDto
                 {
                     Order = question.Order,
-                    UserAnswer = testSubmitDto.QuestionSubmitDtos[i].Value,
-                    Answer = question.Answer,
-                    IsTrue = question.Answer.ToLower() == testSubmitDto.QuestionSubmitDtos[i].Value.ToLower()
+                    UserAnswer = testSubmitDto.QuestionSubmitDtos[i].Value.Trim(),
+                    Answer = question?.Answer?.Trim() ?? "",
+                    IsTrue = question?.Answer?.ToLower().Trim() == testSubmitDto.QuestionSubmitDtos[i].Value.ToLower().Trim()
                 });
             }
 

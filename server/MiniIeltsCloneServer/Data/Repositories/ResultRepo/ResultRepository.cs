@@ -56,42 +56,42 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
 
         public async Task<TestResultDto> GetResultById(int resultId)
         {
-            var query = from result in _context.Results
-            where result.Id == resultId
-            join test in _context.Tests on result.TestId equals test.Id
-            join exercise in _context.Excercises on test.Id equals exercise.TestId
-            join question in _context.Questions on exercise.Id equals question.ExerciseId
-            select new 
-            {
-                result,
-                test,
-                question,
-                result.Answers
-            };
+            var test = await _context.Tests
+                        .Include(t => t.Results)
+                            .ThenInclude(r => r.Answers)
+                        .Include(t => t.Excercises)
+                            .ThenInclude(e => e.Questions)
+                        .Where(t => t.Results.Any(r => r.Id == resultId))
+                        .Select(t => new
+                        {
+                            t.Id,
+                            t.Title,
+                            Result = t.Results.FirstOrDefault(),
+                            Questions = t.Excercises.SelectMany(e => e.Questions).ToList(),
 
-            // Execute the query up to this point and bring the data into memory
-            var data = await query.AsNoTracking().FirstOrDefaultAsync();
+                        })
+                        .FirstOrDefaultAsync();
 
             // Now do the complex logic on the client side
-            if (data != null)
+            if (test != null)
             {
                 var testResultDto = new TestResultDto
                 {
-                    TestId = data.test.Id,
-                    Title = data.test.Title,
-                    Marks = data.result.Score,
-                    QuestionCount = data.Answers.Count(),
-                    Correct = data.Answers.Count(a => a.IsCorrect),
-                    Incorrect = data.Answers.Count(a => !string.IsNullOrEmpty(a.Value) && !a.IsCorrect),
-                    Unanswered = data.Answers.Count(a => string.IsNullOrEmpty(a.Value)),
-                    QuestionResults = data.Answers.Select((answer, index) => new QuestionResultDto
+                    TestId = test.Id,
+                    Title = test.Title,
+                    Marks = test.Result.Score,
+                    QuestionCount = test.Questions.Count,
+                    Correct = test.Result.Answers.Count(a => a.IsCorrect),
+                    Incorrect = test.Result.Answers.Count(a => !string.IsNullOrEmpty(a.Value) && !a.IsCorrect),
+                    Unanswered = test.Result.Answers.Count(a => string.IsNullOrEmpty(a.Value)),
+                    QuestionResults = test.Result.Answers.Select((answer, index) => new QuestionResultDto
                     {
                         Order = index + 1,
                         UserAnswer = answer.Value,
-                        Answer = data.question.Answer,  // Handle multiple questions if needed
+                        Answer = test.Questions[index].Answer,  // Handle multiple questions if needed
                         IsTrue = answer.IsCorrect
                     }).ToList(),
-                    Time = data.result.Time
+                    Time = test.Result.Time
                 };
 
                 return testResultDto;

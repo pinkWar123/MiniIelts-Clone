@@ -16,7 +16,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
   startQuestion,
   showAnswer,
 }) => {
-  const { handleUpdateAnswer } = useAnswers();
+  const { handleUpdateAnswer, getAnswerByOrder } = useAnswers();
   const convertSentenceToInputs = (htmlString: string) => {
     // Normalize the string by replacing &nbsp; with spaces
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
@@ -46,6 +46,11 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
                 <span>
                   <Input
                     disabled={showAnswer}
+                    value={
+                      getAnswerByOrder(
+                        parseInt(placeholderIndex) + startQuestion
+                      )?.value
+                    }
                     key={placeholderIndex + startQuestion}
                     style={{
                       width: "100px",

@@ -15,6 +15,7 @@ namespace MiniIeltsCloneServer.Models
         public int QuestionCount { get; set; } = 0;
         public CategoryEnum Category { get; set; }
         public List<Excercise> Excercises { get; set; } = new List<Excercise>();
+        public List<Result> Results { get; set; } = new List<Result>();
 
     }
 }

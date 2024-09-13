@@ -42,6 +42,15 @@ namespace MiniIeltsCloneServer.Data
                 .WithOne(c => c.Question)
                 .HasForeignKey(c => c.QuestionId);
 
+            builder.Entity<Test>()
+                .HasMany(t => t.Results)
+                .WithOne(e => e.Test)
+                .HasForeignKey(q => q.TestId);
+
+            builder.Entity<Result>()
+                .HasMany(t => t.Answers)
+                .WithOne(a => a.Result)
+                .HasForeignKey(a => a.ResultId);
 
         }
     }
