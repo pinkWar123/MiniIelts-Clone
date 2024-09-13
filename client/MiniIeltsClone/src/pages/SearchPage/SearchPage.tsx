@@ -13,7 +13,7 @@ const SearchPage: React.FC = () => {
   const { user } = useUser();
   return (
     <Layout>
-      {user && user?.roles.includes(ADMIN_ROLE) ? (
+      {user !== null && user?.roles?.includes(ADMIN_ROLE) ? (
         <AdminHeader />
       ) : (
         <NormalHeader />

@@ -11,6 +11,7 @@ using MiniIeltsCloneServer.Models.Dtos.Authentication;
 using MiniIeltsCloneServer.Services.TokenService;
 using MiniIeltsCloneServer.Services.UserService;
 using MiniIeltsCloneServer.Validators.Authentication;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Controllers
 {
@@ -81,10 +82,12 @@ namespace MiniIeltsCloneServer.Controllers
         }
 
         [HttpGet("me")]
+        [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
             var user = await _userService.GetUserViewDto();
-            return Ok(user);
+            Console.WriteLine("Run here!!!!!!!!!!!!!!!!!!!!!!!");
+            return Ok(new Response<UserViewDto>(user!));
         }
 
         [HttpPost("logout")]
