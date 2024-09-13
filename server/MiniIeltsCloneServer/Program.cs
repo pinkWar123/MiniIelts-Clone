@@ -28,6 +28,9 @@ using MiniIeltsCloneServer.Services.UserService;
 using MiniIeltsCloneServer.Settings;
 using MiniIeltsCloneServer.Validators;
 using Newtonsoft.Json;
+using Hangfire;
+using Hangfire.Dashboard;
+using MiniIeltsCloneServer.Services.HangfireService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +69,7 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<Amazon.S3.IAmazonS3>();
 builder.Services.AddCors(options =>
@@ -83,6 +87,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost";
@@ -148,6 +154,7 @@ builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IResultService, ResultService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
+builder.Services.AddScoped<IHangfireService, HangfireService>();
 // builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 // builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -165,6 +172,11 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 
 var app = builder.Build();
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    IsReadOnlyFunc = (DashboardContext context) => true
+});
+app.UseHangfireDashboard();
 // SeedDatabase(app.Services);
 using (var scope = app.Services.CreateScope())
 {
