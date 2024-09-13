@@ -22,8 +22,11 @@ namespace MiniIeltsCloneServer.Services.StatisticService
         public async Task<Accuracy> GetQuestionAccuracies()
         {
             var cacheKey = "questionAccuracies";
+                Console.WriteLine("Cache-hit!!!!!!!!!!!!");
+
             var questionAccuracies = await _cache.GetOrSetAsync(cacheKey, 
             async () => {
+                Console.WriteLine("Cache-miss!!!!!!!!!!!!");
                 return await _statisticRepo.GetQuestionAccuracies();
             })!;
             return questionAccuracies!;

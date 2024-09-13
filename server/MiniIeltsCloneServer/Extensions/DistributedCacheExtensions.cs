@@ -11,7 +11,7 @@ namespace MiniIeltsCloneServer.Extensions
 {
     public static class DistributedCacheExtensions
 {
-    private static JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+    public static JsonSerializerOptions serializerOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = null,
         WriteIndented = true,

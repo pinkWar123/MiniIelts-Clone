@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.StatisticRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
@@ -24,6 +25,7 @@ namespace MiniIeltsCloneServer.Data
         IQuestionChoiceRepository QuestionChoiceRepository { get; }
         IResultRepository ResultRepository { get; }
         IAnswerRepository AnswerRepository { get; }
+        IStatisticRepository StatisticRepository { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();

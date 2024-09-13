@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.StatisticRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
@@ -44,6 +45,8 @@ namespace MiniIeltsCloneServer.Data
         public IResultRepository ResultRepository { get; private set;}
 
         public IAnswerRepository AnswerRepository { get; private set;}
+
+        public IStatisticRepository StatisticRepository { get; private set; }
 
         public void Dispose()
         {
