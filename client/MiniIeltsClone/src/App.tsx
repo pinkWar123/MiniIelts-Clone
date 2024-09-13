@@ -92,6 +92,7 @@ function App() {
               const user = await refreshTokens(); // Assume this refreshes tokens
               if (user.isAuthenticated) {
                 localStorage.setItem("access_token", user.token);
+                console.log(user);
                 setUser(user); // Assuming setUser updates global state
                 originalRequest.headers.Authorization = `Bearer ${user.token}`;
                 processQueue(null, user.token); // Retry queued requests

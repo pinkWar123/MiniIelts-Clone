@@ -84,7 +84,7 @@ namespace MiniIeltsCloneServer.Services.UserService
         public async Task<UserViewDto?> GetUserViewDto()
         {
             var user = await GetCurrentUser();
-            if(user == null) return null;
+            if(user == null) throw new UnauthorizedAccessException();
             var roles = await _userManager.GetRolesAsync(user);
             return new UserViewDto
             {

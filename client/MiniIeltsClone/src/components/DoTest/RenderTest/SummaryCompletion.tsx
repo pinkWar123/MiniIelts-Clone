@@ -16,7 +16,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
   startQuestion,
   showAnswer,
 }) => {
-  const { handleUpdateAnswer } = useAnswers();
+  const { handleUpdateAnswer, getAnswerByOrder } = useAnswers();
   const convertToInputs = (htmlString: string) => {
     // Regex để tìm tất cả các trường hợp `strong` có chứa `_____`
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
@@ -52,6 +52,11 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
                       marginLeft: "10px",
                       marginRight: "10px",
                     }}
+                    value={
+                      getAnswerByOrder(
+                        parseInt(placeholderIndex) + startQuestion
+                      )?.value
+                    }
                     onChange={(e) => {
                       handleUpdateAnswer(
                         parseInt(placeholderIndex) + startQuestion,
