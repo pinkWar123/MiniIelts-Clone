@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { IResponseTest } from "../../types/Model/Test";
+import { ITest } from "../../types/Model/Test";
 import { getTestById } from "../../services/test";
 import DoTestLayout from "../../layouts/DoTestLayout/DoTestLayout";
 import Essay from "../../components/DoTest/Essay";
@@ -12,7 +12,7 @@ import { QuestionTypeEnum } from "../../contants/questionType";
 interface DoTestPageProps {}
 
 const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
-  const [test, setTest] = useState<IResponseTest>();
+  const [test, setTest] = useState<ITest>();
   const { setAnswers } = useAnswers();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -25,7 +25,7 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
         if (_test) {
           setTest(_test);
           let questionTypes: QuestionTypeEnum[] = [];
-          _test.excercises.forEach((exercise) => {
+          _test.exercises.forEach((exercise) => {
             const types = Array.from(
               { length: exercise.endQuestion - exercise.startQuestion + 1 },
               () => exercise.exerciseType
@@ -54,7 +54,7 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
     <>
       <DoTestLayout
         essay={<Essay title={test.title} content={test.essay} />}
-        test={<Test exercises={test.excercises} />}
+        test={<Test exercises={test.exercises} />}
       />
       <BottomPanel id={parseInt(id)} />
     </>

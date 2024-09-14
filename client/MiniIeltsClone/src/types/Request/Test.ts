@@ -11,6 +11,8 @@ export interface CreateTestDto {
   excercises: CreateExerciseDto[];
 }
 
+export interface UpdateTestDto extends CreateTestDto {}
+
 export interface QuestionSubmitDto {
   order: number;
   value: string;

@@ -16,7 +16,7 @@ const AnswerContent: FunctionComponent<QuestionContentProps> = ({
   type,
   options,
 }) => {
-  const { handleUpdateQuestion, test } = useTest();
+  const { handleUpdateQuestion, test, findQuestion } = useTest();
   const onUpdateQuestion = (answer: string) => {
     if (!test?.exercises) return;
     const exercise = test.exercises?.find(
@@ -37,6 +37,7 @@ const AnswerContent: FunctionComponent<QuestionContentProps> = ({
         <Input
           id={`a-${questionOrder}`}
           placeholder="Enter answer"
+          value={findQuestion(exerciseOrder, questionOrder)?.answer}
           onChange={(e) => onUpdateQuestion(e.target.value)}
         />
       )}
@@ -44,6 +45,7 @@ const AnswerContent: FunctionComponent<QuestionContentProps> = ({
         <Select<string>
           id={`a-${questionOrder}`}
           options={options}
+          value={findQuestion(exerciseOrder, questionOrder)?.answer}
           onChange={(value) => {
             console.log("Answer: " + value);
             onUpdateQuestion(value);

@@ -26,10 +26,16 @@ namespace MiniIeltsCloneServer.Controllers
         private readonly ITestService _testService;
         private readonly IUriService _uriService;
         private readonly IValidator<CreateTestDto> _createTestValidator;
-        public TestController(ITestService testService, IValidator<CreateTestDto> createTestValidator, IUriService uriService)
+        private readonly IValidator<UpdateTestDto> _updateTestValidator;
+        public TestController(
+            ITestService testService, 
+            IValidator<CreateTestDto> createTestValidator,
+            IValidator<UpdateTestDto> updateTestValidator, 
+            IUriService uriService)
         {
             _testService = testService;
             _createTestValidator = createTestValidator;
+            _updateTestValidator = updateTestValidator;
             _uriService = uriService;
         }
         [HttpPost]
@@ -45,6 +51,21 @@ namespace MiniIeltsCloneServer.Controllers
             }
             await _testService.CreateTestAsync(createTestDto);
             return Results.Accepted();
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateTest([FromRoute] int id,[FromBody] UpdateTestDto updateTestDto)
+        {
+            Console.WriteLine("Update test");
+            var validationResult = await _updateTestValidator.ValidateAsync(updateTestDto);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.ToDictionary());
+            }
+
+            await _testService.UpdateTestAsync(id, updateTestDto);
+            return Accepted();
         }
 
         [HttpGet]

@@ -41,5 +41,5 @@ export const useUpload = (initialFiles?: UploadFile[]) => {
     });
     return await uploadFiles(formData);
   };
-  return { handleUpload, onPreview, props, fileList };
+  return { handleUpload, onPreview, props, fileList, setFileList };
 };

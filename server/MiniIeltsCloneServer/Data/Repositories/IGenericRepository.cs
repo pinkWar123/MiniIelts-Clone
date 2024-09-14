@@ -19,5 +19,6 @@ namespace MiniIeltsCloneServer.Repositories
         void Remove(T entity);
         void RemoveRange(List<T> entities);
         public Task<bool> IsExisted(int Id);
+        Task<int> SaveChangesAsync();
     }
 }

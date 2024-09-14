@@ -31,11 +31,16 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
             if (!bucketExists) return NotFound($"Bucket {bucketName} does not exist.");
-            var key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}";
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
+            // Get the file extension
+            string fileExtension = Path.GetExtension(file.FileName);
+            // Create a new file name with a timestamp
+            string newFileName = $"{fileNameWithoutExtension}_{DateTime.UtcNow:yyyyMMdd_HHmmssfff}{fileExtension}";
+            var key = string.IsNullOrEmpty(prefix) ? newFileName : $"{prefix?.TrimEnd('/')}/{newFileName}";
             var request = new Amazon.S3.Model.PutObjectRequest()
             {
                 BucketName = bucketName,
-                Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                Key = key,
                 InputStream = file.OpenReadStream()
             };
             request.Metadata.Add("Content-Type", file.ContentType);

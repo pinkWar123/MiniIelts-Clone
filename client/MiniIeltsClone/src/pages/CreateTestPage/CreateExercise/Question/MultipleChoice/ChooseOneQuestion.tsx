@@ -16,6 +16,12 @@ const ChooseOneQuestion: FunctionComponent<ChooseOneQuestionProps> = ({
   exerciseOrder,
 }) => {
   const { handleUpdateChoice, handleUpdateQuestion, findQuestion } = useTest();
+  const handleFindChoiceContent = (index: number) => {
+    const choices = findQuestion(exerciseOrder, questionOrder)?.choices;
+    if (!choices || choices.length <= index) return undefined;
+    return choices[index].content;
+  };
+  console.log(findQuestion(exerciseOrder, questionOrder)?.answer);
   const renderChoices = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return Array.from({ length: choiceCount }, (_, value) => {
@@ -29,6 +35,7 @@ const ChooseOneQuestion: FunctionComponent<ChooseOneQuestionProps> = ({
               {letters[value]}.{" "}
               <Input
                 id={`chooseone-${questionOrder}-${value}`}
+                value={handleFindChoiceContent(value)}
                 onChange={(e) => {
                   handleUpdateChoice(exerciseOrder, questionOrder, value + 1, {
                     value: letters[value],
@@ -54,7 +61,10 @@ const ChooseOneQuestion: FunctionComponent<ChooseOneQuestionProps> = ({
       <MultipleChoiceQuestion
         questionOrder={questionOrder}
         choices={
-          <Radio.Group onChange={(e) => updateQuestion(e.target.value)}>
+          <Radio.Group
+            onChange={(e) => updateQuestion(e.target.value)}
+            value={findQuestion(exerciseOrder, questionOrder)?.answer}
+          >
             {renderChoices()}
           </Radio.Group>
         }

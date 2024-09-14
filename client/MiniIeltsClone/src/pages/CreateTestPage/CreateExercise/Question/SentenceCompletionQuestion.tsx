@@ -44,6 +44,15 @@ const SentenceCompletionQuestion: FunctionComponent<
 
   useEffect(() => {
     const question = findQuestion(exerciseOrder, questionOrder);
+    const parts = question?.content?.split(Blank);
+    if (!parts || parts.length <= 0) return;
+    const inputArray: string[] = [parts[0], question?.answer ?? ""];
+    if (parts.length > 1) inputArray.push(parts[1]);
+    else inputArray.push("");
+    setInputs(inputArray);
+  }, []);
+  useEffect(() => {
+    const question = findQuestion(exerciseOrder, questionOrder);
     if (!question) return;
     const newQuestion: IQuestion = {
       ...question,
@@ -64,6 +73,7 @@ const SentenceCompletionQuestion: FunctionComponent<
         >
           <Input
             key={getKey(questionOrder, exerciseOrder, index)}
+            value={inputs[index]}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
         </Form.Item>

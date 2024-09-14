@@ -20,14 +20,3 @@ export interface TestSearchViewDto {
   questionCount: number;
   createdOn: string;
 }
-
-export interface IResponseTest {
-  id: string;
-  title: string;
-  essay: string;
-  picture?: string;
-  viewCount: number;
-  questionCount: number;
-  category?: CategoryEnum;
-  excercises: IExercise[];
-}
