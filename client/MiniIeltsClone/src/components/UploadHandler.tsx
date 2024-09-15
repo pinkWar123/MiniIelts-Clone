@@ -19,6 +19,7 @@ const UploadHandler: FunctionComponent<UploadHandlerProps> = ({
         {...props}
         onPreview={onPreview}
         maxCount={1}
+        // onChange={e => }
       >
         <button
           style={{ border: 0, background: "none" }}

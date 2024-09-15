@@ -1,6 +1,10 @@
 import { AxiosResponse } from "axios";
-import { CreateTestDto, TestSubmitDto } from "../types/Request/Test";
-import { IResponseTest, ITest, TestSearchViewDto } from "../types/Model/Test";
+import {
+  CreateTestDto,
+  TestSubmitDto,
+  UpdateTestDto,
+} from "../types/Request/Test";
+import { ITest, TestSearchViewDto } from "../types/Model/Test";
 import axiosInstance from "./axiosConfig";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
 import { TestSubmitResultDto } from "../types/Responses/Test";
@@ -9,6 +13,13 @@ export const createTest = async (
   createTestDto: CreateTestDto
 ): Promise<AxiosResponse<ITest>> => {
   return await axiosInstance.post("/Test", createTestDto);
+};
+
+export const updateTest = async (
+  testId: number,
+  updateTestDto: UpdateTestDto
+) => {
+  return (await axiosInstance.put(`/Test/${testId}`, updateTestDto)).data;
 };
 
 export const getAllTests = async (
@@ -27,10 +38,8 @@ export const getTestSearch = async (qs: string) => {
   ).data;
 };
 
-export const getTestById = async (
-  id: number | string
-): Promise<AxiosResponse<IResponseTest>> => {
-  return (await axiosInstance.get(`Test/${id}`)).data;
+export const getTestById = async (id: number | string) => {
+  return (await axiosInstance.get<IResponse<ITest>>(`Test/${id}`)).data;
 };
 
 export const getTestResult = async (

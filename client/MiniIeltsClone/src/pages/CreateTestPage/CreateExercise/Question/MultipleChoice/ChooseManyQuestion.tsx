@@ -53,6 +53,7 @@ const ChooseManyQuestion: FunctionComponent<ChooseManyQuestionProps> = ({
         choices={
           <Checkbox.Group<string>
             onChange={(value: string[]) => updateQuestion(value)}
+            value={findQuestion(exerciseOrder, questionOrder)?.answer.split("")}
           >
             {renderChoices()}
           </Checkbox.Group>

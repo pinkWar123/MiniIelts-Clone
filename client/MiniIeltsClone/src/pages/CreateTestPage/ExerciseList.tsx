@@ -14,6 +14,7 @@ interface ExerciseListProps {}
 
 const ExerciseList: FunctionComponent<ExerciseListProps> = () => {
   const { test } = useTest();
+  console.log(test?.exercises);
   return (
     <>
       {test?.exercises?.map((exercise) => {

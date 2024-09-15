@@ -23,6 +23,7 @@ const QuestionContent: FunctionComponent<QuestionContentProps> = ({
       <Input
         id={`q-${questionOrder}`}
         placeholder="Enter question"
+        value={findQuestion(exerciseOrder, questionOrder)?.content}
         onChange={(e) => onUpdateQuestion(e.target.value)}
       />
     </>

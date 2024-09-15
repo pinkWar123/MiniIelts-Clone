@@ -24,6 +24,7 @@ import { StartTestProvider } from "./contexts/StartTestContext";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import Test from "./pages/AdminPage/Test";
 import Statistics from "./pages/AdminPage/Statistics";
+import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -171,6 +172,14 @@ function App() {
             element={
               <TestProvider>
                 <CreateTestPage />
+              </TestProvider>
+            }
+          />
+          <Route
+            path="update-test/:id"
+            element={
+              <TestProvider>
+                <UpdateTestPage />
               </TestProvider>
             }
           />

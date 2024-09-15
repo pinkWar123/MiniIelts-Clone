@@ -229,5 +229,14 @@ namespace MiniIeltsCloneServer.Services.TestService
 
             
         }
+        public async Task UpdateTestAsync(int testId, UpdateTestDto updateTestDto)
+        {
+            var test = await _testRepo.GetByIdAsync(testId);
+            if(test == null) throw new TestNotFoundException($"Can't find test with id {testId}");
+            var entity = _mapper.Map<Test>(updateTestDto);
+            entity.Id = test.Id;
+            await _testRepo.UpdateAsync(testId, entity);
+            await _testRepo.SaveChangesAsync();
+        }
     }
 }

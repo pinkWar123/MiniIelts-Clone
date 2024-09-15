@@ -20,6 +20,7 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
   const {
     handleUpdateExercise,
     findExercise,
+    findQuestion,
     handleUpdateExerciseChoice,
     findExerciseChoice,
   } = useTest();
@@ -60,7 +61,18 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
     };
     handleUpdateExercise(newExercise, exerciseOrder);
   }, [choiceCount, exerciseOrder]);
+
   const renderChoices = () => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return;
+    const findChoice = (order: number) => {
+      if (
+        !exercise.chooseManyChoices ||
+        exercise.chooseManyChoices?.length <= order
+      )
+        return undefined;
+      return exercise.chooseManyChoices[order].content;
+    };
     return Array.from({ length: choiceCount }, (_, order) => {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       return (
@@ -70,6 +82,7 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
               {letters[order]}.{" "}
               <Input
                 id={`choosemany-input-${order + 1}`}
+                value={findChoice(order)}
                 onChange={(e) => {
                   const oldChoice = findExerciseChoice(
                     exerciseOrder,
@@ -118,7 +131,10 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
   return (
     <>
       <Form.Item label="Question: " required>
-        <Input onChange={(e) => handleChangeQuestion(e.target.value)} />
+        <Input
+          value={findExercise(exerciseOrder)?.content}
+          onChange={(e) => handleChangeQuestion(e.target.value)}
+        />
       </Form.Item>
       <Form.Item label="Number of choices: " required>
         <TypedInputNumber<number>
@@ -127,7 +143,10 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
           min={endQuestion - startQuestion + 1}
         />
       </Form.Item>
-      <Checkbox.Group onChange={handleCheckboxGroupChange}>
+      <Checkbox.Group
+        value={findQuestion(exerciseOrder, startQuestion)?.answer.split("")}
+        onChange={handleCheckboxGroupChange}
+      >
         {renderChoices()}
       </Checkbox.Group>
     </>

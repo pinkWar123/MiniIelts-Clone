@@ -1,4 +1,4 @@
-import { App, Button, Form, Input, message, Typography } from "antd";
+import { App, Button, Form, Input, Typography } from "antd";
 import { FunctionComponent } from "react";
 import styles from "./CreateTestPage.module.scss";
 import AddExercise from "./AddExercise";
@@ -40,7 +40,7 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
       excercises: test?.exercises,
     };
     console.log("data to send:", fakeValue);
-    const res = await createTest(fakeValue);
+    await createTest(fakeValue);
     modal.success({
       content: "Create test successfully. Do you want to refresh the page?",
       onOk: () => setTest(null),
@@ -60,10 +60,17 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
         }}
       >
         <Form.Item label="Title" name="title" required>
-          <Input placeholder="Enter the title of the test" />
+          <Input
+            placeholder="Enter the title of the test"
+            value={test?.title}
+          />
         </Form.Item>
         <Form.Item label="Essay" name="essay" required>
-          <Input.TextArea rows={4} placeholder="Enter the essay" />
+          <Input.TextArea
+            rows={4}
+            placeholder="Enter the essay"
+            value={test?.essay}
+          />
         </Form.Item>
         <Form.Item label="Picture" required>
           <UploadHandler onPreview={onPreview} props={props} />

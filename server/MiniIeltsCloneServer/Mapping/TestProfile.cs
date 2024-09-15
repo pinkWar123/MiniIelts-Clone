@@ -14,9 +14,10 @@ namespace MiniIeltsCloneServer.Mapping
         {
             CreateMap<Test, CreateTestDto>().ReverseMap();
             CreateMap<Test, TestViewDto>()
-            .ForMember(dest => dest.Excercises, opt => opt.MapFrom(src => src.Excercises))
-            .ReverseMap();
+                .ForMember(dest => dest.Exercises, opt => opt.MapFrom(src => src.Excercises))
+                .ReverseMap();
             CreateMap<Test, TestSearchViewDto>();
+            CreateMap<Test, UpdateTestDto>().ReverseMap();
         }
     }
 }
