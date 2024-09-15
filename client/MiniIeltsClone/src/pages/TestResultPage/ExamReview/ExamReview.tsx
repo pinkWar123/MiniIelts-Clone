@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import TestDisplay from "../../../components/DoTest/TestDisplay";
 import Test from "../../../components/DoTest/RenderTest/Test";
 import Essay from "../../../components/DoTest/Essay";
-import { IResponseTest } from "../../../types/Model/Test";
+import { ITest } from "../../../types/Model/Test";
 import { getTestById } from "../../../services/test";
 
 interface ExamReviewProps {
@@ -10,7 +10,7 @@ interface ExamReviewProps {
 }
 
 const ExamReview: FunctionComponent<ExamReviewProps> = ({ id }) => {
-  const [test, setTest] = useState<IResponseTest>();
+  const [test, setTest] = useState<ITest>();
   useEffect(() => {
     const fetchTest = async () => {
       const res = await getTestById(id);
@@ -23,7 +23,7 @@ const ExamReview: FunctionComponent<ExamReviewProps> = ({ id }) => {
   return (
     <>
       <TestDisplay
-        test={<Test exercises={test.excercises} showAnswer />}
+        test={<Test exercises={test.exercises} showAnswer />}
         essay={<Essay title={test.title} content={test.essay} />}
       />
     </>

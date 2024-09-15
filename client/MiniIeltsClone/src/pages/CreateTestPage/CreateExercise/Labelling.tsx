@@ -3,7 +3,7 @@ import { IExerciseProps } from "./exerciseProps";
 import ExerciseDivider from "../../../components/create-test/ExerciseDivider";
 import { convertQuestionTypeEnumToDescription } from "../../../helpers/convertQuestionType";
 import { QuestionTypeEnum } from "../../../contants/questionType";
-import { Form, Input } from "antd";
+import { Form, Input, UploadFile } from "antd";
 import useTest from "../../../hooks/useTest";
 import { IQuestion } from "../../../types/Model/Question";
 import UploadHandler from "../../../components/UploadHandler";
@@ -25,10 +25,14 @@ const Labelling: FunctionComponent<LabellingProps> = ({
   endQuestion,
   exerciseOrder,
 }) => {
-  const { props, onPreview, handleUpload, fileList } = useUpload();
+  const { props, onPreview, handleUpload, fileList, setFileList } = useUpload();
   const quillRef = useRef<ReactQuill | null>(null);
-  const { handleUpdateQuestion, handleUpdateExercise, findExercise } =
-    useTest();
+  const {
+    handleUpdateQuestion,
+    handleUpdateExercise,
+    findExercise,
+    findQuestion,
+  } = useTest();
   const onQuestionChange = (index: number, answer: string) => {
     const questionOrder = startQuestion + index;
     const newQuestion: IQuestion = {
@@ -51,15 +55,31 @@ const Labelling: FunctionComponent<LabellingProps> = ({
   };
 
   useEffect(() => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return;
+    const fileList: UploadFile = {
+      uid: "initial-diagram-image",
+      name: exercise.content,
+      url: exercise.content,
+    };
+    setFileList([fileList]);
+  }, []);
+
+  useEffect(() => {
     const uploadDiagram = async () => {
-      if (fileList.length === 0) return;
-      const images = await handleUpload();
+      let images;
+      if (
+        fileList.length > 0 &&
+        !fileList?.some((f) => f.name === findExercise(exerciseOrder)?.content)
+      ) {
+        images = await handleUpload();
+      }
       console.log(images);
       const currentExercise = findExercise(exerciseOrder);
       if (!currentExercise) return;
       const newExercise: IExercise = {
         ...currentExercise,
-        content: images.data.fileNames[0],
+        content: images?.data.fileNames[0] ?? currentExercise.content,
       };
       handleUpdateExercise(newExercise, exerciseOrder);
     };
@@ -86,7 +106,10 @@ const Labelling: FunctionComponent<LabellingProps> = ({
       <div style={{ marginTop: "12px", marginBottom: "12px" }}>Answer:</div>
       {Array.from({ length: endQuestion - startQuestion + 1 }, (_, index) => (
         <Form.Item key={`label-${index}`} label={`${index + startQuestion} `}>
-          <Input onChange={(e) => onQuestionChange(index, e.target.value)} />
+          <Input
+            value={findQuestion(exerciseOrder, index + startQuestion)?.answer}
+            onChange={(e) => onQuestionChange(index, e.target.value)}
+          />
         </Form.Item>
       ))}
     </>

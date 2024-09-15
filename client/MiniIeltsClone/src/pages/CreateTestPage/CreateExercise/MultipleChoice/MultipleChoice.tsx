@@ -9,6 +9,7 @@ import ChooseOne from "./ChooseOne";
 import ChooseMany from "./ChooseMany";
 import CancelButton from "../../../../components/create-test/CancelButton";
 import ExerciseDivider from "../../../../components/create-test/ExerciseDivider";
+import useTest from "../../../../hooks/useTest";
 
 interface MultipleChoiceProps extends IExerciseProps {}
 
@@ -17,8 +18,16 @@ const MultipleChoice: FunctionComponent<MultipleChoiceProps> = ({
   endQuestion,
   exerciseOrder,
 }) => {
+  const { findExercise } = useTest();
+  const isMultipleChoice = () => {
+    const exercise = findExercise(exerciseOrder);
+    if (!exercise) return false;
+    return exercise.chooseManyChoices && exercise.chooseManyChoices.length > 0;
+  };
   const [type, setType] = useState<MultipleChoiceEnum>(
-    MultipleChoiceEnum.ChooseOne
+    isMultipleChoice()
+      ? MultipleChoiceEnum.ChooseMany
+      : MultipleChoiceEnum.ChooseOne
   );
   return (
     <>

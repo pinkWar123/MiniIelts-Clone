@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { App, Button, Form, Input, Typography, UploadFile } from "antd";
 import { useUpload } from "../../hooks/useUpload";
 import { CreateTestDto } from "../../types/Request/Test";
@@ -8,7 +8,7 @@ import ExerciseList from "./ExerciseList";
 import AddExercise from "./AddExercise";
 import useTest from "../../hooks/useTest";
 import { createTest, updateTest } from "../../services/test";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 interface TestPageProps {
   variant: "update" | "create";
 }
@@ -26,9 +26,13 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
   const { test, setTest } = useTest();
   const { id } = useParams();
   const { modal } = App.useApp();
+  const navigate = useNavigate();
   const { handleUpload, props, onPreview, setFileList, fileList } = useUpload();
+  const [firstTime, setFirstTime] = useState<boolean>(true);
   useEffect(() => {
+    if (!firstTime) return;
     const fileList = test?.picture;
+    console.log(fileList);
     if (!fileList) return;
     const uploadFileList: UploadFile = {
       uid: "intial-image",
@@ -36,7 +40,8 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
       name: fileList,
     };
     setFileList([uploadFileList]);
-  }, [test]);
+    setFirstTime(false);
+  }, [test, firstTime]);
   console.log(fileList);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (value: any) => {
@@ -58,8 +63,9 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
     if (variant === "create") await createTest(fakeValue);
     else if (id) await updateTest(parseInt(id), fakeValue);
     modal.success({
-      content: "Create test successfully. Do you want to refresh the page?",
-      onOk: () => setTest(null),
+      content:
+        "Create test successfully. Do you want to go back to test admin page?",
+      onOk: () => navigate("/admin/test"),
       closable: true,
       closeIcon: true,
     });
@@ -106,7 +112,7 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
           <AddExercise />
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Create test
+              {variant === "create" ? "Create test" : "Update test"}
             </Button>
           </Form.Item>
         </Form.Item>

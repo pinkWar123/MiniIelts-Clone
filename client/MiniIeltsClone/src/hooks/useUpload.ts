@@ -26,6 +26,9 @@ export const useUpload = (initialFiles?: UploadFile[]) => {
       newFileList.splice(index, 1);
       setFileList(newFileList);
     },
+    // onChange: ({ fileList }) => {
+    //   setFileList(fileList);
+    // },
     beforeUpload: (file) => {
       setFileList([...fileList, file]);
 
