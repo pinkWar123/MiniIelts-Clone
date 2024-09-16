@@ -22,7 +22,7 @@ import GuestTestResultPage from "./pages/TestResultPage/GuestTestResultPage";
 import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTestResultPage";
 import { StartTestProvider } from "./contexts/StartTestContext";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
-import Test from "./pages/AdminPage/Test";
+import Test from "./pages/AdminPage/Test/Test";
 import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
 import Statistics from "./pages/AdminPage/Statistics/Statistics";
 import Users from "./pages/AdminPage/Users/Users";
