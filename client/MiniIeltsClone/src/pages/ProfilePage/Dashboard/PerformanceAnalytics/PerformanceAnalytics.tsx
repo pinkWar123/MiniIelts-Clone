@@ -1,5 +1,8 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { callGetTestHistory } from "../../../../services/profile";
+import {
+  callGetTestHistory,
+  callGetTestHistoryByAdmin,
+} from "../../../../services/profile";
 import PerformanceChart, { Result } from "./PerformanceChart";
 import { Card, Col, Row } from "antd";
 import styles from "./PerformanceAnalytics.module.scss";
@@ -7,21 +10,25 @@ import { TestHistory } from "../../../../types/Responses/history";
 import dayjs from "dayjs";
 import QuestionTypes from "./QuestionTypes";
 import TestHistoryList from "../TestHistory/TestHistoryList";
+import { useParams } from "react-router-dom";
+import { IPagedResponse } from "../../../../types/Responses/response";
 interface PerformanceAnalyticsProps {}
 
 const PerformanceAnalytics: FunctionComponent<
   PerformanceAnalyticsProps
 > = () => {
   const [testHistory, setTestHistory] = useState<TestHistory[]>();
-
+  const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
-      const res = await callGetTestHistory(1, 10);
+      let res: IPagedResponse<TestHistory[]>;
+      if (id) res = await callGetTestHistoryByAdmin(id, 1, 10);
+      else res = await callGetTestHistory(1, 10);
       if (res.data) setTestHistory(res.data);
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const getChartDetails = () => {
     return testHistory?.map(

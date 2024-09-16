@@ -10,6 +10,14 @@ export const callGetOverallResult = async () => {
   ).data;
 };
 
+export const callGetOverallResultByAdmin = async (id: string) => {
+  return (
+    await axiosInstance.get<IResponse<Performance>>(
+      `Dashboard/overall-result/${id}}`
+    )
+  ).data;
+};
+
 export const callGetTestHistory = async (
   pageNumber: number,
   pageSize: number
@@ -24,10 +32,33 @@ export const callGetTestHistory = async (
   ).data;
 };
 
+export const callGetTestHistoryByAdmin = async (
+  id: string,
+  pageNumber: number,
+  pageSize: number
+) => {
+  return (
+    await axiosInstance.get<IPagedResponse<TestHistory[]>>(
+      `Dashboard/history/${id}`,
+      {
+        params: { pageNumber, pageSize },
+      }
+    )
+  ).data;
+};
+
 export const callGetQuestionStatistics = async () => {
   return (
     await axiosInstance.get<IResponse<QuestionStatistics[]>>(
       "Dashboard/question-statistics"
+    )
+  ).data;
+};
+
+export const callGetQuestionStatisticsByAdmin = async (id: string) => {
+  return (
+    await axiosInstance.get<IResponse<QuestionStatistics[]>>(
+      `Dashboard/question-statistics/${id}`
     )
   ).data;
 };

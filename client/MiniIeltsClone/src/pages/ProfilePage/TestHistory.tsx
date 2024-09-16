@@ -2,20 +2,34 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { TestHistory } from "../../types/Responses/history";
 import TestHistoryList from "./Dashboard/TestHistory/TestHistoryList";
 import { Pagination } from "antd";
-import { callGetTestHistory } from "../../services/profile";
+import {
+  callGetTestHistory,
+  callGetTestHistoryByAdmin,
+} from "../../services/profile";
 import { usePagination } from "../../hooks/usePagination";
+import { IPagedResponse } from "../../types/Responses/response";
+import { useParams } from "react-router-dom";
 
 interface TestHistoryProps {}
 
 const TestHistoryComponent: FunctionComponent<TestHistoryProps> = () => {
   const [histories, setHistories] = useState<TestHistory[]>();
   const { pagination, setPagination, handleChangePage } = usePagination();
+  const { id } = useParams();
   useEffect(() => {
     const fetchHistories = async () => {
-      const res = await callGetTestHistory(
-        pagination.pageNumber,
-        pagination.pageSize
-      );
+      let res: IPagedResponse<TestHistory[]>;
+      if (id)
+        res = await callGetTestHistoryByAdmin(
+          id,
+          pagination.pageNumber,
+          pagination.pageSize
+        );
+      else
+        res = await callGetTestHistory(
+          pagination.pageNumber,
+          pagination.pageSize
+        );
       console.log(res);
       setHistories(res.data);
       setPagination({

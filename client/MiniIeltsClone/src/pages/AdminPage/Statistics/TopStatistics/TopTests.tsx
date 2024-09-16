@@ -1,7 +1,7 @@
 import { Table, TableColumnsType, Typography } from "antd";
 import { FunctionComponent } from "react";
-import { TopTest } from "../../../types/Responses/statistic";
-import { formatTimestampToDateMonthYear } from "../../../helpers/time";
+import { TopTest } from "../../../../types/Responses/statistic";
+import { formatTimestampToDateMonthYear } from "../../../../helpers/time";
 
 interface TopTestsProps {
   topTests: TopTest[];

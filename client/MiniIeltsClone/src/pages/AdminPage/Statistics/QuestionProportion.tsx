@@ -1,9 +1,9 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import { useEffect, useState } from "react";
-import { QuestionDistribution } from "../../types/Responses/statistic";
-import { getQuestionDistribution } from "../../services/statistic";
-import { convertQuestionTypeEnumToDescription } from "../../helpers/convertQuestionType";
+import { QuestionDistribution } from "../../../types/Responses/statistic";
+import { getQuestionDistribution } from "../../../services/statistic";
+import { convertQuestionTypeEnumToDescription } from "../../../helpers/convertQuestionType";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 

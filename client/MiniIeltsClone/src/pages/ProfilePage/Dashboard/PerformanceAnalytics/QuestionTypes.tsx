@@ -1,20 +1,28 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { QuestionStatistics } from "../../../../types/Responses/questionStatistics";
-import { callGetQuestionStatistics } from "../../../../services/profile";
+import {
+  callGetQuestionStatistics,
+  callGetQuestionStatisticsByAdmin,
+} from "../../../../services/profile";
 import { Divider, Flex } from "antd";
 import { convertQuestionTypeEnumToDescription } from "../../../../helpers/convertQuestionType";
 import styles from "./PerformanceAnalytics.module.scss";
+import { useParams } from "react-router-dom";
+import { IResponse } from "../../../../types/Responses/response";
 interface QuestionTypesProps {}
 
 const QuestionTypes: FunctionComponent<QuestionTypesProps> = () => {
   const [questionStat, setQuestionStat] = useState<QuestionStatistics[]>();
+  const { id } = useParams();
   useEffect(() => {
     const fetchStat = async () => {
-      const res = await callGetQuestionStatistics();
+      let res: IResponse<QuestionStatistics[]>;
+      if (id) res = await callGetQuestionStatisticsByAdmin(id);
+      else res = await callGetQuestionStatistics();
       if (res.data) setQuestionStat(res.data);
     };
     fetchStat();
-  }, []);
+  }, [id]);
   console.log(questionStat);
   return (
     <>

@@ -35,7 +35,9 @@ const AdminLayout: FunctionComponent<AdminLayoutProps> = () => {
       <Layout>
         <Header></Header>
         <Content>
-          <Outlet></Outlet>
+          <div style={{ padding: "40px" }}>
+            <Outlet />
+          </div>
         </Content>
       </Layout>
     </Layout>

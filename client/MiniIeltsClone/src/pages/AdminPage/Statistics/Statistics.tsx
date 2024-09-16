@@ -1,10 +1,10 @@
 import { Card, Col, Row } from "antd";
 import { FunctionComponent } from "react";
-import TotalStatistics from "./TotalStatistics";
 import AccuracyBarChart from "./Accuracy";
 import QuestionProportionPieChart from "./QuestionProportion";
 import ScoreDistributionChart from "./ScoreDistribution";
 import TopStatistics from "./TopStatistics/TopStatistics";
+import TotalStatistics from "./TotalStatistics";
 
 interface StatisticsProps {}
 

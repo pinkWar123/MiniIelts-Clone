@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -8,12 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useState } from "react";
-import { getQuestionAccuracies } from "../../services/statistic";
-import { Accuracy } from "../../types/Responses/statistic";
-import { convertQuestionTypeEnumToDescription } from "../../helpers/convertQuestionType";
+import { ScoreDistribution } from "../../../types/Responses/statistic";
+import { getScoreDistribution } from "../../../services/statistic";
 
-// Register the necessary components
+// Register components required for Bar Chart
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,24 +22,24 @@ ChartJS.register(
   Legend
 );
 
-const AccuracyBarChart = () => {
-  const [stat, setStat] = useState<Accuracy>();
+const ScoreDistributionChart = () => {
+  const [stat, setStat] = useState<ScoreDistribution>();
   useEffect(() => {
     const fetchStat = async () => {
-      const res = await getQuestionAccuracies();
+      const res = await getScoreDistribution();
       setStat(res.data);
     };
     fetchStat();
   }, []);
   const data = {
-    labels: stat?.questionAccuracies.map((q) =>
-      convertQuestionTypeEnumToDescription(q.questionType)
+    labels: stat?.scoreDistributionDetails.map(
+      (q) => `${q.floorScore}-${q.floorScore + 1}`
     ),
 
     datasets: [
       {
-        label: "Accuracy (%)",
-        data: stat?.questionAccuracies.map((q) => q.accuracy * 100), // Sample accuracy data
+        label: "Number of test takers ",
+        data: stat?.scoreDistributionDetails.map((q) => q.number), // Sample accuracy data
         backgroundColor: "rgba(75, 192, 192, 0.6)", // Bar color
         borderColor: "rgba(75, 192, 192, 1)", // Border color
         borderWidth: 1,
@@ -73,4 +72,4 @@ const AccuracyBarChart = () => {
   return <Bar data={data} options={options} height={300} />;
 };
 
-export default AccuracyBarChart;
+export default ScoreDistributionChart;
