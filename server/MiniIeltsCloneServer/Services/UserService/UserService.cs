@@ -233,10 +233,10 @@ namespace MiniIeltsCloneServer.Services.UserService
         {
             var query = _context.Users.AsQueryable();
             
-            if(@object.UserName != null)
+            if(!String.IsNullOrEmpty(@object.UserName))
             {
                 Console.WriteLine("Filter by user name");
-                query = query.Where(x => x.UserName.Contains(@object.UserName, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(x => x.UserName.ToLower().Contains(@object.UserName.ToLower()));
             }
 
             
@@ -257,7 +257,7 @@ namespace MiniIeltsCloneServer.Services.UserService
                                 Id = ur.u.Id
                             });
 
-            if(@object.Role != null)
+            if(!String.IsNullOrEmpty(@object.Role))
             {
                 Console.WriteLine("Filter by role");
                 roleFilteredQuery = roleFilteredQuery.Where(r => r.Role == @object.Role);
