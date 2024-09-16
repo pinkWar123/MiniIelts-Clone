@@ -23,8 +23,8 @@ import AuthenticatedTestResultPage from "./pages/TestResultPage/AuthenticatedTes
 import { StartTestProvider } from "./contexts/StartTestContext";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import Test from "./pages/AdminPage/Test";
-import Statistics from "./pages/AdminPage/Statistics";
 import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
+import Statistics from "./pages/AdminPage/Statistics/Statistics";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();

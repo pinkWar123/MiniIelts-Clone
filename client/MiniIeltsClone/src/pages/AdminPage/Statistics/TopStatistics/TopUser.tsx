@@ -1,6 +1,6 @@
 import { Table, TableColumnsType, Typography } from "antd";
 import { FunctionComponent } from "react";
-import { TopUser } from "../../../types/Responses/statistic";
+import { TopUser } from "../../../../types/Responses/statistic";
 
 interface TopUsersProps {
   topUsers: TopUser[];

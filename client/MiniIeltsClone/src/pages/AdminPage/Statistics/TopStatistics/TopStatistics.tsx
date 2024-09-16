@@ -2,8 +2,8 @@ import { Card, Col } from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
 import TopTests from "./TopTests";
 import TopUsers from "./TopUser";
-import { TopStatistics as TopStat } from "../../../types/Responses/statistic";
-import { getTopStatistics } from "../../../services/statistic";
+import { TopStatistics as TopStat } from "../../../../types/Responses/statistic";
+import { getTopStatistics } from "../../../../services/statistic";
 
 interface TopStatisticsProps {}
 

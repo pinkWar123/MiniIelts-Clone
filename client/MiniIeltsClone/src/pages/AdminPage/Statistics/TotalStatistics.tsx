@@ -1,7 +1,7 @@
 import { Card, Col, Statistic } from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
-import { TotalStatistics as TotalStat } from "../../types/Responses/statistic";
-import { getTotalStatistics } from "../../services/statistic";
+import { TotalStatistics as TotalStat } from "../../../types/Responses/statistic";
+import { getTotalStatistics } from "../../../services/statistic";
 
 interface TotalStatisticsProps {}
 
