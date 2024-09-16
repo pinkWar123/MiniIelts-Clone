@@ -1,5 +1,8 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { callGetOverallResult } from "../../../services/profile";
+import {
+  callGetOverallResult,
+  callGetOverallResultByAdmin,
+} from "../../../services/profile";
 import { Performance } from "../../../types/Responses/performance";
 import { Col, Row, Typography } from "antd";
 import styles from "../ProfilePage.module.scss";
@@ -11,20 +14,25 @@ import {
   RiseOutlined,
 } from "@ant-design/icons";
 import PerformanceAnalytics from "./PerformanceAnalytics/PerformanceAnalytics";
+import { useParams } from "react-router-dom";
+import { IResponse } from "../../../types/Responses/response";
 interface ProfilePageProps {}
 
 const Dashboard: FunctionComponent<ProfilePageProps> = () => {
   const [performance, setPerformance] = useState<Performance>();
+  const { id } = useParams();
   useEffect(() => {
     const fetchUserPerformance = async () => {
-      const res = await callGetOverallResult();
+      let res: IResponse<Performance>;
+      if (id) res = await callGetOverallResultByAdmin(id);
+      else res = await callGetOverallResult();
       console.log(res);
       if (res.data) {
         setPerformance(res.data);
       }
     };
     fetchUserPerformance();
-  }, []);
+  }, [id]);
   console.log(performance);
   return (
     <>

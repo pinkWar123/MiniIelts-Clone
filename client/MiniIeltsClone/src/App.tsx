@@ -25,6 +25,7 @@ import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import Test from "./pages/AdminPage/Test";
 import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
 import Statistics from "./pages/AdminPage/Statistics/Statistics";
+import Users from "./pages/AdminPage/Users/Users";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -225,12 +226,15 @@ function App() {
           />
           <Route path="profile" element={<ProfileLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboard/:id" element={<Dashboard />} />
             <Route path="history" element={<TestHistoryComponent />} />
+            <Route path="history/:id" element={<TestHistoryComponent />} />
           </Route>
 
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<Statistics />} />
             <Route path="test" element={<Test />} />
+            <Route path="user" element={<Users />} />
           </Route>
         </Routes>
       </>
