@@ -3,7 +3,7 @@ import { TestTime } from "../pages/DoTestPage/BottomPanel/BottomPanel";
 export interface StartTestContextProps {
   startTest: boolean;
   setStartTest: React.Dispatch<React.SetStateAction<boolean>>;
-  time: TestTime;
+  startTime: Date | null;
 }
 export const StartTestContext = createContext<
   StartTestContextProps | undefined
@@ -16,30 +16,33 @@ interface StartTestProviderProps {
 
 export const StartTestProvider: React.FC<StartTestProviderProps> = ({
   children,
-  time: initialTime,
 }) => {
   const [startTest, setStartTest] = useState<boolean>(false);
-  const [time, setTime] = useState<TestTime>(
-    initialTime ?? { minute: 0, second: 0 }
-  );
+  const [startTime, setStartTime] = useState<Date | null>(null);
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prev) => {
-        if (!startTest) return prev;
-        const newTime: TestTime = { ...prev };
-        if (prev.second < 59) newTime.second += 1;
-        else if (prev.second === 59) {
-          prev.second = 0;
-          prev.minute += 1;
-        }
-        return newTime;
-      });
-    }, 1000);
+    // const interval = setInterval(() => {
+    //   setTime((prev) => {
+    //     if (!startTest) return prev;
+    //     const newTime: TestTime = { ...prev };
+    //     if (prev.second < 59) newTime.second += 1;
+    //     else if (prev.second === 59) {
+    //       prev.second = 0;
+    //       prev.minute += 1;
+    //     }
+    //     return newTime;
+    //   });
+    // }, 1000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
+
+    if (startTest) {
+      const start = new Date();
+      setStartTime(start);
+      console.log("Start Time:", start.getTime()); // Log start time
+    }
   }, [startTest]);
   return (
-    <StartTestContext.Provider value={{ setStartTest, startTest, time }}>
+    <StartTestContext.Provider value={{ setStartTest, startTest, startTime }}>
       {children}
     </StartTestContext.Provider>
   );

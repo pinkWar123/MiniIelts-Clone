@@ -23,7 +23,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [answers, setAnswers] = useState<IDoTestAnswer[] | null>(null);
-  const { time } = useStartTest();
+  const { startTime, setStartTest } = useStartTest();
   const { user } = useUser();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -42,10 +42,23 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
   };
   const handleSubmit = async () => {
     if (!id) return;
+    const endTime = new Date(); // Get current time
+    console.log("End Time:", endTime.getTime()); // Log end time
+
+    const duration = endTime.getTime() - (startTime?.getTime() ?? 0);
+    console.log("Duration in milliseconds:", duration); // Log duration in ms
+
+    // Convert duration to minutes and seconds
+    const seconds = Math.floor(duration / 1000) % 60;
+    const minutes = Math.floor(duration / 1000 / 60);
+    console.log(`Elapsed time: ${minutes} minutes and ${seconds} seconds`);
+
+    console.log(seconds, minutes);
     const testSubmitDto: TestSubmitDto = {
       questionSubmitDtos: [],
-      time: time.minute * 60 + time.second,
+      time: minutes * 60 + seconds,
     };
+    console.log(testSubmitDto);
     let order = 1;
     answers?.forEach((answer) =>
       testSubmitDto.questionSubmitDtos.push({
@@ -59,6 +72,7 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
       if (res.data) {
         console.log(res.data);
         navigate(`/result/${res.data.resultId}`);
+        setStartTest(false);
       } else message.error({ content: "Submit test failed" });
       return;
     }
@@ -66,8 +80,9 @@ export const AnswersProvider: React.FC<{ children: ReactNode }> = ({
     let url = "./result?";
     answers?.forEach((answer) => (url += `a=${answer.value}&`));
     url = url.slice(0, -1);
-    url += `&time=${time.minute * 60 + time.second}`;
+    url += `&time=${minutes * 60 + seconds}`;
     navigate(url);
+    setStartTest(false);
   };
 
   const getAnswerByOrder = (order: number) => {
