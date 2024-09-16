@@ -3,7 +3,7 @@ import { Col, Flex, Row } from "antd";
 import styles from "./ProfileLayout.module.scss";
 import { navigateItems } from "./navigateItems";
 import NavigateItem from "./NavigateItem";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { ADMIN_ROLE } from "../../contants/roles";
 import AdminHeader from "../../components/Header/AdminHeader";
@@ -13,6 +13,7 @@ interface ProfileLayoutProps {}
 const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
   const location = useLocation();
   const { user } = useUser();
+  const { id } = useParams();
   const navigate = useNavigate();
   const profileString = location.pathname.split("/").pop();
   const isActive = (title: string) => {
@@ -35,7 +36,9 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
               <NavigateItem
                 {...item}
                 active={isActive(item.title)}
-                onClick={() => navigate(`./${item.url}`)}
+                onClick={() =>
+                  navigate(id ? `./${id}/${item.url}` : `./${item.url}`)
+                }
               />
             ))}
           </Col>

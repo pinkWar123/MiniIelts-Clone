@@ -60,7 +60,7 @@ const Users: FunctionComponent<UsersProps> = () => {
         key: "action",
         render: (value: string) => (
           <Space>
-            <a href={`/profile/dashboard/${value}`}>Profile</a>
+            <a href={`/profile/${value}/dashboard`}>Profile</a>
           </Space>
         ),
       },
