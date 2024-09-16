@@ -6,12 +6,15 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Authentication;
 using MiniIeltsCloneServer.Services.TokenService;
+using MiniIeltsCloneServer.Services.UriService;
 using MiniIeltsCloneServer.Services.UserService;
 using MiniIeltsCloneServer.Validators.Authentication;
 using MiniIeltsCloneServer.Wrappers;
+using MiniIeltsCloneServer.Wrappers.Filter;
 
 namespace MiniIeltsCloneServer.Controllers
 {
@@ -21,10 +24,12 @@ namespace MiniIeltsCloneServer.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        public UserController(IUserService userService, ITokenService tokenService)
+        private readonly IUriService _uriService;
+        public UserController(IUserService userService, ITokenService tokenService,IUriService uriService)
         {
             _userService = userService;
             _tokenService = tokenService;
+            _uriService = uriService;
         }
 
         [HttpGet("{token}")]
@@ -98,6 +103,15 @@ namespace MiniIeltsCloneServer.Controllers
             Console.WriteLine($"------------------------ Refresh Token: {refreshToken} -------------------------------");
             if(refreshToken != null) await _tokenService.RevokeToken(refreshToken);
             return NoContent();
+        }
+
+        [HttpGet("user-info")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserInfo([FromQuery] UserQueryObject @object)
+        {
+            var results = await _userService.GetPagedUsers(@object);
+            var response = PaginationHelper.CreatePagedResponse(results.Value, results.TotalRecords, new PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request.Path.Value);
+            return Ok(response);
         }
 
         private void SetRefreshTokenInCookie(string refreshToken)

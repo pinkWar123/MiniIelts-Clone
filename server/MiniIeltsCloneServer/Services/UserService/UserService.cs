@@ -14,9 +14,11 @@ using Microsoft.IdentityModel.Tokens;
 using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Authentication;
+using MiniIeltsCloneServer.Models.Dtos.User;
 using MiniIeltsCloneServer.Services.TokenService;
 using MiniIeltsCloneServer.Settings;
 using MiniIeltsCloneServer.Validators.Authentication;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.UserService
 {
@@ -24,17 +26,20 @@ namespace MiniIeltsCloneServer.Services.UserService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly ITokenService _tokenService;
         public UserService(
             ApplicationDbContext context,
         UserManager<AppUser> userManager,
+        RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
         IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
             _tokenService = tokenService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -222,6 +227,52 @@ namespace MiniIeltsCloneServer.Services.UserService
         public Task Logout()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<PagedData<UserInfoDto>> GetPagedUsers(UserQueryObject @object)
+        {
+            var query = _context.Users.AsQueryable();
+            
+            if(@object.UserName != null)
+            {
+                Console.WriteLine("Filter by user name");
+                query = query.Where(x => x.UserName.Contains(@object.UserName, StringComparison.OrdinalIgnoreCase));
+            }
+
+            
+
+            var roleFilteredQuery = query
+                    .Join(_context.UserRoles, 
+                            u => u.Id, 
+                            ur => ur.UserId, 
+                            (u, ur) => new { u, ur })
+                    .Join(_context.Roles, 
+                            u => u.ur.RoleId, 
+                            r => r.Id, 
+                            (ur, r) => new UserInfoDto
+                            {
+                                Username = ur.u.UserName,
+                                Role = r.Name
+                            });
+
+            if(@object.Role != null)
+            {
+                Console.WriteLine("Filter by role");
+                roleFilteredQuery = roleFilteredQuery.Where(r => r.Role == @object.Role);
+            }
+
+            var totalRecords = await roleFilteredQuery.CountAsync();    
+                var users = await roleFilteredQuery
+                            .OrderBy(u => u.Username)
+                            .Skip((@object.PageNumber - 1) * @object.PageSize)
+                            .Take(@object.PageSize)
+                            .ToListAsync();
+                return new PagedData<UserInfoDto>
+                {
+                    TotalRecords = totalRecords,
+                    Value = users 
+                };
+            
         }
     }
 }
