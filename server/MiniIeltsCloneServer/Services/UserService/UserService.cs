@@ -253,7 +253,8 @@ namespace MiniIeltsCloneServer.Services.UserService
                             {
                                 Username = ur.u.UserName,
                                 Email = ur.u.Email,
-                                Role = r.Name
+                                Role = r.Name,
+                                Id = ur.u.Id
                             });
 
             if(@object.Role != null)
