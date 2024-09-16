@@ -31,6 +31,11 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             return performance;
         }
 
+        public async Task<Performance> GetOverallEvaluationByAdmin(string userId)
+        {
+            return await _resultRepository.GetOverallResult(userId);
+        }
+
         public async Task<List<QuestionStatistics>> GetQuestionStatistics()
         {
             var user = await _userService.GetCurrentUser();
@@ -40,6 +45,11 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             return statistics;
         }
 
+        public async Task<List<QuestionStatistics>> GetQuestionStatisticsByAdmin(string userId)
+        {
+            return await _resultRepository.GetQuestionStatistics(userId);
+        }
+
         public async Task<PagedData<TestHistory>> GetTestHistory(DashboardQueryObject @object)
         {
             var user = await _userService.GetCurrentUser();
@@ -47,6 +57,11 @@ namespace MiniIeltsCloneServer.Services.DashboardService
                 throw new UnauthorizedAccessException();
             var history = await _resultRepository.GetTestHistory(user.Id, @object);
             return history;
+        }
+
+        public async Task<PagedData<TestHistory>> GetTestHistoryByAdmin(string userId, DashboardQueryObject @object)
+        {
+            return await _resultRepository.GetTestHistory(userId, @object);
         }
     }
 }

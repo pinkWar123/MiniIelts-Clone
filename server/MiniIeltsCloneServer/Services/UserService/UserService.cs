@@ -252,6 +252,7 @@ namespace MiniIeltsCloneServer.Services.UserService
                             (ur, r) => new UserInfoDto
                             {
                                 Username = ur.u.UserName,
+                                Email = ur.u.Email,
                                 Role = r.Name
                             });
 
