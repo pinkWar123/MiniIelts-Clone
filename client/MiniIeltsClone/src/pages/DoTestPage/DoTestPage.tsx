@@ -53,7 +53,13 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
   return (
     <>
       <DoTestLayout
-        essay={<Essay title={test.title} content={test.essay} />}
+        essay={
+          <Essay
+            title={test.title}
+            content={test.essay}
+            picture={test.picture}
+          />
+        }
         test={<Test exercises={test.exercises} />}
       />
       <BottomPanel id={parseInt(id)} />

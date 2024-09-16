@@ -25,6 +25,7 @@ import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import Test from "./pages/AdminPage/Test";
 import Statistics from "./pages/AdminPage/Statistics";
 import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
+import TextHighlight from "./components/TextHighlight/TextHighlight";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -162,6 +163,7 @@ function App() {
       {contextHolder[1]}
       <>
         <Routes>
+          <Route path="highlight" element={<TextHighlight />} />
           <Route path="/home" element={<SearchPage />} />
           <Route path="auth" element={<AuthLayout />}>
             <Route path="register" element={<RegisterPage />} />

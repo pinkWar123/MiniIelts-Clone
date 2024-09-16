@@ -66,12 +66,12 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
                         {
                             t.Id,
                             t.Title,
-                            Result = t.Results.FirstOrDefault(),
+                            Result = t.Results.FirstOrDefault(r => r.Id == resultId),
                             Questions = t.Excercises.SelectMany(e => e.Questions).ToList(),
 
                         })
                         .FirstOrDefaultAsync();
-
+            Console.WriteLine($"Time: ${test?.Result?.Time}");
             // Now do the complex logic on the client side
             if (test != null)
             {
