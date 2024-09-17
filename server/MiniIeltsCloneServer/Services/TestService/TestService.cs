@@ -63,6 +63,18 @@ namespace MiniIeltsCloneServer.Services.TestService
             }
         }
 
+        public async Task DeleteTestById(int id)
+        {
+            var testToDelete = await _unitOfWork.TestRepository.GetByIdAsync(id);
+            if(testToDelete == null) 
+            {
+                throw new TestNotFoundException($"Test with id {id} not found");
+            }
+
+            _unitOfWork.TestRepository.Remove(testToDelete);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<PagedData<TestViewDto>?> GetAllTestsAsync(TestQueryObject queryObject)
         {
             var tests = _unitOfWork.TestRepository.GetValuesByQuery(queryObject);

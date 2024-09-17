@@ -75,7 +75,6 @@ interface SearchBoxProps {}
 const SearchBox: React.FC<SearchBoxProps> = () => {
   const [searchQuery, setSearchQuery] = useState<SearchQuery>({
     questionType: [],
-    sort: QuestionSortEnum.MostViewed,
   });
   const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
     useQueryParams();
@@ -101,7 +100,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   const handleSearch = () => {
     let qs: string = "";
     searchQuery.questionType?.forEach(
-      (type) => type && (qs += `questionType=${type}&`)
+      (type) => (type || type === 0) && (qs += `questionType=${type}&`)
     );
     qs = qs.slice(0, qs.length - 1);
     if (searchQuery.sort !== undefined) qs += `&sort=${searchQuery.sort}`;

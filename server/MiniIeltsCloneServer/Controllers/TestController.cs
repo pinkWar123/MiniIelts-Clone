@@ -131,5 +131,12 @@ namespace MiniIeltsCloneServer.Controllers
 
             return Ok(new Response<TestResultDto>(result));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTestById([FromRoute] int id)
+        {
+            await _testService.DeleteTestById(id);
+            return NoContent();
+        }
     }
 }

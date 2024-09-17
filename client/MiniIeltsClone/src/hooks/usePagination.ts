@@ -6,7 +6,7 @@ import {
 } from "../contants/pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 
-interface IPagination {
+export interface IPagination {
   pageNumber: number;
   pageSize: number;
   totalRecords: number;
