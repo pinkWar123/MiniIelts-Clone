@@ -1,6 +1,7 @@
 import { FunctionComponent, useMemo } from "react";
 import { TestSearchViewDto } from "../../../types/Model/Test";
 import {
+  Button,
   message,
   Popconfirm,
   Space,
@@ -81,6 +82,9 @@ const Test: FunctionComponent<TestProps> = () => {
   return (
     <>
       <SearchBox />
+      <a href="../../create-test" target="blank">
+        <Button style={{ margin: "20px 0" }}>Create new test</Button>
+      </a>
       <Table
         columns={columns}
         dataSource={tests}
