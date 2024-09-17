@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.TestService;
 using MiniIeltsCloneServer.Wrappers;
@@ -32,16 +33,28 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
             return test;
         }
 
+        public async Task<List<TestDropdownViewDto>> GetTestDropdownViewDtos(string testName)
+        {
+            return await GetContext()
+                        .Where(t => t.Title.ToLower().Contains(testName.ToLower()))
+                        .Select(t => new TestDropdownViewDto
+                        {
+                            Title = t.Title,
+                            Id = t.Id
+                        })
+                        .Take(10)
+                        .ToListAsync();
+        }
+
         public async Task<PagedData<Test>> GetTestSearchViews(TestQueryObject @object)
         {
-            Console.WriteLine(@object?.QuestionType?.Count());
             var query = GetContext()
                             .Include(x => x.Excercises)
                             .AsQueryable();
 
             if(@object?.Title != null && !String.IsNullOrEmpty(@object.Title))
             {
-                query = query.Where(q => q.Title.Contains(@object.Title));
+                query = query.Where(q => q.Title.ToLower().Contains(@object.Title.ToLower()));
             }
             
             if(@object?.QuestionType != null && @object.QuestionType.Count > 0)
@@ -81,8 +94,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
                 TotalRecords = totalRecords,
                 Value = tests
             };
-
-            throw new NotImplementedException();
         }
     }
 }
