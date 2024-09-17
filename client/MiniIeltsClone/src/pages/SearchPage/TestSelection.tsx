@@ -1,42 +1,19 @@
 import { Col, Empty, Flex, Pagination, Row } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import TestCard from "../../components/TestCard";
 import PaddingContainer from "../../components/PaddingContainer";
-import { TestSearchViewDto } from "../../types/Model/Test";
-import { getTestSearch } from "../../services/test";
-import useQueryParams from "../../hooks/useQueryParam";
 import { usePagination } from "../../hooks/usePagination";
 import styles from "./SearchPage.module.scss";
+import { useSearchTest } from "../../hooks/useSearchTest";
 interface TestSelectionProps {}
 
 const TestSelection: FunctionComponent<TestSelectionProps> = () => {
-  const [tests, setTests] = useState<TestSearchViewDto[]>();
   const { pagination, handleChangePage, setPagination } = usePagination(8);
   const [isEmpty, setEmpty] = useState<boolean>(false);
-  const { getQueryParamWithMultipleValues, getQueryParamWithSingleValue } =
-    useQueryParams();
-  useEffect(() => {
-    const fetchTests = async () => {
-      const questionTypes = getQueryParamWithMultipleValues("questionType");
-      const sort = getQueryParamWithSingleValue("sort");
-      const title = getQueryParamWithSingleValue("title");
-      let qs: string = `pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`;
-      questionTypes?.forEach((type) => type && (qs += `&questionType=${type}`));
-      if (sort) qs += `&questionSort=${sort}`;
-      if (title) qs += `&title=${title}`;
-      const res = await getTestSearch(qs);
-      setTests(res.data);
-      setPagination((prev) => ({ ...prev, totalRecords: res.totalRecords }));
-      if (!res.data || res.data.length === 0) setEmpty(true);
-    };
-    fetchTests();
-  }, [
-    getQueryParamWithMultipleValues,
-    getQueryParamWithSingleValue,
-    pagination.pageNumber,
-    pagination.pageSize,
-    setPagination,
-  ]);
+  const { tests } = useSearchTest(pagination, setPagination, () => {
+    setEmpty(true);
+  });
+
   if (isEmpty)
     return (
       <div className={styles["empty"]}>

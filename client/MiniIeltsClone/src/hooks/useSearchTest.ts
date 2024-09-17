@@ -1,47 +1,17 @@
 import { useEffect, useState } from "react";
-import { QuestionSortEnum } from "../contants/sort";
-import { SearchQuery } from "../pages/SearchPage/search";
 import useQueryParams from "./useQueryParam";
-import {
-  convertStringToQuestionTypeEnum,
-  convertStringToSortEnum,
-} from "../helpers/convertEnum";
 import { getTestSearch } from "../services/test";
 import { TestSearchViewDto } from "../types/Model/Test";
 import { IPagination } from "./usePagination";
 
 export const useSearchTest = (
   pagination: IPagination,
-  setPagination: React.Dispatch<React.SetStateAction<IPagination>>
+  setPagination: React.Dispatch<React.SetStateAction<IPagination>>,
+  onFinishFailed?: () => void
 ) => {
   const { getQueryParamWithSingleValue, getQueryParamWithMultipleValues } =
     useQueryParams();
   const [tests, setTests] = useState<TestSearchViewDto[]>();
-
-  const [searchQuery, setSearchQuery] = useState<SearchQuery>({
-    questionType: [],
-    sort: QuestionSortEnum.MostViewed,
-  });
-
-  useEffect(() => {
-    const sort = getQueryParamWithSingleValue("sort");
-    let sortParam: QuestionSortEnum | null = searchQuery?.sort ?? null;
-    if (sort !== null) {
-      sortParam = convertStringToSortEnum(sort);
-    }
-    const questionType = getQueryParamWithMultipleValues("questionType")?.map(
-      (type) => convertStringToQuestionTypeEnum(type)
-    );
-
-    setSearchQuery((prev) => ({
-      questionType: questionType
-        ? questionType.filter((i) => i !== null)
-        : prev.questionType,
-      sort: sortParam || prev.sort,
-      title: getQueryParamWithSingleValue("title") ?? "",
-    }));
-  }, [getQueryParamWithSingleValue, getQueryParamWithMultipleValues]);
-
   useEffect(() => {
     const fetchTests = async () => {
       const questionTypes = getQueryParamWithMultipleValues("questionType");
@@ -54,6 +24,8 @@ export const useSearchTest = (
       const res = await getTestSearch(qs);
       setTests(res.data);
       setPagination((prev) => ({ ...prev, totalRecords: res.totalRecords }));
+      if ((!res.data || res.data.length === 0) && onFinishFailed)
+        onFinishFailed();
     };
     fetchTests();
   }, [
@@ -62,6 +34,7 @@ export const useSearchTest = (
     pagination.pageNumber,
     pagination.pageSize,
     setPagination,
+    onFinishFailed,
   ]);
 
   return { tests };
