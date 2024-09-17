@@ -60,7 +60,7 @@ const DoTestLayout: FunctionComponent<DoTestLayoutProps> = ({
       ) : (
         <NormalHeader canLogOut={false} />
       )}
-      <TestDisplay essay={essay} test={test} />
+      <TestDisplay essay={essay} test={test} mode="doTest" />
     </>
   );
 };

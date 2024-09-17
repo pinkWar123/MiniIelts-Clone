@@ -7,9 +7,14 @@ import useAnswers from "../../hooks/useAnswers";
 interface TestDisplayProps {
   essay: React.ReactElement;
   test: React.ReactElement;
+  mode: "review" | "doTest";
 }
 
-const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
+const TestDisplay: FunctionComponent<TestDisplayProps> = ({
+  essay,
+  test,
+  mode,
+}) => {
   const { handleSubmit } = useAnswers();
   return (
     <>
@@ -34,20 +39,22 @@ const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
         </Resizable>
         <div className={styles["right-container"]}>
           {test}
-          <div>
-            <Divider />
-            <Flex justify="center">
-              <Typography.Title level={3}>End of the test</Typography.Title>
-            </Flex>
-            <Flex justify="center">
-              <Typography.Title level={5}>
-                Please submit to view your score and solutions
-              </Typography.Title>
-            </Flex>
-            <Flex justify="center">
-              <SubmitButton onClick={handleSubmit} />
-            </Flex>
-          </div>
+          {mode === "review" && (
+            <div>
+              <Divider />
+              <Flex justify="center">
+                <Typography.Title level={3}>End of the test</Typography.Title>
+              </Flex>
+              <Flex justify="center">
+                <Typography.Title level={5}>
+                  Please submit to view your score and solutions
+                </Typography.Title>
+              </Flex>
+              <Flex justify="center">
+                <SubmitButton onClick={handleSubmit} />
+              </Flex>
+            </div>
+          )}
         </div>
       </div>
     </>
