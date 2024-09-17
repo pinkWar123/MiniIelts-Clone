@@ -113,6 +113,11 @@ namespace MiniIeltsCloneServer.Services.TestService
             return _mapper.Map<TestViewDto>(test);           
         }
 
+        public async Task<List<TestDropdownViewDto>> GetTestDropdownViewDtos(string testName)
+        {
+            return await _testRepo.GetTestDropdownViewDtos(testName);
+        }
+
         public double GetTestMark(int correct, int questionCount)
         {
             var diff = questionCount - correct;
