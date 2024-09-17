@@ -34,7 +34,7 @@ const Essay: FunctionComponent<EssayProps> = ({ title, content, picture }) => {
       </Flex>
       <Typography.Paragraph style={{ paddingBottom: "150px" }}>
         <SelectionProvider>
-          <Highlighter htmlString={cleanedContent} />
+          <Highlighter minSelectionLength={5} htmlString={cleanedContent} />
         </SelectionProvider>
       </Typography.Paragraph>
     </div>
