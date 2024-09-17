@@ -1,5 +1,5 @@
 import { Col, Empty, Flex, Pagination, Row } from "antd";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import TestCard from "../../components/TestCard";
 import PaddingContainer from "../../components/PaddingContainer";
 import { usePagination } from "../../hooks/usePagination";
@@ -10,9 +10,10 @@ interface TestSelectionProps {}
 const TestSelection: FunctionComponent<TestSelectionProps> = () => {
   const { pagination, handleChangePage, setPagination } = usePagination(8);
   const [isEmpty, setEmpty] = useState<boolean>(false);
-  const { tests } = useSearchTest(pagination, setPagination, () => {
+  const onFinishFailed = useCallback(() => {
     setEmpty(true);
-  });
+  }, []);
+  const { tests } = useSearchTest(pagination, setPagination, onFinishFailed);
 
   if (isEmpty)
     return (

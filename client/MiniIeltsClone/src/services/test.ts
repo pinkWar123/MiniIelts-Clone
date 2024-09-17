@@ -61,3 +61,7 @@ export const submitTest = async (id: number, testSubmitDto: TestSubmitDto) => {
 export const incrementTestViewCount = async (id: number) => {
   return await axiosInstance.post(`Test/${id}/increment-viewcount`);
 };
+
+export const deleteTestById = async (id: number) => {
+  return (await axiosInstance.delete(`Test/${id}`)).data;
+};

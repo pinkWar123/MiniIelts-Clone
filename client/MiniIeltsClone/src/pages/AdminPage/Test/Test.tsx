@@ -1,17 +1,30 @@
 import { FunctionComponent, useMemo } from "react";
 import { TestSearchViewDto } from "../../../types/Model/Test";
-import { Table, TableColumnsType, Tooltip } from "antd";
+import {
+  message,
+  Popconfirm,
+  Space,
+  Table,
+  TableColumnsType,
+  Tooltip,
+} from "antd";
 import CustomImage from "../../../components/CustomImage";
 import { usePagination } from "../../../hooks/usePagination";
 import SearchBox from "../../../components/Search";
 import { useSearchTest } from "../../../hooks/useSearchTest";
+import { AuditOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { deleteTestById } from "../../../services/test";
 
 interface TestProps {}
 
 const Test: FunctionComponent<TestProps> = () => {
   const { pagination, setPagination, handleChangePage } = usePagination();
-  const { tests } = useSearchTest(pagination, setPagination);
-
+  const { tests, fetchTests } = useSearchTest(pagination, setPagination);
+  const handleDeleteTest = async (id: number) => {
+    await deleteTestById(id);
+    await fetchTests();
+    message.success({ content: "Delete test successfully" });
+  };
   const columns: TableColumnsType<TestSearchViewDto> = useMemo(
     () => [
       {
@@ -33,6 +46,34 @@ const Test: FunctionComponent<TestProps> = () => {
       },
       { title: "View Count", dataIndex: "viewCount", key: "viewCount" },
       { title: "Created Date", dataIndex: "createdOn", key: "createdOn" },
+      {
+        title: "Action",
+        key: "action",
+        render: (_, record) => (
+          <Space>
+            <Tooltip title="View test">
+              <a href={`../../test/${record.id}`} target="blank">
+                <AuditOutlined />
+              </a>
+            </Tooltip>
+            <Tooltip title="Edit test">
+              <a href={`../../update-test/${record.id}`} target="blank">
+                <EditOutlined />
+              </a>
+            </Tooltip>
+            <Tooltip title="Delete test">
+              <Popconfirm
+                title="Delete this test"
+                description="Are you sure to delete this test?"
+                placement="left"
+                onConfirm={() => handleDeleteTest(parseInt(record.id))}
+              >
+                <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+              </Popconfirm>
+            </Tooltip>
+          </Space>
+        ),
+      },
     ],
     []
   );
