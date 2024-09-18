@@ -28,6 +28,7 @@ import Statistics from "./pages/AdminPage/Statistics/Statistics";
 import Users from "./pages/AdminPage/Users/Users";
 import CreateFullTestLayout from "./layouts/CreateFullTestLayout/CreateFullTestLayout";
 import CreateFullTestPage from "./pages/CreateFullTestPage/CreateFullTestPage";
+import FullTest from "./pages/AdminPage/FullTest/FullTest";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -237,6 +238,7 @@ function App() {
             <Route index element={<Statistics />} />
             <Route path="test" element={<Test />} />
             <Route path="user" element={<Users />} />
+            <Route path="full-test" element={<FullTest />} />
           </Route>
 
           <Route path="create-full-test" element={<CreateFullTestLayout />}>

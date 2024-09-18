@@ -34,7 +34,7 @@ const TestDebounceSelect: FunctionComponent<TestDebounceSelectProps> = ({
           const _items = items as unknown as TestDropDownValue[];
           onChange(_items.map((item) => item.value));
         }}
-        style={{ width: "200px" }}
+        style={{ width: "100%" }}
       />
     </>
   );

@@ -15,6 +15,7 @@ import SearchBox from "../../../components/Search";
 import { useSearchTest } from "../../../hooks/useSearchTest";
 import { AuditOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { deleteTestById } from "../../../services/test";
+import FullTest from "../FullTest/FullTest";
 
 interface TestProps {}
 
@@ -82,9 +83,11 @@ const Test: FunctionComponent<TestProps> = () => {
   return (
     <>
       <SearchBox />
-      <a href="../../create-test" target="blank">
-        <Button style={{ margin: "20px 0" }}>Create new test</Button>
-      </a>
+      <Space>
+        <a href="../../create-test" target="blank">
+          <Button style={{ margin: "20px 0" }}>Create new test</Button>
+        </a>
+      </Space>
       <Table
         columns={columns}
         dataSource={tests}
@@ -95,6 +98,7 @@ const Test: FunctionComponent<TestProps> = () => {
         }}
         onChange={(config) => handleChangePage(config.current ?? 1)}
       />
+      <FullTest />
     </>
   );
 };

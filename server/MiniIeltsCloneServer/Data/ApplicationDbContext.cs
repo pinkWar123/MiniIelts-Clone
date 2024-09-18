@@ -19,6 +19,7 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<Answer> Answers { get; set; }
         public DbSet<ExerciseChoice> ExerciseChoices { get; set; }
         public DbSet<QuestionChoice> QuestionChoices { get; set; }
+        public DbSet<FullTest> FullTests { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

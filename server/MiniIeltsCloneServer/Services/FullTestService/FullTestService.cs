@@ -9,6 +9,8 @@ using MiniIeltsCloneServer.Exceptions.FullTest;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.FullTest;
+using MiniIeltsCloneServer.Models.Dtos.Test;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.FullTestService
 {
@@ -31,7 +33,6 @@ namespace MiniIeltsCloneServer.Services.FullTestService
                     var newFullTest = new FullTest
                     {
                         Title = dto.Title,
-                        Image = dto.Image,
                         CreatedOn = DateTime.UtcNow
                     };
 
@@ -63,6 +64,30 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(id);
             if(fullTest == null) throw new FullTestNotFoundException(id);
             return _mapper.Map<FullTestViewDto>(fullTest);
+        }
+
+        public async Task<PagedData<FullTestViewDto>> GetFullTests(FullTestQueryObject @object)
+        {
+            var fullTests = await _unitOfWork.FullTestRepository.GetFullTests(@object);
+            var values = fullTests.Value.Select(f => new FullTestViewDto
+            {
+                Title = f.Title,
+                Tests = f.Tests.Select(t => _mapper.Map<TestViewDto>(t)).ToList(),
+                CreatedOn = f.CreatedOn
+            }).ToList();
+
+            return new PagedData<FullTestViewDto>
+            {
+                Value = values,
+                TotalRecords = fullTests.TotalRecords
+            };
+        }
+
+        public async Task<bool> HasNameExisted(string name)
+        {
+            var fullTests = await _unitOfWork.FullTestRepository.FindAllAsync(f => f.Title == name);
+            if(fullTests == null || fullTests.Count == 0) return false;
+            return true;
         }
     }
 }

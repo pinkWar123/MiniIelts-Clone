@@ -6,9 +6,12 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models.Dtos.FullTest;
 using MiniIeltsCloneServer.Services.FullTestService;
+using MiniIeltsCloneServer.Services.UriService;
 using MiniIeltsCloneServer.Wrappers;
+using MiniIeltsCloneServer.Wrappers.Filter;
 
 namespace MiniIeltsCloneServer.Controllers
 {
@@ -18,10 +21,15 @@ namespace MiniIeltsCloneServer.Controllers
     {
         private readonly IValidator<CreateFullTestDto> _createFullTestValidator;
         private readonly IFullTestService _fullTestService;
-        public FullTestController(IValidator<CreateFullTestDto> createFullTestValidator, IFullTestService fullTestService)
+        private readonly IUriService _uriService;
+        public FullTestController(IValidator<CreateFullTestDto> createFullTestValidator, 
+        IFullTestService fullTestService,
+        IUriService uriService
+        )
         {
             _createFullTestValidator = createFullTestValidator;
             _fullTestService = fullTestService;
+            _uriService = uriService;
         }
         [HttpPost]
         public async Task<IResult> CreateNewFullTest([FromBody] CreateFullTestDto dto)
@@ -42,6 +50,21 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var fullTest = await _fullTestService.GetFullTestById(id);
             return Ok(new Response<FullTestViewDto>(fullTest));
+        }
+
+        [HttpGet]
+        public async Task<IResult> GetFullTests([FromQuery] FullTestQueryObject @object)
+        {
+            var fullTests = await _fullTestService.GetFullTests(@object);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(fullTests.Value, fullTests.TotalRecords, new PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request.Path.Value);
+            return Results.Ok(pagedResponse);
+        }
+
+        [HttpGet("check-title")]
+        public async Task<IResult> CheckNameExistence([FromQuery] string title)
+        {
+            var isExisted = await _fullTestService.HasNameExisted(title);
+            return Results.Ok(new Response<bool>(isExisted));
         }
     }
 }
