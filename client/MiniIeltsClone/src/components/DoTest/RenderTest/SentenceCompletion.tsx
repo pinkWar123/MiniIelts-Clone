@@ -17,7 +17,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
   showAnswer,
 }) => {
   const { handleUpdateAnswer, getAnswerByOrder } = useAnswers();
-  const convertSentenceToInputs = (htmlString: string) => {
+  const convertSentenceToInputs = (htmlString: string, index: number) => {
     // Normalize the string by replacing &nbsp; with spaces
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
 
@@ -25,9 +25,10 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
     const regex = /_____+/g;
 
     // Replace `_____` with placeholder
-    let count = 0;
+    let count = -1;
     const placeholders = normalizedHtmlString.replace(regex, () => {
-      return `<input data-placeholder="${count++}" />`;
+      count++;
+      return `<input data-placeholder="${count}" />`;
     });
 
     // Convert HTML with placeholders into React elements
@@ -40,28 +41,21 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
           if (element.attribs && element.attribs["data-placeholder"]) {
             const placeholderIndex: string =
               element.attribs["data-placeholder"];
-
+            console.log(placeholderIndex);
             return (
               <>
                 <span>
                   <Input
                     disabled={showAnswer}
-                    value={
-                      getAnswerByOrder(
-                        parseInt(placeholderIndex) + startQuestion
-                      )?.value
-                    }
-                    key={placeholderIndex + startQuestion}
+                    value={getAnswerByOrder(index + startQuestion)?.value}
+                    key={index + startQuestion}
                     style={{
                       width: "100px",
                       marginLeft: "10px",
                       marginRight: "10px",
                     }}
                     onChange={(e) => {
-                      handleUpdateAnswer(
-                        parseInt(placeholderIndex) + startQuestion,
-                        e.target.value
-                      );
+                      handleUpdateAnswer(index + startQuestion, e.target.value);
                     }}
                   />
                 </span>
@@ -87,7 +81,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
       {questions.map((q, index) => (
         <div key={`sentence-completion-${index + startQuestion}`}>
           <strong>{index + startQuestion}. </strong>
-          {convertSentenceToInputs(q.content ?? "")}
+          {convertSentenceToInputs(q.content ?? "", index)}
         </div>
       ))}{" "}
     </>

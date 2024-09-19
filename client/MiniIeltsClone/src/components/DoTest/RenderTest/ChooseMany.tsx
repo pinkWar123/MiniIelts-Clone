@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { TestBase } from "./base";
 import { generateABCOptions } from "../../../helpers/generateQuestionOptions";
 import { Checkbox } from "antd";
@@ -18,6 +18,17 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
   const [checkedIndex, setCheckedIndex] = useState<number[]>(
     Array.from({ length: endQuestion - startQuestion + 1 }, () => -1)
   );
+  useEffect(() => {
+    const indexes: number[] = [];
+    for (let i = startQuestion; i <= endQuestion; i++) {
+      const answer = getAnswerByOrder(i)?.value;
+      if (answer) {
+        indexes.push(answer.charCodeAt(0) - "A".charCodeAt(0));
+        console.log(parseInt("A"));
+      } else indexes.push(-1);
+    }
+    setCheckedIndex(indexes);
+  }, [startQuestion, endQuestion]);
   const handleCheckboxChange = (
     checked: boolean,
     value: string,
@@ -29,7 +40,7 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
         setCheckedIndex((prev) =>
           prev.map((i, _index) => (_index === positionToInsert ? index : i))
         );
-        handleUpdateAnswer(positionToInsert + startQuestion + 1, value);
+        handleUpdateAnswer(positionToInsert + startQuestion, value);
       }
     } else {
       const positionToRemove = checkedIndex.findIndex((i) => i === index);
@@ -37,9 +48,20 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
         setCheckedIndex((prev) =>
           prev.map((i, _index) => (_index === positionToRemove ? -1 : i))
         );
-        handleUpdateAnswer(positionToRemove + startQuestion + 1, "");
+        handleUpdateAnswer(positionToRemove + startQuestion, "");
       }
     }
+  };
+
+  const onCheckBoxChange = () => {};
+
+  const getValues = () => {
+    const values: string[] = [];
+    for (let i = startQuestion; i <= endQuestion; i++) {
+      const value = getAnswerByOrder(i)?.value;
+      if (value) values.push(value);
+    }
+    return values;
   };
 
   const renderQuestions = () => {
@@ -54,9 +76,11 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
                 !checkedIndex.includes(index)
               }
               key={`choosemany-${index}`}
+              value={choice.value}
               onChange={(e) =>
                 handleCheckboxChange(e.target.checked, choice.value, index)
               }
+              checked={getValues().includes(choice.value)}
             >
               <strong>{choice.value}.</strong> {choice.content}
             </Checkbox>
@@ -70,7 +94,6 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
       const clientAnswers = questionIndexes.map((index) =>
         getAnswerByOrder(index)
       );
-      console.log(clientAnswers);
       return (
         <div key={`choosemanydiv-${index}`} style={{ marginBottom: "10px" }}>
           <Checkbox

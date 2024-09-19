@@ -20,6 +20,20 @@ namespace MiniIeltsCloneServer.Data.Repositories.FullTestRepo
         {
         }
 
+        public override async Task<FullTest?> GetByIdAsync(int id)
+        {
+            var test = await GetContext()
+            .Include(f => f.Tests)
+                .ThenInclude(x => x.Excercises)
+                    .ThenInclude(x => x.ChooseManyChoices)
+            .Include(x => x.Tests)
+                .ThenInclude(x => x.Excercises)
+                    .ThenInclude(x => x.Questions)
+                        .ThenInclude(x => x.Choices)
+            .FirstOrDefaultAsync(x => x.Id == id);
+            return test;
+        }
+
         public async Task<PagedData<FullTest>> GetFullTests(FullTestQueryObject @object)
         {
             var query = _context.FullTests.AsQueryable();

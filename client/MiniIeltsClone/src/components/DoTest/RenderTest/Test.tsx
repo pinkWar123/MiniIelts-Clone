@@ -6,19 +6,26 @@ import SummaryCompletion from "./SummaryCompletion";
 import { TestBase } from "./base";
 import MatchingHeading from "./MatchingHeadings";
 import ChooseMany from "./ChooseMany";
-import { Typography } from "antd";
+import { Divider, Flex, Typography } from "antd";
 import MatchingInformation from "./MatchingInformation";
 import YNNG from "./YNNG";
 import Labelling from "./Labelling";
 import ChooseOne from "./ChooseOne";
 import SentenceCompletion from "./SentenceCompletion";
-
+import SubmitButton from "../../Buttons/SubmitButton";
+import useAnswers from "../../../hooks/useAnswers";
 interface TestProps {
   exercises: IExercise[];
   showAnswer?: boolean;
+  mode: "review" | "do-test";
 }
 
-const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
+const Test: FunctionComponent<TestProps> = ({
+  exercises,
+  showAnswer,
+  mode,
+}) => {
+  const { handleSubmit } = useAnswers();
   const renderExercises = (exercise: IExercise, index: number) => {
     const {
       startQuestion,
@@ -95,9 +102,27 @@ const Test: FunctionComponent<TestProps> = ({ exercises, showAnswer }) => {
     );
   };
   return (
-    <div>
-      {exercises?.map((exercise, index) => renderExercises(exercise, index))}
-    </div>
+    <>
+      <div>
+        {exercises?.map((exercise, index) => renderExercises(exercise, index))}
+      </div>
+      {mode === "do-test" && (
+        <div>
+          <Divider />
+          <Flex justify="center">
+            <Typography.Title level={3}>End of the test</Typography.Title>
+          </Flex>
+          <Flex justify="center">
+            <Typography.Title level={5}>
+              Please submit to view your score and solutions
+            </Typography.Title>
+          </Flex>
+          <Flex justify="center">
+            <SubmitButton onClick={handleSubmit} />
+          </Flex>
+        </div>
+      )}
+    </>
   );
 };
 

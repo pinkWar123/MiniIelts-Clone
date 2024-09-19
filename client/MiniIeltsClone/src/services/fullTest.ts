@@ -25,3 +25,8 @@ export const getFullTests = async (query: FullTestQueryObject) => {
     })
   ).data;
 };
+
+export const getFullTestByIdAsync = async (id: string) => {
+  return (await axiosInstance.get<IResponse<FullTestViewDto>>(`FullTest/${id}`))
+    .data;
+};

@@ -20,6 +20,7 @@ const ChooseOne: FunctionComponent<ChooseOneProps> = ({
           onChange={(e) =>
             handleUpdateAnswer(startQuestion + index, e.target.value)
           }
+          value={getAnswerByOrder(startQuestion + index)?.value}
         >
           {question.choices?.map((choice, _index) => (
             <div key={`chooseone-choice-group-${_index}_${choice.order}`}>
