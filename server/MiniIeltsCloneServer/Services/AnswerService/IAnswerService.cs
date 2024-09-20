@@ -9,5 +9,6 @@ namespace MiniIeltsCloneServer.Services.AnswerService
     public interface IAnswerService
     {
         Task CreateNewAnswer(CreateAnswerDto createAnswerDto);
+        Task CreateNewAnswers(List<CreateAnswerDto> createAnswersDto);
     }
 }

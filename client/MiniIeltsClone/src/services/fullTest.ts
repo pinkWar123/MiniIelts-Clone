@@ -2,7 +2,11 @@ import {
   CreateFullTestDto,
   FullTestQueryObject,
 } from "../types/Request/fullTest";
-import { FullTestViewDto } from "../types/Responses/fullTest";
+import {
+  FullTestResultDto,
+  FullTestViewDto,
+  SubmitFullTestDto,
+} from "../types/Responses/fullTest";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
 import axiosInstance from "./axiosConfig";
 
@@ -29,4 +33,13 @@ export const getFullTests = async (query: FullTestQueryObject) => {
 export const getFullTestByIdAsync = async (id: string) => {
   return (await axiosInstance.get<IResponse<FullTestViewDto>>(`FullTest/${id}`))
     .data;
+};
+
+export const submitFullTest = async (id: number, dto: SubmitFullTestDto) => {
+  return (
+    await axiosInstance.post<IResponse<FullTestResultDto>>(
+      `FullTest/${id}/submit`,
+      dto
+    )
+  ).data;
 };

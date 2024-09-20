@@ -53,8 +53,6 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
     }
   };
 
-  const onCheckBoxChange = () => {};
-
   const getValues = () => {
     const values: string[] = [];
     for (let i = startQuestion; i <= endQuestion; i++) {

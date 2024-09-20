@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Space } from "antd";
+import { Col, Row, Space } from "antd";
 import { FunctionComponent } from "react";
 import QuestionCircle from "../DoTestPage/BottomPanel/QuestionCircle";
 import useAnswers from "../../hooks/useAnswers";

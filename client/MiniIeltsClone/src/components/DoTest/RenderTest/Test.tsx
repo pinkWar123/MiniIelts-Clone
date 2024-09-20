@@ -18,6 +18,7 @@ interface TestProps {
   exercises: IExercise[];
   showAnswer?: boolean;
   mode: "review" | "do-test";
+  questionRefs?: React.RefObject<HTMLDivElement>[];
 }
 
 const Test: FunctionComponent<TestProps> = ({

@@ -13,5 +13,6 @@ namespace MiniIeltsCloneServer.Services.FullTestService
         Task<FullTestViewDto> GetFullTestById(int id);
         Task<PagedData<FullTestViewDto>> GetFullTests(FullTestQueryObject @object);
         Task<bool> HasNameExisted(string name);
+        Task<FullTestResultDto> SubmitFullTest(int fullTestId, SubmitFullTestDto dto);
     }
 }

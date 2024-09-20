@@ -9,7 +9,9 @@ using MiniIeltsCloneServer.Exceptions.FullTest;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.FullTest;
+using MiniIeltsCloneServer.Models.Dtos.Question;
 using MiniIeltsCloneServer.Models.Dtos.Test;
+using MiniIeltsCloneServer.Services.TestService;
 using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.FullTestService
@@ -17,12 +19,14 @@ namespace MiniIeltsCloneServer.Services.FullTestService
     public class FullTestService : IFullTestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITestService _testService;
         private readonly IMapper _mapper;
         
-        public FullTestService(IUnitOfWork unitOfWork, IMapper mapper)
+        public FullTestService(IUnitOfWork unitOfWork, IMapper mapper, ITestService testService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _testService = testService;
         }
         public async Task CreateFullTest(CreateFullTestDto dto)
         {
@@ -88,6 +92,50 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             var fullTests = await _unitOfWork.FullTestRepository.FindAllAsync(f => f.Title == name);
             if(fullTests == null || fullTests.Count == 0) return false;
             return true;
+        }
+
+        public async Task<FullTestResultDto> SubmitFullTest(int fullTestId, SubmitFullTestDto dto)
+        {
+            var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(fullTestId);
+            if(fullTest == null) throw new FullTestNotFoundException(fullTestId);
+            
+            var offset = 0;
+            var results = new List<TestResultDto>();
+            for (var i = 0; i < fullTest.Tests.Count; i++)
+            {
+                var test = fullTest.Tests[i];
+                var questions = dto.Answers.Skip(offset).Take(test.QuestionCount).ToList();
+                questions.ForEach(q => q.Order -= offset);
+                var result = await _testService.GetTestResult(test.Id, new TestSubmitDto {QuestionSubmitDtos = questions});
+                results.Add(result);
+                offset += test.QuestionCount;
+            }
+
+            var questionResults = new List<QuestionResultDto>();
+            var curIdx = 1;
+
+            results.ForEach(r => r.QuestionResults.ForEach(q => {
+                questionResults.Add(new QuestionResultDto
+                {
+                    Order = curIdx++,
+                    UserAnswer = q.UserAnswer,
+                    Answer = q.Answer,
+                    IsTrue = q.IsTrue
+                });
+            }));
+
+
+            return new FullTestResultDto
+            {
+                FullTestId = fullTestId,
+                Title = fullTest.Title,
+                Marks = 0,
+                Correct = results.Sum(r => r.Correct),
+                QuestionCount = results.Sum(r => r.QuestionCount),
+                QuestionResults = questionResults
+            };  
+
+
         }
     }
 }

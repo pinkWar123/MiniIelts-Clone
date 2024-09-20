@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -20,15 +21,18 @@ namespace MiniIeltsCloneServer.Controllers
     public class FullTestController : ControllerBase
     {
         private readonly IValidator<CreateFullTestDto> _createFullTestValidator;
+        private readonly IValidator<SubmitFullTestDto> _submitFullTestValidator;
         private readonly IFullTestService _fullTestService;
         private readonly IUriService _uriService;
         public FullTestController(IValidator<CreateFullTestDto> createFullTestValidator, 
         IFullTestService fullTestService,
+        IValidator<SubmitFullTestDto> submitFullTestValidator,
         IUriService uriService
         )
         {
             _createFullTestValidator = createFullTestValidator;
             _fullTestService = fullTestService;
+            _submitFullTestValidator = submitFullTestValidator;
             _uriService = uriService;
         }
         [HttpPost]
@@ -43,6 +47,22 @@ namespace MiniIeltsCloneServer.Controllers
             await _fullTestService.CreateFullTest(dto);
 
             return Results.Accepted();
+        }
+
+        [HttpPost("{id}/submit")]
+        [Authorize]
+        public async Task<IResult> SubmitFullTest([FromRoute] int id, [FromBody] SubmitFullTestDto dto)
+        {
+            var validationResult = await _submitFullTestValidator.ValidateAsync(dto);
+            if(!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+
+            var result = await _fullTestService.SubmitFullTest(id, dto);
+
+            return Results.Ok(new Response<FullTestResultDto>(result));
+
         }
 
         [HttpGet("{id}")]
