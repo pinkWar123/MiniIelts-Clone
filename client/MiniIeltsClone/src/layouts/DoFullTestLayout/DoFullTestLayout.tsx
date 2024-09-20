@@ -5,7 +5,7 @@ import {
 } from "@ant-design/icons";
 import { App, Button, Flex, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import styles from "./DoFullTestLayout.module.scss";
 import { Outlet, useParams } from "react-router-dom";
 import useAnswers from "../../hooks/useAnswers";
@@ -18,6 +18,15 @@ const DoFullTestLayout: FunctionComponent<DoFullTestLayoutProps> = () => {
   const { answers } = useAnswers();
   const { modal } = App.useApp();
   const { id } = useParams();
+  useEffect(() => {
+    // Add the overflow-hidden class when this component mounts
+    document.body.style.overflow = "hidden";
+
+    // Clean up: Reset the body overflow when the component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
   const handleSubmit = async () => {
     if (!id || !answers || answers.length === 0) return;
     const dto: SubmitFullTestDto = {
