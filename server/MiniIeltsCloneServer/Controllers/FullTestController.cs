@@ -72,6 +72,13 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(new Response<FullTestViewDto>(fullTest));
         }
 
+        [HttpGet("{id}/solution")]
+        public async Task<IResult> GetFullTestSolution([FromRoute] int id)
+        {
+            var solution = await _fullTestService.GetFullTestKey(id);
+            return Results.Ok(new Response<FullTestKeyDto>(solution));
+        }
+
         [HttpGet]
         public async Task<IResult> GetFullTests([FromQuery] FullTestQueryObject @object)
         {

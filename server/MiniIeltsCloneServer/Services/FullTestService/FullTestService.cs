@@ -70,6 +70,39 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             return _mapper.Map<FullTestViewDto>(fullTest);
         }
 
+        public async Task<FullTestKeyDto> GetFullTestKey(int fullTestId)
+        {
+            var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(fullTestId);
+            if(fullTest == null) throw new FullTestNotFoundException(fullTestId);
+            
+            var part = 1;
+            var offset = 0;
+            var testKeys = fullTest.Tests.Select(t =>
+            {
+                var dto = new TestKeyDto
+                {
+                    Part = part++,
+                    StartQuestion = offset + 1,
+                    EndQuestion = offset + t.QuestionCount,
+                    Keys = t.Excercises.SelectMany(e => e.Questions).Select(q => new QuestionKeyDto
+                    {
+                        Order = q.Order + offset,
+                        Answer = q.Answer
+                    }).ToList() 
+                };
+                offset += t.QuestionCount;
+                return dto;
+            }).ToList();
+
+            return new FullTestKeyDto
+            {
+                FullTestId = fullTestId,
+                Title = fullTest.Title,
+                QuestionCount = fullTest.Tests.Sum(t => t.QuestionCount),
+                TestKeys = testKeys
+            };
+        }
+
         public async Task<PagedData<FullTestViewDto>> GetFullTests(FullTestQueryObject @object)
         {
             var fullTests = await _unitOfWork.FullTestRepository.GetFullTests(@object);
@@ -100,29 +133,37 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             if(fullTest == null) throw new FullTestNotFoundException(fullTestId);
             
             var offset = 0;
-            var results = new List<TestResultDto>();
+            var testResults = new List<Models.Dtos.Test.TestResultDto>();
             for (var i = 0; i < fullTest.Tests.Count; i++)
             {
                 var test = fullTest.Tests[i];
                 var questions = dto.Answers.Skip(offset).Take(test.QuestionCount).ToList();
                 questions.ForEach(q => q.Order -= offset);
                 var result = await _testService.GetTestResult(test.Id, new TestSubmitDto {QuestionSubmitDtos = questions});
-                results.Add(result);
+                testResults.Add(result);
                 offset += test.QuestionCount;
             }
 
-            var questionResults = new List<QuestionResultDto>();
-            var curIdx = 1;
+            var results = new List<Models.Dtos.FullTest.TestResultDto>();
+            offset = 0;
+            var currentPart = 1;
 
-            results.ForEach(r => r.QuestionResults.ForEach(q => {
-                questionResults.Add(new QuestionResultDto
+            testResults.ForEach(t => {
+                results.Add(new Models.Dtos.FullTest.TestResultDto
                 {
-                    Order = curIdx++,
-                    UserAnswer = q.UserAnswer,
-                    Answer = q.Answer,
-                    IsTrue = q.IsTrue
+                    Part = currentPart++,
+                    StartQuestion = offset + 1,
+                    EndQuestion = offset + t.QuestionCount,
+                    QuestionResults = t.QuestionResults.Select(q => new QuestionResultDto
+                    {
+                        UserAnswer = q.UserAnswer,
+                        Answer = q.Answer,
+                        IsTrue = q.IsTrue,
+                        Order = q.Order + offset
+                    }).ToList()
                 });
-            }));
+                offset += t.QuestionCount;
+            });
 
 
             return new FullTestResultDto
@@ -130,9 +171,9 @@ namespace MiniIeltsCloneServer.Services.FullTestService
                 FullTestId = fullTestId,
                 Title = fullTest.Title,
                 Marks = 0,
-                Correct = results.Sum(r => r.Correct),
-                QuestionCount = results.Sum(r => r.QuestionCount),
-                QuestionResults = questionResults,
+                Correct = testResults.Sum(r => r.Correct),
+                QuestionCount = testResults.Sum(r => r.QuestionCount),
+                Results = results,
                 Time = dto.Time
             };  
 
