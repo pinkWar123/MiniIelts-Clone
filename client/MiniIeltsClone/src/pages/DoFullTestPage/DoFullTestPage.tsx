@@ -39,6 +39,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
       const transformedTests = tests.map((t, index) => {
         return {
           ...t,
+          picture: t.picture,
           exercises: t.exercises.map((e) => {
             return {
               ...e,
@@ -109,6 +110,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
           <Essay
             content={fullTest.tests[activeIndex].essay}
             title={fullTest.tests[activeIndex].title}
+            picture={fullTest.tests[activeIndex].picture}
           />
         }
         test={

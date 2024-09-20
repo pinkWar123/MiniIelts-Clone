@@ -1,19 +1,33 @@
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Space } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect } from "react";
 import styles from "./DoFullTestLayout.module.scss";
 import { convertSecondsToMinute } from "../../helpers/time";
-interface TimeProps {}
+interface TimeProps {
+  time: number;
+  start: boolean;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
+  onTimeOut: () => Promise<void>;
+}
 
-const Time: FunctionComponent<TimeProps> = () => {
-  const [time, setTime] = useState<number>(60 * 60);
+const Time: FunctionComponent<TimeProps> = ({
+  onTimeOut,
+  time,
+  setTime,
+  start,
+}) => {
   useEffect(() => {
+    if (!start) return;
+    if (time === 0) {
+      onTimeOut();
+      return;
+    }
+
     const interval = setInterval(() => {
       setTime((prev) => prev - 1);
     }, 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [time, setTime, onTimeOut, start]);
   return (
     <div>
       <Space>
@@ -22,7 +36,7 @@ const Time: FunctionComponent<TimeProps> = () => {
         <span className={styles["minute"]}>
           {convertSecondsToMinute(time)}
         </span>{" "}
-        minutes remaining
+        {time >= 60 ? "minutes" : "seconds"} remaining
       </Space>
     </div>
   );

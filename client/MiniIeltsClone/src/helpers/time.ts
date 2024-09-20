@@ -25,4 +25,4 @@ export const formatTimestampToDateMonthYear = (timestamp: string) => {
 };
 
 export const convertSecondsToMinute = (seconds: number) =>
-  Math.floor(seconds / 60);
+  seconds >= 60 ? Math.floor(seconds / 60) : seconds;

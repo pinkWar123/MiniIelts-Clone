@@ -103,7 +103,7 @@ const Test: FunctionComponent<TestProps> = ({
     );
   };
   return (
-    <>
+    <div style={{ paddingBottom: "200px" }}>
       <div>
         {exercises?.map((exercise, index) => renderExercises(exercise, index))}
       </div>
@@ -123,7 +123,7 @@ const Test: FunctionComponent<TestProps> = ({
           </Flex>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

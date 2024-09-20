@@ -1,43 +1,40 @@
 import { BlockOutlined, SendOutlined } from "@ant-design/icons";
 import { App, Button, Flex, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import styles from "./DoFullTestLayout.module.scss";
 import useAnswers from "../../hooks/useAnswers";
 import { useParams } from "react-router-dom";
 import { SubmitFullTestDto } from "../../types/Responses/fullTest";
 import { submitFullTest } from "../../services/fullTest";
 import Time from "./Time";
-import useStartTest from "../../hooks/useStartTest";
 import useUser from "../../hooks/useUser";
+import AskLoginModal from "../../components/AuthForm/AskLoginModal";
 interface FullTestHeaderProps {}
+
+const initialTime = 60 * 60;
 
 const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
   const { answers } = useAnswers();
   const { modal } = App.useApp();
-  const { user } = useUser();
-  const { startTime, setStartTest } = useStartTest();
   const { id } = useParams();
+  const { user } = useUser();
+  const [time, setTime] = useState<number>(initialTime);
+  const [start, setStart] = useState<boolean>(user !== null);
 
-  useEffect(() => {
-    if (user) setStartTest(true);
-  }, [user, setStartTest]);
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!id || !answers || answers.length === 0) return;
-    const now = new Date();
-    console.log(startTime?.getTime());
-    const duration = now.getTime() - (startTime?.getTime() ?? 0);
     const dto: SubmitFullTestDto = {
       answers: answers?.map((a) => ({
         order: a.order,
         value: a.value,
         questionType: a.questionType,
       })),
-      time: Math.floor(duration / 1000),
+      time: initialTime - time,
     };
     const res = await submitFullTest(parseInt(id), dto);
     console.log(res);
-  };
+  }, [answers, id, time]);
   const handlePreviewAnswer = () => {
     modal.info({
       title: "Preview answers",
@@ -68,7 +65,12 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
     <Header style={{ backgroundColor: "white" }}>
       <Flex justify="space-between">
         <div>MiniIelts</div>
-        <Time />
+        <Time
+          onTimeOut={handleSubmit}
+          time={time}
+          setTime={setTime}
+          start={start}
+        />
         <div>
           <Space>
             <Button
@@ -89,6 +91,7 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
           </Space>
         </div>
       </Flex>
+      <AskLoginModal open={!user} onSuccess={() => setStart(true)} />
     </Header>
   );
 };

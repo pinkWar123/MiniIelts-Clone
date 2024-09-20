@@ -6,6 +6,7 @@ export interface FullTestViewDto {
   tests: ITest[];
   title: string;
   createdOn: string;
+  picture?: string;
 }
 
 export interface SubmitFullTestDto {
