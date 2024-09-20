@@ -132,7 +132,8 @@ namespace MiniIeltsCloneServer.Services.FullTestService
                 Marks = 0,
                 Correct = results.Sum(r => r.Correct),
                 QuestionCount = results.Sum(r => r.QuestionCount),
-                QuestionResults = questionResults
+                QuestionResults = questionResults,
+                Time = dto.Time
             };  
 
 

@@ -23,3 +23,6 @@ export const formatTimestampToDateMonthYear = (timestamp: string) => {
 
   return `${day}-${month.toLowerCase()}-${year}`;
 };
+
+export const convertSecondsToMinute = (seconds: number) =>
+  Math.floor(seconds / 60);

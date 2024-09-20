@@ -9,5 +9,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.FullTest
     public class SubmitFullTestDto
     {
         public List<QuestionSubmitDto> Answers { get; set; } = new List<QuestionSubmitDto>();
+        public int Time { get; set; }
     }
 }

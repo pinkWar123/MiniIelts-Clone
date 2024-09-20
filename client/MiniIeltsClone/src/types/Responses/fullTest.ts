@@ -10,6 +10,7 @@ export interface FullTestViewDto {
 
 export interface SubmitFullTestDto {
   answers: QuestionSubmitDto[];
+  time: number;
 }
 
 export interface FullTestResultDto {
