@@ -14,11 +14,38 @@ export interface SubmitFullTestDto {
   time: number;
 }
 
+interface TestResultDto {
+  part: number;
+  startQuestion: number;
+  endQuestion: number;
+  questionResults: QuestionResultDto[];
+}
+
 export interface FullTestResultDto {
   fullTestId: number;
+  title: string;
   marks: number;
   correct: number;
   questionCount: number;
-  questionResults: QuestionResultDto[];
+  results: TestResultDto[];
   time: number;
+}
+
+interface QuestionKeyDto {
+  order: number;
+  answer: string;
+}
+
+interface TestKeyDto {
+  part: number;
+  startQuestion: number;
+  endQuestion: number;
+  keys: QuestionKeyDto[];
+}
+
+export interface FullTestKeyDto {
+  fullTestId: number;
+  title: string;
+  questionCount: number;
+  testKeys: TestKeyDto[];
 }
