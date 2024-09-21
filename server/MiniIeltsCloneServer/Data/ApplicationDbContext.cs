@@ -20,6 +20,7 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<ExerciseChoice> ExerciseChoices { get; set; }
         public DbSet<QuestionChoice> QuestionChoices { get; set; }
         public DbSet<FullTest> FullTests { get; set; }
+        public DbSet<FullTestResult> FullTestResults { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -59,7 +60,16 @@ namespace MiniIeltsCloneServer.Data
                 .HasForeignKey(t => t.FullTestId)
                 .IsRequired(false);
 
-                
+            builder.Entity<FullTest>()
+                .HasMany(t => t.FullTestResults)
+                .WithOne(f => f.FullTest)
+                .HasForeignKey(t => t.FullTestId);
+
+            builder.Entity<FullTestResult>()
+                .HasMany(t => t.Results)
+                .WithOne(t => t.FullTestResult)
+                .HasForeignKey(t => t.FullTestResultId)
+                .IsRequired(false);
         }
     }
 }
