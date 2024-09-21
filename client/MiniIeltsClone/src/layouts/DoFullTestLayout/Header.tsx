@@ -1,7 +1,7 @@
 import { BlockOutlined, SendOutlined } from "@ant-design/icons";
 import { App, Button, Flex, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import styles from "./DoFullTestLayout.module.scss";
 import useAnswers from "../../hooks/useAnswers";
 import { useParams } from "react-router-dom";

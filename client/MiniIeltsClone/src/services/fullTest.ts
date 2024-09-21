@@ -3,6 +3,7 @@ import {
   FullTestQueryObject,
 } from "../types/Request/fullTest";
 import {
+  FullTestKeyDto,
   FullTestResultDto,
   FullTestViewDto,
   SubmitFullTestDto,
@@ -40,6 +41,14 @@ export const submitFullTest = async (id: number, dto: SubmitFullTestDto) => {
     await axiosInstance.post<IResponse<FullTestResultDto>>(
       `FullTest/${id}/submit`,
       dto
+    )
+  ).data;
+};
+
+export const getFullTestSolution = async (id: number) => {
+  return (
+    await axiosInstance.get<IResponse<FullTestKeyDto>>(
+      `FullTest/${id}/solution`
     )
   ).data;
 };

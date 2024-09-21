@@ -60,11 +60,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
                   />
                 </span>
                 <span>
-                  {showAnswer && (
-                    <Answer
-                      answer={questions[parseInt(placeholderIndex)]?.answer}
-                    />
-                  )}
+                  {showAnswer && <Answer answer={questions[index]?.answer} />}
                 </span>
               </>
             );

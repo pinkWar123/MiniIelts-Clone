@@ -36,7 +36,7 @@ interface QuestionKeyDto {
   answer: string;
 }
 
-interface TestKeyDto {
+export interface TestKeyDto {
   part: number;
   startQuestion: number;
   endQuestion: number;
