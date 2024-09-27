@@ -11,5 +11,6 @@ namespace MiniIeltsCloneServer.Models
         public List<FullTestResult> FullTestResults { get; set; } = new List<FullTestResult>();
         public required string Title { get; set; }
         public int Time { get; set; }
+        public int ViewCount { get; set; }
     }
 }

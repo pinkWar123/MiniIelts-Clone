@@ -23,6 +23,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.FullTest
     public class FullTestResultDto
     {
         public int FullTestId { get; set; }
+        public int FullTestResultId { get; set; }
         public required string Title { get; set; }
         public double Marks { get; set; }
         public int Correct { get; set; }

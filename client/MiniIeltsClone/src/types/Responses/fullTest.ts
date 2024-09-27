@@ -23,6 +23,7 @@ interface TestResultDto {
 
 export interface FullTestResultDto {
   fullTestId: number;
+  fullTestResultId?: number;
   title: string;
   marks: number;
   correct: number;
