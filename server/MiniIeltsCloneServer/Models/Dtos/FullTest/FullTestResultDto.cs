@@ -30,6 +30,8 @@ namespace MiniIeltsCloneServer.Models.Dtos.FullTest
         public int QuestionCount { get; set; }
         public List<TestResultDto> Results { get; set; } = new List<TestResultDto>();
         public int Time { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public int ViewCount { get; set; }
     }
     public class FullTestKeyDto
     {
@@ -37,5 +39,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.FullTest
         public required string Title { get; set; }
         public int QuestionCount { get; set; }
         public List<TestKeyDto> TestKeys { get; set; } = new List<TestKeyDto>();
+        public DateTime CreatedOn { get; set; }
+        public int ViewCount { get; set; }
     }
 }

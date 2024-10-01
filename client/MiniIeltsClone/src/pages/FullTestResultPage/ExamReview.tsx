@@ -6,7 +6,7 @@ import { FullTestViewDto } from "../../types/Responses/fullTest";
 import { getFullTestByIdAsync } from "../../services/fullTest";
 import { useParams } from "react-router-dom";
 import styles from "./FullTestResultPage.module.scss";
-import { Button, Empty, Flex } from "antd";
+import { Button, Empty } from "antd";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 interface ExamReviewProps {}
 

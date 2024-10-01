@@ -1,41 +1,21 @@
-import { FunctionComponent, useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Flex,
-  message,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-} from "antd";
-import {
-  CarryOutOutlined,
-  CopyOutlined,
-  KeyOutlined,
-  SnippetsOutlined,
-} from "@ant-design/icons";
-import { FullTestKeyDto } from "../../types/Responses/fullTest";
-import { useParams } from "react-router-dom";
-import { getFullTestSolution } from "../../services/fullTest";
-import AnswerList from "./AnswerList";
-import CustomImage from "../../components/CustomImage";
+import { FunctionComponent } from "react";
+import { Button, Col, Flex, message, Row, Tooltip } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 import styles from "./FullTestResultPage.module.scss";
 import ExamReview from "./ExamReview";
-interface FullTestResultPageProps {}
+import ResultDisplay from "./ResultDisplay";
+import { AnswerListProps } from "./AnswerList";
+interface FullTestResultPageProps {
+  title: string;
+  createdOn: string;
+  viewCount: number;
+  keys: AnswerListProps[];
+  showUserAnswer?: boolean;
+}
 
-const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = () => {
-  const { id } = useParams();
-  const [solution, setSolution] = useState<FullTestKeyDto>();
-  useEffect(() => {
-    const fetchSolution = async () => {
-      if (!id) return;
-      const res = await getFullTestSolution(parseInt(id));
-      setSolution(res.data);
-    };
-    fetchSolution();
-  }, [id]);
-  console.log(solution);
+const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = (
+  props
+) => {
   return (
     <>
       <Row
@@ -48,53 +28,7 @@ const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = () => {
       >
         <Col span={2}></Col>
         <Col span={14}>
-          <Row gutter={16}>
-            <Col>
-              <Space>
-                <CustomImage
-                  style={{ width: "100px", height: "100px" }}
-                  picture="https://miniielts-clone.s3.ap-southeast-2.amazonaws.com/test/Etrusion-Process-Final-16001200_20240917_035015468.jpeg"
-                />
-                <CustomImage
-                  style={{ width: "100px", height: "100px" }}
-                  picture="https://miniielts-clone.s3.ap-southeast-2.amazonaws.com/test/Etrusion-Process-Final-16001200_20240917_035015468.jpeg"
-                />
-                <CustomImage
-                  style={{ width: "100px", height: "100px" }}
-                  picture="https://miniielts-clone.s3.ap-southeast-2.amazonaws.com/test/Etrusion-Process-Final-16001200_20240917_035015468.jpeg"
-                />
-              </Space>
-            </Col>
-            <Col>
-              <Typography.Title level={2}>
-                IELTS Mock Test 2024 January
-              </Typography.Title>
-              <div>
-                <Space>
-                  <SnippetsOutlined /> Posted on: <strong>06 Sep 2023</strong>
-                </Space>
-              </div>
-              <div>
-                <Space>
-                  <CarryOutOutlined /> Tests taken: <strong>1,225,109</strong>
-                </Space>
-              </div>
-            </Col>
-          </Row>
-          <div className={styles["key"]}>
-            <Space>
-              <KeyOutlined style={{ fontSize: "25px" }} />
-              <Typography.Title level={4}>Key</Typography.Title>
-            </Space>
-          </div>
-
-          <div>
-            {solution?.testKeys.map((key) => (
-              <div key={`solution-${key.part}`}>
-                <AnswerList testKey={key} />
-              </div>
-            ))}
-          </div>
+          <ResultDisplay {...props} />
         </Col>
         <Col span={6}>
           <div className={styles["share-score-wrapper"]}>

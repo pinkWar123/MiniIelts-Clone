@@ -18,6 +18,6 @@ namespace MiniIeltsCloneServer.Services.FullTestService
         Task IncrementViewCount(int fullTestId);
         double GetBandScore(int correct);
         Task<FullTestResultDto> GetFullTestResultById(int id);
-        Task<FullTestResultDto> GetFullTestResult(SubmitFullTestDto dto);
+        Task<FullTestResultDto> GetFullTestResult(int fullTestId, SubmitFullTestDto dto);
     }
 }

@@ -137,87 +137,127 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             };
         }
 
-        public async Task<FullTestResultDto> GetFullTestResult(int id)
+        public async Task<FullTestResultDto> GetFullTestResult(int fullTestId, SubmitFullTestDto dto)
         {
-            var fullTestResult = await _fullTestResultService.GetFullTestResultById(id);
-            if(fullTestResult == null) throw new FullTestResultNotFoundException(id);
-            var results = new List<Models.Dtos.FullTest.TestResultDto>();
+            var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(fullTestId);
+            if(fullTest == null) throw new FullTestNotFoundException(fullTestId);
             
+            var offset = 0;
+            var testResults = new List<Models.Dtos.Test.TestResultDto>();
+            var resultIds = new List<int>();
+            for (var i = 0; i < fullTest.Tests.Count; i++)
+            {
+                var test = fullTest.Tests[i];
+                var questions = dto.Answers.Skip(offset).Take(test.QuestionCount).ToList();
+                questions.ForEach(q => q.Order -= offset);
+                var result = new Models.Dtos.Test.TestResultDto {Title = ""};
+                
+                var testResult = await _testService.GetTestResult(test.Id, new TestSubmitDto {QuestionSubmitDtos = questions});
+                if(testResult != null)
+                {
+                    testResults.Add(testResult);
+                }
+                offset += test.QuestionCount;
+            }
+
+            var correct = testResults.Sum(r => r.Correct);
+            var part = 1;
+            offset = 1;
+            var results = new List<Models.Dtos.FullTest.TestResultDto>();
+            testResults.ForEach(result =>
+            {
+
+                var testResultDto = new Models.Dtos.FullTest.TestResultDto
+                {
+                    Part = part++,
+                    StartQuestion = offset,
+                    EndQuestion = offset + result.QuestionCount - 1,
+                    QuestionResults = result.QuestionResults.Select(a => new QuestionResultDto
+                    {
+                        UserAnswer = a.UserAnswer,
+                        IsTrue = a.IsTrue,
+                        Order = offset++,
+                        Answer = a.Answer // Avoid IndexOutOfRangeException
+                    }).ToList()
+                };
+                results.Add(testResultDto);
+            });
+            var fullTestResult = new FullTestResultDto
+            {
+                Title = fullTest.Title,
+                FullTestId = fullTestId,
+                Marks = GetBandScore(correct),
+                Correct = correct,
+                QuestionCount = testResults.Sum(r => r.QuestionCount),
+                Time = dto.Time,
+                CreatedOn = DateTime.UtcNow,
+                Results = results
+            };
+            var _results = await _unitOfWork.ResultRepository.FindAllAsync(r => resultIds.Contains(r.Id));
+            if(_results == null) throw new BadHttpRequestException("Could not find results");
+            
+            return fullTestResult;
+        }
+
+        public async Task<FullTestResultDto> GetFullTestResultById(int id)
+        {
+            var fullTestResult = await _unitOfWork.FullTestResultRepository.GetByIdAsync(id);
+            if (fullTestResult == null) throw new FullTestResultNotFoundException(id);
+
+            // Ensure FullTest and Tests are loaded
+            if (fullTestResult.FullTest?.Tests == null || !fullTestResult.FullTest.Tests.Any())
+                throw new Exception("No tests found in FullTest.");
+
+            var results = new List<Models.Dtos.FullTest.TestResultDto>();
+            var part = 1;
+            var order = 1;
+            
+            var questions = fullTestResult.FullTest.Tests
+                .SelectMany(t => t.Excercises?.SelectMany(e => e.Questions)?.ToList() ?? new List<Question>())
+                .ToList();
+
+            if (questions == null || !questions.Any())
+                throw new Exception("No questions found in tests.");
+
+            var keys = questions.Select(q => q.Answer).ToList();
+            if (keys.Count != fullTestResult.QuestionCount)
+                throw new FullTestResultConflictLengthException(id);
+
+            fullTestResult.Results.ForEach(result =>
+            {
+                if (result?.Test == null || result.Answers == null) 
+                    throw new Exception("Test or Answers are null for a result.");
+
+                var testResultDto = new Models.Dtos.FullTest.TestResultDto
+                {
+                    Part = part++,
+                    StartQuestion = order,
+                    EndQuestion = order + result.Test.QuestionCount - 1,
+                    QuestionResults = result.Answers.Select(a => new QuestionResultDto
+                    {
+                        UserAnswer = a.Value,
+                        IsTrue = a.IsCorrect,
+                        Order = order++,
+                        Answer = keys.ElementAtOrDefault(order - 2) // Avoid IndexOutOfRangeException
+                    }).ToList()
+                };
+                results.Add(testResultDto);
+            });
+
             return new FullTestResultDto
             {
+                FullTestId = fullTestResult.FullTestId,
+                Id = fullTestResult.Id,
                 Title = fullTestResult.Title,
                 Marks = fullTestResult.Marks,
                 Correct = fullTestResult.Correct,
                 QuestionCount = fullTestResult.QuestionCount,
                 Time = fullTestResult.Time,
-                Id = fullTestResult.Id,
-                FullTestId = fullTestResult.FullTestId
+                Results = results,
+                CreatedOn = fullTestResult.FullTest.CreatedOn,
+                ViewCount = fullTestResult.FullTest.ViewCount
             };
-            throw new NotImplementedException();
         }
-
-        public Task<FullTestResultDto> GetFullTestResult(SubmitFullTestDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<FullTestResultDto> GetFullTestResultById(int id)
-{
-    var fullTestResult = await _unitOfWork.FullTestResultRepository.GetByIdAsync(id);
-    if (fullTestResult == null) throw new FullTestResultNotFoundException(id);
-
-    // Ensure FullTest and Tests are loaded
-    if (fullTestResult.FullTest?.Tests == null || !fullTestResult.FullTest.Tests.Any())
-        throw new Exception("No tests found in FullTest.");
-
-    var results = new List<Models.Dtos.FullTest.TestResultDto>();
-    var part = 1;
-    var order = 1;
-    
-    var questions = fullTestResult.FullTest.Tests
-        .SelectMany(t => t.Excercises?.SelectMany(e => e.Questions)?.ToList() ?? new List<Question>())
-        .ToList();
-
-    if (questions == null || !questions.Any())
-        throw new Exception("No questions found in tests.");
-
-    var keys = questions.Select(q => q.Answer).ToList();
-    if (keys.Count != fullTestResult.QuestionCount)
-        throw new FullTestResultConflictLengthException(id);
-
-    fullTestResult.Results.ForEach(result =>
-    {
-        if (result?.Test == null || result.Answers == null) 
-            throw new Exception("Test or Answers are null for a result.");
-
-        var testResultDto = new Models.Dtos.FullTest.TestResultDto
-        {
-            Part = part++,
-            StartQuestion = order,
-            EndQuestion = order + result.Test.QuestionCount - 1,
-            QuestionResults = result.Answers.Select(a => new QuestionResultDto
-            {
-                UserAnswer = a.Value,
-                IsTrue = a.IsCorrect,
-                Order = order++,
-                Answer = keys.ElementAtOrDefault(order - 2) // Avoid IndexOutOfRangeException
-            }).ToList()
-        };
-        results.Add(testResultDto);
-    });
-
-    return new FullTestResultDto
-    {
-        FullTestId = fullTestResult.FullTestId,
-        Id = fullTestResult.Id,
-        Title = fullTestResult.Title,
-        Marks = fullTestResult.Marks,
-        Correct = fullTestResult.Correct,
-        QuestionCount = fullTestResult.QuestionCount,
-        Time = fullTestResult.Time,
-        Results = results
-    };
-}
 
 
         public async Task<PagedData<FullTestViewDto>> GetFullTests(FullTestQueryObject @object)
@@ -279,27 +319,6 @@ namespace MiniIeltsCloneServer.Services.FullTestService
                 testResults.Add(result);
                 offset += test.QuestionCount;
             }
-
-            // var results = new List<Models.Dtos.FullTest.TestResultDto>();
-            // offset = 0;
-            // var currentPart = 1;
-
-            // testResults.ForEach(t => {
-            //     results.Add(new Models.Dtos.FullTest.TestResultDto
-            //     {
-            //         Part = currentPart++,
-            //         StartQuestion = offset + 1,
-            //         EndQuestion = offset + t.QuestionCount,
-            //         QuestionResults = t.QuestionResults.Select(q => new QuestionResultDto
-            //         {
-            //             UserAnswer = q.UserAnswer,
-            //             Answer = q.Answer,
-            //             IsTrue = q.IsTrue,
-            //             Order = q.Order + offset
-            //         }).ToList()
-            //     });
-            //     offset += t.QuestionCount;
-            // });
 
             var correct = testResults.Sum(r => r.Correct);
 

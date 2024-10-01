@@ -30,6 +30,8 @@ export interface FullTestResultDto {
   questionCount: number;
   results: TestResultDto[];
   time: number;
+  createdOn: string;
+  viewCount: number;
 }
 
 interface QuestionKeyDto {
@@ -42,6 +44,8 @@ export interface TestKeyDto {
   startQuestion: number;
   endQuestion: number;
   keys: QuestionKeyDto[];
+  createdOn: string;
+  viewCount: number;
 }
 
 export interface FullTestKeyDto {
@@ -49,4 +53,17 @@ export interface FullTestKeyDto {
   title: string;
   questionCount: number;
   testKeys: TestKeyDto[];
+  createdOn: string;
+  viewCount: number;
+}
+
+export interface FullTestResultDto {
+  fullTestId: number;
+  id: number;
+  title: string;
+  marks: number;
+  correct: number;
+  questionCount: number;
+  results: TestResultDto[];
+  time: number;
 }
