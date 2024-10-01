@@ -44,8 +44,8 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
       return;
     }
     const res = await submitFullTest(parseInt(id), dto);
-    if (res.data.fullTestResultId) {
-      navigate(`./result/${res.data.fullTestResultId}`);
+    if (res.data) {
+      navigate(location.pathname + `/result/${res.data}`);
     }
   }, [answers, id, time, navigate, user, location.pathname]);
   const handlePreviewAnswer = () => {

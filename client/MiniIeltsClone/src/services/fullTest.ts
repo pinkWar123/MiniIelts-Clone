@@ -38,10 +38,7 @@ export const getFullTestByIdAsync = async (id: string) => {
 
 export const submitFullTest = async (id: number, dto: SubmitFullTestDto) => {
   return (
-    await axiosInstance.post<IResponse<FullTestResultDto>>(
-      `FullTest/${id}/submit`,
-      dto
-    )
+    await axiosInstance.post<IResponse<number>>(`FullTest/${id}/submit`, dto)
   ).data;
 };
 
