@@ -235,6 +235,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                     return new TestSubmitResultDto
                     {
                         ResultId = testResult.Id,
+                        Result = result
                     } ;
                 }
                 catch (System.Exception)

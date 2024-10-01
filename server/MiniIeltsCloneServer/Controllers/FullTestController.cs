@@ -61,7 +61,7 @@ namespace MiniIeltsCloneServer.Controllers
 
             var result = await _fullTestService.SubmitFullTest(id, dto);
 
-            return Results.Ok(new Response<FullTestResultDto>(result));
+            return Results.Ok(new Response<int>(result));
 
         }
 
@@ -77,6 +77,13 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var solution = await _fullTestService.GetFullTestKey(id);
             return Results.Ok(new Response<FullTestKeyDto>(solution));
+        }
+
+        [HttpGet("result/{id}")]
+        public async Task<IResult> GetFullTestResultById([FromRoute] int id)
+        {
+            var result = await _fullTestService.GetFullTestResultById(id);
+            return Results.Ok(new Response<FullTestResultDto>(result));
         }
 
         [HttpGet]

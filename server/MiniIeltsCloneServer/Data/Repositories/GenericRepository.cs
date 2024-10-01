@@ -37,7 +37,7 @@ namespace MiniIeltsCloneServer.Repositories
 
         }
 
-        virtual public async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             return await GetContext().FindAsync(id);
         }
