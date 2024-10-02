@@ -1,0 +1,90 @@
+.number {
+  color: white;
+  background-color: green;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 25px;
+}
+
+.answer-text {
+  color: green;
+}
+
+.title {
+  font-weight: 700;
+  color: #294563;
+}
+
+.key {
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.share-score-wrapper {
+  border: 1px solid #294563;
+  padding: 20px;
+  .title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.url-box {
+  background-color: #f1f1f1; /* Light grey background */
+  padding: 10px 20px; /* Adjust padding */
+  border-radius: 50px; /* Rounded corners */
+  display: inline-block; /* Allow it to shrink/grow with content */
+  max-width: 100%; /* Prevent the box from being too wide */
+  overflow: hidden; /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add "..." when content overflows */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.url-box a {
+  text-decoration: none; /* Remove underline */
+  color: #666; /* Grey text color */
+  font-family: Arial, sans-serif; /* Choose font */
+  font-size: 14px; /* Font size */
+  font-style: italic; /* Italic text */
+  display: block; /* Keep it block-level for easy styling */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Ellipsis for long text */
+  white-space: nowrap; /* No wrapping */
+}
+
+.exam-review-wrapper {
+  border: 20px solid #294563;
+  border-radius: 10px;
+}
+
+.nav-button {
+  height: 50px;
+  width: 50px !important;
+  background-color: #e0e0e0 !important;
+}
+
+.prev-nav-wrapper {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  margin-left: -35px;
+}
+
+.next-nav-wrapper {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 0;
+  margin-right: -35px;
+  // margin-left: 25px;
+}
+
+.next-nav-wrapper,
+.prev-nav-wrapper {
+  :hover {
+    border-color: inherit;
+    color: black !important;
+  }
+}

@@ -20,3 +20,8 @@ export interface TestSearchViewDto {
   questionCount: number;
   createdOn: string;
 }
+
+export interface TestDropDownViewDto {
+  id: string;
+  title: string;
+}

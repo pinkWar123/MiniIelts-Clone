@@ -30,6 +30,7 @@ const Labelling: FunctionComponent<LabellingProps> = ({
                 onChange={(e) =>
                   handleUpdateAnswer(startQuestion + index, e.target.value)
                 }
+                value={getAnswerByOrder(startQuestion + index)?.value}
               />
             </Form.Item>
           );

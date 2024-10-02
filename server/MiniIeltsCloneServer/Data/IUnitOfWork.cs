@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MiniIeltsCloneServer.Data.Repositories.AnswerRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
+using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
+using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
@@ -26,6 +28,8 @@ namespace MiniIeltsCloneServer.Data
         IResultRepository ResultRepository { get; }
         IAnswerRepository AnswerRepository { get; }
         IStatisticRepository StatisticRepository { get; }
+        IFullTestRepository FullTestRepository{ get; }
+        IFullTestResultRepository FullTestResultRepository { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();

@@ -56,7 +56,7 @@ const ScoreDistributionChart = () => {
       },
       title: {
         display: true,
-        text: "Accuracy of Each Question Type",
+        text: "Band score distribution",
       },
     },
     scales: {

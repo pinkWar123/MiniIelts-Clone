@@ -31,6 +31,10 @@ using Newtonsoft.Json;
 using Hangfire;
 using Hangfire.Dashboard;
 using MiniIeltsCloneServer.Services.HangfireService;
+using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
+using MiniIeltsCloneServer.Services.FullTestService;
+using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
+using MiniIeltsCloneServer.Services.FullTestResultService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -145,6 +149,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
 builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
+builder.Services.AddScoped<IFullTestRepository, FullTestRepository>();
+builder.Services.AddScoped<IFullTestResultRepository, FullTestResultRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -154,6 +160,8 @@ builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IResultService, ResultService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
+builder.Services.AddScoped<IFullTestService, FullTestService>();
+builder.Services.AddScoped<IFullTestResultService, FullTestResultService>();
 builder.Services.AddScoped<IHangfireService, HangfireService>();
 // builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 // builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();

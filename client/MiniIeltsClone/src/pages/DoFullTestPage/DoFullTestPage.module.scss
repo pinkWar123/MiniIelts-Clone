@@ -1,0 +1,21 @@
+.panel-wrapper {
+  background-color: white;
+  height: 75px;
+
+  .section-wrapper {
+    border-radius: 10px;
+    border: 1px solid green;
+    height: 70px;
+    margin-top: 6px;
+    text-align: center;
+    align-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    line-height: 70px;
+    cursor: pointer;
+    &:hover {
+      border: 2px solid green;
+    }
+  }
+}

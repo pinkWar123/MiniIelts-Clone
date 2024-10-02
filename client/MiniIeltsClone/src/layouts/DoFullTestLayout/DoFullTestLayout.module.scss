@@ -1,0 +1,43 @@
+.submit-btn {
+  background-color: green !important;
+  color: white;
+
+  &:hover {
+    background-color: green !important;
+    color: white !important;
+  }
+}
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  // background-color: #2196f3;
+  padding: 4px;
+}
+
+.question {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 12px;
+  text-align: left;
+
+  .value {
+    font-weight: 700;
+    color: #284664;
+    font-size: 20px;
+  }
+}
+
+.clock-logo {
+  font-size: 24px;
+}
+
+.minute {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.clock-logo,
+.minute {
+  color: green;
+}

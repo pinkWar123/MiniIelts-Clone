@@ -175,6 +175,9 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QuestionType")
                         .HasColumnType("int");
 
@@ -187,6 +190,8 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("ResultId");
 
@@ -349,6 +354,85 @@ namespace MiniIeltsCloneServer.Migrations
                     b.ToTable("ExerciseChoices");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("FullTests");
+                });
+
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTestResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Correct")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FullTestId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Marks")
+                        .HasColumnType("float");
+
+                    b.Property<int>("QuestionCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("FullTestId");
+
+                    b.ToTable("FullTestResults");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -445,6 +529,9 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FullTestResultId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Score")
                         .HasColumnType("float");
 
@@ -457,6 +544,8 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("FullTestResultId");
 
                     b.HasIndex("TestId");
 
@@ -486,6 +575,9 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<string>("Essay")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("FullTestId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
@@ -501,6 +593,8 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("FullTestId");
 
                     b.ToTable("Tests");
                 });
@@ -562,6 +656,12 @@ namespace MiniIeltsCloneServer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
+                    b.HasOne("MiniIeltsCloneServer.Models.Question", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MiniIeltsCloneServer.Models.Result", "Result")
                         .WithMany("Answers")
                         .HasForeignKey("ResultId")
@@ -569,6 +669,8 @@ namespace MiniIeltsCloneServer.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Question");
 
                     b.Navigation("Result");
                 });
@@ -644,6 +746,32 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("Excercise");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTest", b =>
+                {
+                    b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTestResult", b =>
+                {
+                    b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("MiniIeltsCloneServer.Models.FullTest", "FullTest")
+                        .WithMany("FullTestResults")
+                        .HasForeignKey("FullTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("FullTest");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Question", b =>
                 {
                     b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
@@ -684,6 +812,10 @@ namespace MiniIeltsCloneServer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
+                    b.HasOne("MiniIeltsCloneServer.Models.FullTestResult", "FullTestResult")
+                        .WithMany("Results")
+                        .HasForeignKey("FullTestResultId");
+
                     b.HasOne("MiniIeltsCloneServer.Models.Test", "Test")
                         .WithMany("Results")
                         .HasForeignKey("TestId")
@@ -691,6 +823,8 @@ namespace MiniIeltsCloneServer.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("FullTestResult");
 
                     b.Navigation("Test");
                 });
@@ -701,7 +835,13 @@ namespace MiniIeltsCloneServer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
+                    b.HasOne("MiniIeltsCloneServer.Models.FullTest", "FullTest")
+                        .WithMany("Tests")
+                        .HasForeignKey("FullTestId");
+
                     b.Navigation("AppUser");
+
+                    b.Navigation("FullTest");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Excercise", b =>
@@ -711,8 +851,22 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("Questions");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTest", b =>
+                {
+                    b.Navigation("FullTestResults");
+
+                    b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTestResult", b =>
+                {
+                    b.Navigation("Results");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Question", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("Choices");
                 });
 

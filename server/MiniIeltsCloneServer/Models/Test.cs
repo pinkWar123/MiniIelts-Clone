@@ -16,6 +16,8 @@ namespace MiniIeltsCloneServer.Models
         public CategoryEnum Category { get; set; }
         public List<Excercise> Excercises { get; set; } = new List<Excercise>();
         public List<Result> Results { get; set; } = new List<Result>();
+        public int? FullTestId { get; set; }
+        public FullTest? FullTest { get; set; }
 
     }
 }

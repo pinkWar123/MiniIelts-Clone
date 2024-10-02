@@ -60,7 +60,7 @@ const DoTestPage: FunctionComponent<DoTestPageProps> = () => {
             picture={test.picture}
           />
         }
-        test={<Test exercises={test.exercises} />}
+        test={<Test exercises={test.exercises} mode="do-test" />}
       />
       <BottomPanel id={parseInt(id)} />
     </>

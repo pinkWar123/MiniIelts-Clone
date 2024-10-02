@@ -26,6 +26,16 @@ import Test from "./pages/AdminPage/Test/Test";
 import UpdateTestPage from "./pages/CreateTestPage/UpdateTestPage";
 import Statistics from "./pages/AdminPage/Statistics/Statistics";
 import Users from "./pages/AdminPage/Users/Users";
+import CreateFullTestLayout from "./layouts/CreateFullTestLayout/CreateFullTestLayout";
+import CreateFullTestPage from "./pages/CreateFullTestPage/CreateFullTestPage";
+import FullTest from "./pages/AdminPage/FullTest/FullTest";
+import DoFullTestLayout from "./layouts/DoFullTestLayout/DoFullTestLayout";
+import DoFullTestPage from "./pages/DoFullTestPage/DoFullTestPage";
+import FullTestResultLayout from "./layouts/FullTestResultLayout/FullTestResultLayout";
+import FullTestResultByIdPage from "./pages/FullTestResultPage/FullTestResultByIdPage";
+import FullTestSolution from "./pages/FullTestResultPage/FullTestSolution";
+import FullTestResultByQuery from "./pages/FullTestResultPage/FullTestResultByQuery";
+import Series from "./pages/AdminPage/Series/Series";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -235,6 +245,42 @@ function App() {
             <Route index element={<Statistics />} />
             <Route path="test" element={<Test />} />
             <Route path="user" element={<Users />} />
+            <Route path="series" element={<Series />} />
+            <Route path="full-test" element={<FullTest />} />
+          </Route>
+
+          <Route path="create-full-test" element={<CreateFullTestLayout />}>
+            <Route index element={<CreateFullTestPage />} />
+          </Route>
+
+          <Route
+            path="full-test"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <DoFullTestLayout />
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          >
+            <Route path=":id" element={<DoFullTestPage />} />
+          </Route>
+          <Route
+            path="full-test/:id"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <FullTestResultLayout />
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          >
+            <Route path="solution" element={<FullTestSolution />} />
+            <Route path="result" element={<FullTestResultByQuery />} />
+            <Route
+              path="result/:resultId"
+              element={<FullTestResultByIdPage />}
+            />
           </Route>
         </Routes>
       </>

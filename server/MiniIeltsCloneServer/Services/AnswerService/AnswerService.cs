@@ -24,5 +24,11 @@ namespace MiniIeltsCloneServer.Services.AnswerService
             var answer = _mapper.Map<Answer>(createAnswerDto);
             await _unitOfWork.AnswerRepository.AddAsync(answer);
         }
+
+        public async Task CreateNewAnswers(List<CreateAnswerDto> createAnswersDto)
+        {
+            var answers = createAnswersDto.Select(c => _mapper.Map<Answer>(c)).ToList();
+            await _unitOfWork.AnswerRepository.AddRangeAsync(answers);
+        }
     }
 }

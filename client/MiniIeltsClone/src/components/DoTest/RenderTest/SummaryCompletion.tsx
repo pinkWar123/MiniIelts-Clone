@@ -26,8 +26,10 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
 
     // Thay thế các trường hợp `strong` có chứa `_____` bằng placeholder
     let count = 0;
-    const placeholders = normalizedHtmlString.replace(regex, (_, p1) => {
-      return `<strong>${p1}</strong><input data-placeholder="${count++}" />`;
+    const placeholders = normalizedHtmlString.replace(regex, () => {
+      return `<strong>${
+        startQuestion + count
+      }</strong><input data-placeholder="${count++}" />`;
     });
 
     // Chuyển đổi HTML có placeholder thành các phần tử React
@@ -40,7 +42,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
           if (element.attribs && element.attribs["data-placeholder"]) {
             const placeholderIndex: string =
               element.attribs["data-placeholder"];
-
+            console.log(placeholderIndex);
             return (
               <>
                 <span>

@@ -1,9 +1,7 @@
 import { Flex, Form, Select } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import useAnswers from "../../../hooks/useAnswers";
-import { IDoTestAnswer } from "../../../types/Model/Answer";
 import styles from "./Question.module.scss";
-import Answer from "../../Answer/Answer";
 interface SelectQuestionProps {
   order: number;
   options: {
@@ -21,10 +19,6 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
   showAnswer,
 }) => {
   const { getAnswerByOrder, handleUpdateAnswer } = useAnswers();
-  const [defaultValue, setDefautValue] = useState<IDoTestAnswer>();
-  useEffect(() => {
-    setDefautValue(getAnswerByOrder(order));
-  }, [order]);
   const renderSelectAnswer = (order: number) => {
     const answer = getAnswerByOrder(order);
     return (
@@ -49,7 +43,6 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
               id={order.toString()}
               options={options}
               style={{ width: "120px" }}
-              disabled={defaultValue !== undefined && defaultValue.value !== ""}
               value={getAnswerByOrder(order)}
               onChange={(item) => handleUpdateAnswer(order, item)}
             />

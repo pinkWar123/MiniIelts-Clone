@@ -23,7 +23,7 @@ const ExamReview: FunctionComponent<ExamReviewProps> = ({ id }) => {
   return (
     <>
       <TestDisplay
-        test={<Test exercises={test.exercises} showAnswer />}
+        test={<Test exercises={test.exercises} showAnswer mode="review" />}
         essay={<Essay title={test.title} content={test.essay} />}
       />
     </>

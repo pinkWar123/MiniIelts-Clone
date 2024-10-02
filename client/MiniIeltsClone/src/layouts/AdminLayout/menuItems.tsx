@@ -1,4 +1,6 @@
 import {
+  BarsOutlined,
+  BookOutlined,
   EditOutlined,
   LineChartOutlined,
   UserOutlined,
@@ -10,5 +12,15 @@ type MenuItem = Required<MenuProps>["items"][number];
 export const items: MenuItem[] = [
   { key: "", icon: <LineChartOutlined />, label: "Statistics" },
   { key: "test", icon: <EditOutlined />, label: "Tests" },
+  {
+    key: "full-test",
+    icon: <BookOutlined />,
+    label: "Full Tests",
+  },
+  {
+    key: "series",
+    icon: <BarsOutlined />,
+    label: "Series",
+  },
   { key: "user", icon: <UserOutlined />, label: "Users" },
 ];

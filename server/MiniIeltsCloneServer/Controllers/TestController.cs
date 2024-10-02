@@ -77,6 +77,14 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(pagedResponse);
         }
 
+        [HttpGet("dropdown")]
+        [AllowAnonymous]
+        public async Task<IResult> GetTestDropDown([FromQuery] string testName)
+        {
+            var tests = await _testService.GetTestDropdownViewDtos(testName);
+            return Results.Ok(new Response<List<TestDropdownViewDto>>(tests));
+        }
+
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTestById([FromRoute] int id)

@@ -63,11 +63,13 @@ namespace MiniIeltsCloneServer.Exceptions
             {
                 problemDetails.Status = (int)e.StatusCode;
                 problemDetails.Title = e.Message;
+                httpContext.Response.StatusCode =  (int) e.StatusCode;
             }
             else if(exception is Exception ex)
             {
                 problemDetails.Status = (int)ex.HResult;
                 problemDetails.Title = ex.Message;
+                httpContext.Response.StatusCode = (int)ex.HResult;
             }
 
             _logger.LogError("{ProblemDetailsTitle}", problemDetails.Title);

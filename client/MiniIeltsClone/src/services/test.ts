@@ -4,7 +4,11 @@ import {
   TestSubmitDto,
   UpdateTestDto,
 } from "../types/Request/Test";
-import { ITest, TestSearchViewDto } from "../types/Model/Test";
+import {
+  ITest,
+  TestDropDownViewDto,
+  TestSearchViewDto,
+} from "../types/Model/Test";
 import axiosInstance from "./axiosConfig";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
 import { TestSubmitResultDto } from "../types/Responses/Test";
@@ -40,6 +44,14 @@ export const getTestSearch = async (qs: string) => {
 
 export const getTestById = async (id: number | string) => {
   return (await axiosInstance.get<IResponse<ITest>>(`Test/${id}`)).data;
+};
+
+export const getTestDropDown = async (testName: string) => {
+  return (
+    await axiosInstance.get<IResponse<TestDropDownViewDto[]>>(`Test/dropdown`, {
+      params: { testName },
+    })
+  ).data;
 };
 
 export const getTestResult = async (
