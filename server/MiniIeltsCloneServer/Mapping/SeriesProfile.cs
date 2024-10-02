@@ -12,7 +12,12 @@ namespace MiniIeltsCloneServer.Mapping
     {
         public SeriesProfile()
         {
-            CreateMap<Series, SeriesViewDto>();
+            CreateMap<Series, SeriesViewDto>()
+                .ForMember(dest => dest.Tests, opt => opt.MapFrom(src => src.Tests.Select(test => new FullTestNameDto
+                {
+                    Title = test.Title,
+                    Id = test.Id // Assuming FullTest has an Id property
+                }).ToList()));
         }
     }
 }

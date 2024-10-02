@@ -66,6 +66,8 @@ namespace MiniIeltsCloneServer.Services.SeriesService
         public async Task<PagedData<SeriesViewDto>> GetSeries(SeriesQueryObject query)
         {
             var series = await _unitOfWork.SeriesRepository.GetAllSeries(query);
+            var a = series.Value[0];
+            if(a.Tests != null) Console.WriteLine($"{a.Tests[0].Title}----------------------------------------------------------------");
             return new PagedData<SeriesViewDto>
             {
                 TotalRecords = series.TotalRecords,

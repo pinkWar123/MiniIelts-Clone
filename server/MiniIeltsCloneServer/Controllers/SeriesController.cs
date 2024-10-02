@@ -10,6 +10,7 @@ using MiniIeltsCloneServer.Services.SeriesService;
 using MiniIeltsCloneServer.Services.UriService;
 using MiniIeltsCloneServer.Validators;
 using MiniIeltsCloneServer.Wrappers;
+using Newtonsoft.Json;
 
 namespace MiniIeltsCloneServer.Controllers
 {
@@ -49,11 +50,22 @@ namespace MiniIeltsCloneServer.Controllers
         public async Task<IResult> GetAllSeries([FromQuery] SeriesQueryObject queryObject)
         {
             var seriesViewDtos = await _seriesService.GetSeries(queryObject);
-            var pagedResponse = PaginationHelper.CreatePagedResponse(seriesViewDtos.Value
+            var  a = seriesViewDtos.Value[0];
+            Console.WriteLine(JsonConvert.SerializeObject(a));
+            var pagedResponse = PaginationHelper.CreatePagedResponse(seriesViewDtos.Value.Select(x => new SeriesViewDto
+            {
+                Title = x.Title,
+                Image = x.Image,
+                CreatedOn = x.CreatedOn,
+                TestCount = x.TestCount,
+                Tests = x.Tests
+            }).ToList()
                                 , seriesViewDtos.TotalRecords, 
                                 new Wrappers.Filter.PaginationFilter(queryObject.PageNumber, queryObject.PageSize),
                                 _uriService,
                                 Request.Path.Value);
+            Console.WriteLine(JsonConvert.SerializeObject(pagedResponse));
+
             return Results.Ok(pagedResponse);
         }
     }
