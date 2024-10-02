@@ -74,6 +74,14 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             }
         }
 
+        public async Task DeleteFullTestById(int id)
+        {
+            var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(id);
+            if(fullTest == null) throw new FullTestNotFoundException(id);
+            _unitOfWork.FullTestRepository.Remove(fullTest);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public double GetBandScore(int correct)
         {
             if(correct > 40 || correct < 0) throw new BadHttpRequestException("Number of correct answers is invalid");
@@ -267,7 +275,8 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             {
                 Title = f.Title,
                 Tests = f.Tests.Select(t => _mapper.Map<TestViewDto>(t)).ToList(),
-                CreatedOn = f.CreatedOn
+                CreatedOn = f.CreatedOn,
+                Id = f.Id
             }).ToList();
 
             return new PagedData<FullTestViewDto>

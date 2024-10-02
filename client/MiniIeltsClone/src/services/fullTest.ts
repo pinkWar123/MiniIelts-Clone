@@ -69,3 +69,7 @@ export const getFullTestResultByQuery = async (
     )
   ).data;
 };
+
+export const deleteFullTestById = async (id: number) => {
+  return (await axiosInstance.delete(`FullTest/${id}`)).data;
+};

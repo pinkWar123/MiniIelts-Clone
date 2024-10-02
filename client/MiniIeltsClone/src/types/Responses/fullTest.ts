@@ -3,6 +3,7 @@ import { QuestionSubmitDto } from "../Request/Test";
 import { QuestionResultDto } from "./Test";
 
 export interface FullTestViewDto {
+  id: number;
   tests: ITest[];
   title: string;
   createdOn: string;

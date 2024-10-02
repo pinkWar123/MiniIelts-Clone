@@ -32,17 +32,35 @@ namespace MiniIeltsCloneServer.Services.StatisticService
         }
         public async Task<QuestionDistribution> GetQuestionDistribution()
         {
-            return await _statisticRepo.GetQuestionDistribution();
+            var cacheKey = "questionDistribution";
+
+            var questionDistribution = await _cache.GetOrSetAsync(cacheKey, 
+            async () => {
+                return await _statisticRepo.GetQuestionDistribution();
+            })!;
+            return questionDistribution!;
         }
 
         public async Task<ScoreDistribution> GetScoreDistribution()
         {
-            return await _statisticRepo.GetScoreDistribution();
+            var cacheKey = "scoreDistribution";
+
+            var scoreDistribution = await _cache.GetOrSetAsync(cacheKey, 
+            async () => {
+                return await _statisticRepo.GetScoreDistribution();
+            })!;
+            return scoreDistribution!;
         }
 
         public async Task<TopStatistics> GetTopStatistics()
         {
-            return await _statisticRepo.GetTopStatistics();
+            var cacheKey = "topStatistics";
+
+            var topStatistics = await _cache.GetOrSetAsync(cacheKey, 
+            async () => {
+                return await _statisticRepo.GetTopStatistics();
+            })!;
+            return topStatistics!;
         }
 
         public async Task<TotalStatistics> GetTotalStatistics()

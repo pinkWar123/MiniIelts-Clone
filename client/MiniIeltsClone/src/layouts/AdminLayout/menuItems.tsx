@@ -1,4 +1,5 @@
 import {
+  BarsOutlined,
   BookOutlined,
   EditOutlined,
   LineChartOutlined,
@@ -14,7 +15,12 @@ export const items: MenuItem[] = [
   {
     key: "full-test",
     icon: <BookOutlined />,
-    label: "Full Tests & Series",
+    label: "Full Tests",
+  },
+  {
+    key: "series",
+    icon: <BarsOutlined />,
+    label: "Series",
   },
   { key: "user", icon: <UserOutlined />, label: "Users" },
 ];

@@ -19,5 +19,6 @@ namespace MiniIeltsCloneServer.Services.FullTestService
         double GetBandScore(int correct);
         Task<FullTestResultDto> GetFullTestResultById(int id);
         Task<FullTestResultDto> GetFullTestResult(int fullTestId, SubmitFullTestDto dto);
+        Task DeleteFullTestById(int id);
     }
 }

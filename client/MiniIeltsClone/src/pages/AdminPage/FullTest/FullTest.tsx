@@ -1,18 +1,28 @@
-import { BookOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  AuditOutlined,
+  BookOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Form,
   Input,
+  message,
   Modal,
+  Popconfirm,
   Select,
+  Space,
   Table,
   TableColumnsType,
+  Tooltip,
 } from "antd";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import CreateFullTest from "./CreateFullTest";
 import { FullTestViewDto } from "../../../types/Responses/fullTest";
 import { FullTestQueryObject } from "../../../types/Request/fullTest";
-import { getFullTests } from "../../../services/fullTest";
+import { deleteFullTestById, getFullTests } from "../../../services/fullTest";
 import { formatTimestampToDateMonthYear } from "../../../helpers/time";
 import { usePagination } from "../../../hooks/usePagination";
 import useQueryParams from "../../../hooks/useQueryParam";
@@ -53,6 +63,11 @@ const FullTest: FunctionComponent<FullTestProps> = () => {
     pagination.pageSize,
     getQueryParamWithSingleValue,
   ]);
+  const handleDeleteTest = async (id: number) => {
+    await deleteFullTestById(id);
+    message.success("Delete test successfully");
+    await fetchFullTests();
+  };
   useEffect(() => {
     fetchFullTests();
   }, [fetchFullTests]);
@@ -63,6 +78,34 @@ const FullTest: FunctionComponent<FullTestProps> = () => {
       dataIndex: "createdOn",
       key: "createdOn",
       render: (value: string) => <>{formatTimestampToDateMonthYear(value)}</>,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record: FullTestViewDto) => (
+        <Space>
+          <Tooltip title="View full test">
+            <a href={`../../full-test/${record.id}`} target="blank">
+              <AuditOutlined />
+            </a>
+          </Tooltip>
+          <Tooltip title="Edit test">
+            <a href={`../../update-test/${record.id}`} target="blank">
+              <EditOutlined />
+            </a>
+          </Tooltip>
+          <Tooltip title="Delete full test">
+            <Popconfirm
+              title="Delete this full test"
+              description="Are you sure to delete this full test?"
+              placement="left"
+              onConfirm={() => handleDeleteTest(record.id)}
+            >
+              <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
     },
   ];
 
@@ -96,10 +139,15 @@ const FullTest: FunctionComponent<FullTestProps> = () => {
 
   return (
     <>
-      <Button icon={<BookOutlined />} onClick={openCreateFullTestModal}>
+      <Button
+        icon={<BookOutlined />}
+        onClick={openCreateFullTestModal}
+        style={{ marginBottom: "20px" }}
+      >
         Create new full test
       </Button>
       <Form
+        style={{ marginBottom: "20px" }}
         layout="inline"
         form={form}
         onFinish={handleSearch}

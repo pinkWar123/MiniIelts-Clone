@@ -69,6 +69,7 @@ const AccuracyBarChart = () => {
       },
     },
   };
+  console.log(stat);
 
   return <Bar data={data} options={options} height={300} />;
 };

@@ -108,5 +108,13 @@ namespace MiniIeltsCloneServer.Controllers
             var isExisted = await _fullTestService.HasNameExisted(title);
             return Results.Ok(new Response<bool>(isExisted));
         }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IResult> DeleteTestById([FromRoute] int id)
+        {
+            await _fullTestService.DeleteFullTestById(id);
+            return Results.NoContent();
+        }
     }
 }
