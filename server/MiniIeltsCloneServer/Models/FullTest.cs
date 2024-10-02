@@ -12,5 +12,7 @@ namespace MiniIeltsCloneServer.Models
         public required string Title { get; set; }
         public int Time { get; set; }
         public int ViewCount { get; set; }
+        public int SeriesId { get; set; }
+        public Series Series { get; set; }
     }
 }
