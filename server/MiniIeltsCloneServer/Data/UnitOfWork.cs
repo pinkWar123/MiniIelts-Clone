@@ -11,6 +11,7 @@ using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.SeriesRepo;
 using MiniIeltsCloneServer.Data.Repositories.StatisticRepo;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Models;
@@ -35,6 +36,7 @@ namespace MiniIeltsCloneServer.Data
             AnswerRepository = new AnswerRepository(_context);
             FullTestRepository = new FullTestRepository(_context);
             FullTestResultRepository = new FullTestResultRepository(_context);
+            SeriesRepository = new SeriesRepository(_context);
         }
 
         public ITestRepository TestRepository { get; private set; }
@@ -53,6 +55,7 @@ namespace MiniIeltsCloneServer.Data
         public IStatisticRepository StatisticRepository { get; private set; }
         public IFullTestRepository FullTestRepository { get; private set; }
         public IFullTestResultRepository FullTestResultRepository { get; private set; }
+        public ISeriesRepository SeriesRepository { get; private set; }
 
         public void Dispose()
         {
