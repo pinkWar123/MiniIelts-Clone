@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { App, Button, Form, Input, Typography, UploadFile } from "antd";
 import { useUpload } from "../../hooks/useUpload";
-import { CreateTestDto } from "../../types/Request/Test";
+import { CreateTestDto } from "../../types/Request/test";
 import styles from "./CreateTestPage.module.scss";
 import UploadHandler from "../../components/UploadHandler";
 import ExerciseList from "./ExerciseList";

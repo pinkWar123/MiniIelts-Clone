@@ -5,7 +5,7 @@ import AddExercise from "./AddExercise";
 import useTest from "../../hooks/useTest";
 import ExerciseList from "./ExerciseList";
 import { createTest } from "../../services/test";
-import { CreateTestDto } from "../../types/Request/Test";
+import { CreateTestDto } from "../../types/Request/test";
 import UploadHandler from "../../components/UploadHandler";
 import { useUpload } from "../../hooks/useUpload";
 
@@ -28,7 +28,7 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (value: any) => {
     console.log(value);
-    const images = await handleUpload();
+    const images = await handleUpload("test");
     console.log(images);
     const questionCount = test?.exercises
       .map((e) => e.questionCount)

@@ -366,7 +366,7 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SeriesId")
+                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Time")
@@ -571,6 +571,9 @@ namespace MiniIeltsCloneServer.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TestCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()

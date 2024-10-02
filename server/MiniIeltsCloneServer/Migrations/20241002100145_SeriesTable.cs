@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MiniIeltsCloneServer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitializeDatabase : Migration
+    public partial class SeriesTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -157,6 +157,113 @@ namespace MiniIeltsCloneServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Revoked = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => new { x.AppUserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Series",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TestCount = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Series", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Series_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FullTests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    SeriesId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTests_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FullTests_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FullTestResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullTestId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Marks = table.Column<double>(type: "float", nullable: false),
+                    Correct = table.Column<int>(type: "int", nullable: false),
+                    QuestionCount = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTestResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTestResults_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FullTestResults_FullTests_FullTestId",
+                        column: x => x.FullTestId,
+                        principalTable: "FullTests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tests",
                 columns: table => new
                 {
@@ -168,6 +275,7 @@ namespace MiniIeltsCloneServer.Migrations
                     ViewCount = table.Column<int>(type: "int", nullable: false),
                     QuestionCount = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false),
+                    FullTestId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -180,6 +288,11 @@ namespace MiniIeltsCloneServer.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tests_FullTests_FullTestId",
+                        column: x => x.FullTestId,
+                        principalTable: "FullTests",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -189,10 +302,12 @@ namespace MiniIeltsCloneServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TestId = table.Column<int>(type: "int", nullable: false),
-                    QuestionType = table.Column<int>(type: "int", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    ExerciseType = table.Column<int>(type: "int", nullable: false),
                     QuestionCount = table.Column<int>(type: "int", nullable: false),
                     StartQuestion = table.Column<int>(type: "int", nullable: false),
                     EndQuestion = table.Column<int>(type: "int", nullable: false),
+                    ChoiceCount = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -222,7 +337,9 @@ namespace MiniIeltsCloneServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TestId = table.Column<int>(type: "int", nullable: false),
-                    Score = table.Column<int>(type: "int", nullable: false),
+                    FullTestResultId = table.Column<int>(type: "int", nullable: true),
+                    Score = table.Column<double>(type: "float", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -236,9 +353,44 @@ namespace MiniIeltsCloneServer.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Results_FullTestResults_FullTestResultId",
+                        column: x => x.FullTestResultId,
+                        principalTable: "FullTestResults",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Results_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExerciseChoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExerciseId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseChoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExerciseChoices_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ExerciseChoices_Excercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Excercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,10 +402,10 @@ namespace MiniIeltsCloneServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExerciseId = table.Column<int>(type: "int", nullable: false),
-                    ExcerciseId = table.Column<int>(type: "int", nullable: true),
                     QuestionType = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Answer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -267,10 +419,11 @@ namespace MiniIeltsCloneServer.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Questions_Excercises_ExcerciseId",
-                        column: x => x.ExcerciseId,
+                        name: "FK_Questions_Excercises_ExerciseId",
+                        column: x => x.ExerciseId,
                         principalTable: "Excercises",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,6 +435,7 @@ namespace MiniIeltsCloneServer.Migrations
                     IsCorrect = table.Column<bool>(type: "bit", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResultId = table.Column<int>(type: "int", nullable: false),
+                    QuestionType = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -298,6 +452,36 @@ namespace MiniIeltsCloneServer.Migrations
                         name: "FK_Answers_Results_ResultId",
                         column: x => x.ResultId,
                         principalTable: "Results",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestionChoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionChoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuestionChoices_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_QuestionChoices_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -362,14 +546,54 @@ namespace MiniIeltsCloneServer.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChoices_AppUserId",
+                table: "ExerciseChoices",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChoices_ExerciseId",
+                table: "ExerciseChoices",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTestResults_AppUserId",
+                table: "FullTestResults",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTestResults_FullTestId",
+                table: "FullTestResults",
+                column: "FullTestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTests_AppUserId",
+                table: "FullTests",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTests_SeriesId",
+                table: "FullTests",
+                column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionChoices_AppUserId",
+                table: "QuestionChoices",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionChoices_QuestionId",
+                table: "QuestionChoices",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_AppUserId",
                 table: "Questions",
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_ExcerciseId",
+                name: "IX_Questions_ExerciseId",
                 table: "Questions",
-                column: "ExcerciseId");
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_AppUserId",
@@ -377,14 +601,29 @@ namespace MiniIeltsCloneServer.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Results_FullTestResultId",
+                table: "Results",
+                column: "FullTestResultId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Results_TestId",
                 table: "Results",
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Series_AppUserId",
+                table: "Series",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tests_AppUserId",
                 table: "Tests",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tests_FullTestId",
+                table: "Tests",
+                column: "FullTestId");
         }
 
         /// <inheritdoc />
@@ -409,7 +648,13 @@ namespace MiniIeltsCloneServer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "ExerciseChoices");
+
+            migrationBuilder.DropTable(
+                name: "QuestionChoices");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Results");
@@ -418,10 +663,22 @@ namespace MiniIeltsCloneServer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "FullTestResults");
+
+            migrationBuilder.DropTable(
                 name: "Excercises");
 
             migrationBuilder.DropTable(
                 name: "Tests");
+
+            migrationBuilder.DropTable(
+                name: "FullTests");
+
+            migrationBuilder.DropTable(
+                name: "Series");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

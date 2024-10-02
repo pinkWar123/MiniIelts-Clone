@@ -35,6 +35,7 @@ const ChooseOneQuestion: FunctionComponent<ChooseOneQuestionProps> = ({
               {letters[value]}.{" "}
               <Input
                 id={`chooseone-${questionOrder}-${value}`}
+                style={{ width: "400px" }}
                 value={handleFindChoiceContent(value)}
                 onChange={(e) => {
                   handleUpdateChoice(exerciseOrder, questionOrder, value + 1, {

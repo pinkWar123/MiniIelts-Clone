@@ -5,16 +5,16 @@
 namespace MiniIeltsCloneServer.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeTypeOfScore : Migration
+    public partial class AddOptionalFKKeyBetweenFullTestAndSeries : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<double>(
-                name: "Score",
-                table: "Results",
-                type: "float",
-                nullable: false,
+            migrationBuilder.AlterColumn<int>(
+                name: "SeriesId",
+                table: "FullTests",
+                type: "int",
+                nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int");
         }
@@ -23,12 +23,14 @@ namespace MiniIeltsCloneServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Score",
-                table: "Results",
+                name: "SeriesId",
+                table: "FullTests",
                 type: "int",
                 nullable: false,
-                oldClrType: typeof(double),
-                oldType: "float");
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
         }
     }
 }

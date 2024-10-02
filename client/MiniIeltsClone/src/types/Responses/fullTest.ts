@@ -1,5 +1,5 @@
 import { ITest } from "../Model/Test";
-import { QuestionSubmitDto } from "../Request/Test";
+import { QuestionSubmitDto } from "../Request/test";
 import { QuestionResultDto } from "./Test";
 
 export interface FullTestViewDto {
