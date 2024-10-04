@@ -9,7 +9,7 @@ namespace MiniIeltsCloneServer.Models
     {
         public required string Title { get; set; }
         public string? Image { get; set; }
-        public List<FullTest> Tests { get; set; } = new List<FullTest>();
+        public List<SeriesFullTest> SeriesFullTests { get; set; } = new List<SeriesFullTest>();
         public int TestCount { get; set; }
     }
 }

@@ -6,6 +6,7 @@ import SummaryEditor from "./SummaryEditor";
 import ExerciseDivider from "../../../../../components/create-test/ExerciseDivider";
 import { QuestionTypeEnum } from "../../../../../contants/questionType";
 import { convertQuestionTypeEnumToDescription } from "../../../../../helpers/convertQuestionType";
+import CancelButton from "../../../../../components/create-test/CancelButton";
 
 interface SummaryCompletionProps extends IExerciseProps {}
 
@@ -50,6 +51,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
         questionCount={endQuestion - startQuestion + 1}
       />
       {renderAnswers()}
+      <CancelButton exerciseOrder={exerciseOrder} />
     </>
   );
 };

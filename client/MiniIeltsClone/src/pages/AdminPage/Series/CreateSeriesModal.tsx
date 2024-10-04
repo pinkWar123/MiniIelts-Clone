@@ -53,7 +53,12 @@ const CreateSeriesModal: FunctionComponent<CreateSeriesModalProps> = ({
         </Form.Item>
         <Form.Item name={"fullTestIds"} label="Full Tests">
           <FullTestDebounceSelect
-            onChange={(ids) => form.setFieldValue("fullTestId", ids)}
+            onChange={(dtos) =>
+              form.setFieldValue(
+                "fullTestId",
+                dtos.map((dto) => dto.id)
+              )
+            }
           />
         </Form.Item>
       </Form>

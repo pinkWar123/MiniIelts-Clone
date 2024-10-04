@@ -10,14 +10,14 @@ namespace MiniIeltsCloneServer.Mapping
 {
     public class SeriesProfile : Profile
     {
-        public SeriesProfile()
-        {
-            CreateMap<Series, SeriesViewDto>()
-                .ForMember(dest => dest.Tests, opt => opt.MapFrom(src => src.Tests.Select(test => new FullTestNameDto
-                {
-                    Title = test.Title,
-                    Id = test.Id // Assuming FullTest has an Id property
-                }).ToList()));
-        }
+        // public SeriesProfile()
+        // {
+        //     CreateMap<Series, SeriesViewDto>()
+        //         .ForMember(dest => dest.Tests, opt => opt.MapFrom(src => src.SeriesFullTests.Select(test => new FullTestNameDto
+        //         {
+        //             Title = test.Title,
+        //             Id = test.Id // Assuming FullTest has an Id property
+        //         }).ToList()));
+        // }
     }
 }

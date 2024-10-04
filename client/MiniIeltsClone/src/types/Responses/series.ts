@@ -1,4 +1,4 @@
-interface FullTestNameDto {
+export interface FullTestNameDto {
   title: string;
   id: number;
 }

@@ -12,5 +12,7 @@ namespace MiniIeltsCloneServer.Services.SeriesService
         Task CreateNewSeries(CreateSeriesDto dto);
         Task<SeriesViewDto> GetSeriesById(int id);
         Task<PagedData<SeriesViewDto>> GetSeries(SeriesQueryObject query);
+        Task UpdateSeriesById(int seriesId, UpdateSeriesDto dto);
+        Task DeleteSeriesById(int seriesId);
     }
 }

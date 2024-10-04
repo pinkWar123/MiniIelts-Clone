@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Models.Dtos.Series;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.SeriesService;
 using MiniIeltsCloneServer.Wrappers;
+using Newtonsoft.Json;
 
 namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
 {
@@ -21,7 +22,11 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
 
         public override async Task<Series?> GetByIdAsync(int id)
         {
-            return await GetContext().Include(s => s.Tests).FirstOrDefaultAsync();
+            return await GetContext()
+                .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
+                    .ThenInclude(sf => sf.FullTest)
+                .Where(s => s.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<PagedData<Series>> GetAllSeries(SeriesQueryObject seriesQueryObject)
@@ -38,12 +43,11 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
             var count = await query.CountAsync();
 
             var data = await query
-            .Include(s => s.Tests)
-            .Skip((seriesQueryObject.PageNumber - 1) * seriesQueryObject.PageSize)
-            .Take(seriesQueryObject.PageSize)
-            .AsNoTracking()
-            .ToListAsync();
-
+                .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
+                    .ThenInclude(sf => sf.FullTest)
+                .Skip((seriesQueryObject.PageNumber - 1) * seriesQueryObject.PageSize)
+                .Take(seriesQueryObject.PageSize)
+                .ToListAsync();
 
             return new PagedData<Series>
             {

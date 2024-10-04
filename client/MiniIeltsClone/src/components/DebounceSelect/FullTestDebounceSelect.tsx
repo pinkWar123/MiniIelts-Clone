@@ -2,15 +2,16 @@ import { FunctionComponent, useCallback } from "react";
 import DebounceSelect from "./DebounceSelect";
 import { FullTestQueryObject } from "../../types/Request/fullTest";
 import { getFullTests } from "../../services/fullTest";
-
-interface FullTestDebounceSelectProps {
-  onChange: (ids: string[]) => void;
-}
+import { FullTestNameDto } from "../../types/Responses/series";
 
 interface FullTestDropDownValue {
   key: string;
   label: string;
   value: string;
+}
+interface FullTestDebounceSelectProps {
+  onChange: (dtos: FullTestNameDto[]) => void;
+  maxCount?: number;
 }
 // const fetchOptions: (testName: string) => Promise<{
 //   key: number;
@@ -20,7 +21,7 @@ interface FullTestDropDownValue {
 
 const FullTestDebounceSelect: FunctionComponent<
   FullTestDebounceSelectProps
-> = ({ onChange }) => {
+> = ({ onChange, maxCount }) => {
   const fetchOptions = useCallback(async (testName: string) => {
     const query: FullTestQueryObject = {
       pageNumber: 1,
@@ -37,12 +38,18 @@ const FullTestDebounceSelect: FunctionComponent<
   return (
     <>
       <DebounceSelect
+        maxCount={maxCount}
         labelInValue
         mode="multiple"
         fetchOptions={fetchOptions}
         onChange={(items) => {
           const _items = items as unknown as FullTestDropDownValue[];
-          onChange(_items.map((item) => item.value));
+          onChange(
+            _items.map((item) => ({
+              title: item.label,
+              id: parseInt(item.value),
+            }))
+          );
         }}
         style={{ width: "100%" }}
       />
