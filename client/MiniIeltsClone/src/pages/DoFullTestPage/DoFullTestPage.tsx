@@ -2,14 +2,15 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { FullTestViewDto } from "../../types/Responses/fullTest";
 import { useParams } from "react-router-dom";
 import { getFullTestByIdAsync } from "../../services/fullTest";
-import { Empty } from "antd";
+import { Button, Empty } from "antd";
 import TestDisplay from "../../components/DoTest/TestDisplay";
 import Essay from "../../components/DoTest/Essay";
 import Test from "../../components/DoTest/RenderTest/Test";
 import useAnswers from "../../hooks/useAnswers";
 import { QuestionTypeEnum } from "../../contants/questionType";
 import BottomPanel from "./BottomPanel";
-
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import styles from "./DoFullTestPage.module.scss";
 interface DoFullTestPageProps {}
 
 const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
@@ -61,6 +62,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
         title: res.data.title,
         createdOn: res.data.createdOn,
         tests: transformedTests,
+        id: res.data.id,
       });
       let questionTypes: QuestionTypeEnum[] = [];
       res.data.tests.forEach((t) =>
@@ -104,7 +106,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
   const handleChangeTest = (order: number) => setActiveIndex(order - 1);
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <TestDisplay
         essay={
           <Essay
@@ -122,6 +124,26 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
           </div>
         }
       />
+      {activeIndex > 0 && (
+        <div className={styles["prev-nav-wrapper"]}>
+          <Button
+            shape="circle"
+            className={styles["nav-button"]}
+            icon={<ArrowLeftOutlined style={{ fontSize: "25px" }} />}
+            onClick={() => setActiveIndex((prev) => prev - 1)}
+          ></Button>
+        </div>
+      )}
+      {activeIndex < fullTest?.tests.length - 1 && (
+        <div className={styles["next-nav-wrapper"]}>
+          <Button
+            shape="circle"
+            className={styles["nav-button"]}
+            icon={<ArrowRightOutlined style={{ fontSize: "25px" }} />}
+            onClick={() => setActiveIndex((prev) => prev + 1)}
+          ></Button>
+        </div>
+      )}
       <div style={{ position: "sticky", bottom: 0 }}>
         <BottomPanel
           activeOrder={activeIndex + 1}
@@ -129,7 +151,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
           onChange={handleChangeTest}
         />
       </div>
-    </>
+    </div>
   );
 };
 

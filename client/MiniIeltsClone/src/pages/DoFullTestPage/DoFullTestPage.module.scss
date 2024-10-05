@@ -19,3 +19,32 @@
     }
   }
 }
+
+.nav-button {
+  height: 50px;
+  width: 50px !important;
+  background-color: #e0e0e0 !important;
+}
+
+.prev-nav-wrapper {
+  position: absolute;
+  transform: translateY(-50%);
+  // margin-left: -30px;
+}
+
+.next-nav-wrapper {
+  position: absolute;
+  transform: translateY(-50%);
+  right: 0;
+  // margin-right: -35px;
+  // margin-left: 25px;
+}
+
+.next-nav-wrapper,
+.prev-nav-wrapper {
+  top: calc(50% - 100px);
+  :hover {
+    border-color: inherit;
+    color: black !important;
+  }
+}
