@@ -9,5 +9,6 @@ namespace MiniIeltsCloneServer.Services.SeriesService
     public class SeriesQueryObject : QueryObject
     {
         public string? Title { get; set; }
+        public string? Sort { get; set; }
     }
 }

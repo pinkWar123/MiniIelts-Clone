@@ -42,9 +42,26 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
 
             var count = await query.CountAsync();
 
-            var data = await query
+            query = query
                 .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
-                    .ThenInclude(sf => sf.FullTest)
+                    .ThenInclude(sf => sf.FullTest);
+            if(!String.IsNullOrEmpty(seriesQueryObject.Sort))
+            {
+                switch (seriesQueryObject.Sort)
+                {
+                    case "high-ranking":
+                        // query = query.OrderBy(q => q.);
+                        break;
+                    case "newest":
+                        query = query.OrderByDescending(q => q.CreatedOn);
+                        break;
+                    default:
+                        query = query.OrderBy(q => q.CreatedOn);
+                        break;
+                }
+            }
+
+            var data = await query
                 .Skip((seriesQueryObject.PageNumber - 1) * seriesQueryObject.PageSize)
                 .Take(seriesQueryObject.PageSize)
                 .ToListAsync();

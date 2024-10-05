@@ -149,6 +149,7 @@ const Series: FunctionComponent<SeriesProps> = () => {
       {openModal.create && (
         <CreateSeriesModal
           onClose={() => setOpenModal((prev) => ({ ...prev, create: false }))}
+          fetchSeries={fetchSeries}
         />
       )}
       {activeId !== undefined && (

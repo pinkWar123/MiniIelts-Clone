@@ -14,4 +14,5 @@ export interface UpdateSeriesDto {
 
 export interface SeriesQuery extends BaseQuery {
   title?: string;
+  sort?: string;
 }

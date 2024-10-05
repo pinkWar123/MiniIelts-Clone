@@ -2,7 +2,8 @@
   //   display: flex;
   //   align-items: center;
   //   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
   background: url("../../assets/particle-lines-futuristic-gradient-background.jpg")
     no-repeat center center;
   background-size: cover;

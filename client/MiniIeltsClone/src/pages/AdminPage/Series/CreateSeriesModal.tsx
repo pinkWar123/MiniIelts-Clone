@@ -8,10 +8,12 @@ import { createNewSeries } from "../../../services/series";
 
 interface CreateSeriesModalProps {
   onClose: () => void;
+  fetchSeries: () => Promise<void>;
 }
 
 const CreateSeriesModal: FunctionComponent<CreateSeriesModalProps> = ({
   onClose,
+  fetchSeries,
 }) => {
   const { handleUpload, props, onPreview, fileList } = useUpload();
   const [form] = Form.useForm<CreateSeriesDto>();
@@ -28,6 +30,7 @@ const CreateSeriesModal: FunctionComponent<CreateSeriesModalProps> = ({
         dto.image = images.data.fileNames[0];
       }
       await createNewSeries(dto);
+      await fetchSeries();
       setSubmitLoading(false);
       onClose();
       message.success("Create series successfully");

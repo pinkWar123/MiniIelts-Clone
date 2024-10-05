@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { App, Button, Form, Input, Typography, UploadFile } from "antd";
 import { useUpload } from "../../hooks/useUpload";
 import { CreateTestDto } from "../../types/Request/test";
@@ -9,6 +9,8 @@ import AddExercise from "./AddExercise";
 import useTest from "../../hooks/useTest";
 import { createTest, updateTest } from "../../services/test";
 import { useNavigate, useParams } from "react-router-dom";
+import Editor from "../../components/Editor/Editor";
+import ReactQuill from "react-quill";
 interface TestPageProps {
   variant: "update" | "create";
 }
@@ -24,6 +26,7 @@ const formItemLayout = {
 };
 const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
   const { test, setTest } = useTest();
+  const essayRef = useRef<ReactQuill | null>(null);
   const { id } = useParams();
   const { modal } = App.useApp();
   const navigate = useNavigate();
@@ -47,7 +50,7 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
   const handleSubmit = async (value: any) => {
     let images;
     if (fileList.length > 0 && !fileList?.some((f) => f.name === test?.picture))
-      images = await handleUpload();
+      images = await handleUpload("test");
     alert(images);
     const questionCount = test?.exercises
       .map((e) => e.questionCount)
@@ -94,15 +97,11 @@ const TestPage: FunctionComponent<TestPageProps> = ({ variant = "create" }) => {
           />
         </Form.Item>
         <Form.Item label="Essay" required>
-          <Input.TextArea
-            rows={4}
-            placeholder="Enter the essay"
-            value={test?.essay}
-            onChange={(e) =>
-              setTest((prev) => {
-                if (prev == null) return prev;
-                return { ...prev, essay: e.target.value };
-              })
+          <Editor
+            quillRef={essayRef}
+            editorHtml={test?.essay ?? ""}
+            setEditorHtml={(value) =>
+              setTest((prev) => (prev ? { ...prev, essay: value } : prev))
             }
           />
         </Form.Item>

@@ -253,6 +253,10 @@ namespace MiniIeltsCloneServer.Services.TestService
             if(test == null) throw new TestNotFoundException($"Can't find test with id {testId}");
             var entity = _mapper.Map<Test>(updateTestDto);
             entity.Id = test.Id;
+            entity.FullTestId = test.FullTestId;
+            entity.CreatedBy = test.CreatedBy;
+            entity.CreatedOn = test.CreatedOn;
+            entity.AppUserId = test.AppUserId;
             await _testRepo.UpdateAsync(testId, entity);
             await _testRepo.SaveChangesAsync();
         }
