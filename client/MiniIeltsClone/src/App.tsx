@@ -36,6 +36,7 @@ import FullTestResultByIdPage from "./pages/FullTestResultPage/FullTestResultByI
 import FullTestSolution from "./pages/FullTestResultPage/FullTestSolution";
 import FullTestResultByQuery from "./pages/FullTestResultPage/FullTestResultByQuery";
 import Series from "./pages/AdminPage/Series/Series";
+import SeriesPage from "./pages/SeriesPage/SeriesPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -282,6 +283,7 @@ function App() {
               element={<FullTestResultByIdPage />}
             />
           </Route>
+          <Route path="series" element={<SeriesPage />}></Route>
         </Routes>
       </>
     </>

@@ -366,7 +366,7 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SeriesId")
+                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Time")
@@ -382,8 +382,6 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("SeriesId");
 
                     b.ToTable("FullTests");
                 });
@@ -572,6 +570,9 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TestCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -581,6 +582,24 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Series");
+                });
+
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.SeriesFullTest", b =>
+                {
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FullTestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FullTestOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeriesId", "FullTestId");
+
+                    b.HasIndex("FullTestId");
+
+                    b.ToTable("SeriesFullTests");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Test", b =>
@@ -775,13 +794,7 @@ namespace MiniIeltsCloneServer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
-                    b.HasOne("MiniIeltsCloneServer.Models.Series", "Series")
-                        .WithMany("Tests")
-                        .HasForeignKey("SeriesId");
-
                     b.Navigation("AppUser");
-
-                    b.Navigation("Series");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTestResult", b =>
@@ -867,6 +880,25 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.SeriesFullTest", b =>
+                {
+                    b.HasOne("MiniIeltsCloneServer.Models.FullTest", "FullTest")
+                        .WithMany("SeriesFullTests")
+                        .HasForeignKey("FullTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MiniIeltsCloneServer.Models.Series", "Series")
+                        .WithMany("SeriesFullTests")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FullTest");
+
+                    b.Navigation("Series");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Test", b =>
                 {
                     b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
@@ -893,6 +925,8 @@ namespace MiniIeltsCloneServer.Migrations
                 {
                     b.Navigation("FullTestResults");
 
+                    b.Navigation("SeriesFullTests");
+
                     b.Navigation("Tests");
                 });
 
@@ -913,7 +947,7 @@ namespace MiniIeltsCloneServer.Migrations
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Series", b =>
                 {
-                    b.Navigation("Tests");
+                    b.Navigation("SeriesFullTests");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Test", b =>

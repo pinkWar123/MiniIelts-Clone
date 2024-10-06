@@ -22,12 +22,12 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
     const normalizedHtmlString = htmlString.replace(/&nbsp;/g, " ");
 
     // Regex để tìm tất cả các trường hợp strong có chứa số và _____ có hoặc không có khoảng trắng
-    const regex = /<strong>\s*(\d+)\s*<\/strong>\s*_____\s*/g;
+    const regex = /\s*_____\s*/g;
 
     // Thay thế các trường hợp `strong` có chứa `_____` bằng placeholder
     let count = 0;
     const placeholders = normalizedHtmlString.replace(regex, () => {
-      return `<strong>${
+      return `  <strong>${
         startQuestion + count
       }</strong><input data-placeholder="${count++}" />`;
     });

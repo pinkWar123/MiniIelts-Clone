@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import useTest from "../../../../../hooks/useTest";
-import { Checkbox, Flex, Input } from "antd";
+import { Checkbox, Col, Flex, Input, Row } from "antd";
 import MultipleChoiceQuestion from "./MutipleChoiceQuestion";
 import { IQuestion } from "../../../../../types/Model/Question";
 
@@ -20,11 +20,15 @@ const ChooseManyQuestion: FunctionComponent<ChooseManyQuestionProps> = ({
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return Array.from({ length: choiceCount }, (_, value) => {
       return (
-        <div key={`choosemany-${questionOrder}-${value}`}>
-          <Checkbox value={letters[value]}>
+        <div
+          key={`choosemany-${questionOrder}-${value}`}
+          style={{ width: "100%" }}
+        >
+          <Checkbox value={letters[value]} style={{ width: "500px" }}>
             <Flex gap={"small"}>
-              {letters[value]}.{" "}
+              <div style={{ alignContent: "center" }}>{letters[value]}. </div>
               <Input
+                style={{ width: "500px" }}
                 id={`choosemany-${questionOrder}-${value}`}
                 onChange={(e) => {
                   handleUpdateChoice(exerciseOrder, questionOrder, value + 1, {
@@ -55,7 +59,9 @@ const ChooseManyQuestion: FunctionComponent<ChooseManyQuestionProps> = ({
             onChange={(value: string[]) => updateQuestion(value)}
             value={findQuestion(exerciseOrder, questionOrder)?.answer.split("")}
           >
-            {renderChoices()}
+            <Row>
+              <Col span={24}>{renderChoices()}</Col>
+            </Row>
           </Checkbox.Group>
         }
         exerciseOrder={exerciseOrder}

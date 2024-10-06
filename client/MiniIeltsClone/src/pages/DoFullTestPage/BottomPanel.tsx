@@ -27,7 +27,14 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = ({
         {info.map((info) => {
           if (info.order === activeOrder) {
             return (
-              <Col span={11} onClick={() => onChange(info.order)}>
+              <Col
+                xs={24}
+                sm={24}
+                md={24}
+                lg={18}
+                xl={11}
+                onClick={() => onChange(info.order)}
+              >
                 <Space
                   className={styles["section-wrapper"]}
                   style={{
@@ -55,7 +62,14 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = ({
           }
 
           return (
-            <Col span={6} onClick={() => onChange(info.order)}>
+            <Col
+              xs={0}
+              sm={0}
+              md={0}
+              lg={3}
+              xl={6}
+              onClick={() => onChange(info.order)}
+            >
               <div className={styles["section-wrapper"]}>
                 Part {info.order} : {info.end - info.start + 1} questions
               </div>

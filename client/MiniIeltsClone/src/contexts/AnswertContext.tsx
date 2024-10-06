@@ -2,7 +2,7 @@ import React, { createContext, useState, ReactNode } from "react";
 import { IDoTestAnswer } from "../types/Model/Answer";
 import { useNavigate, useParams } from "react-router-dom";
 import { incrementTestViewCount, submitTest } from "../services/test";
-import { TestSubmitDto } from "../types/Request/Test";
+import { TestSubmitDto } from "../types/Request/test";
 import { message } from "antd";
 import useUser from "../hooks/useUser";
 import useStartTest from "../hooks/useStartTest";

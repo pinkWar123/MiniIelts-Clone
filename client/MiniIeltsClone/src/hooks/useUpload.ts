@@ -36,13 +36,12 @@ export const useUpload = (initialFiles?: UploadFile[]) => {
     },
     fileList,
   };
-  const handleUpload = async () => {
-    console.log(fileList);
+  const handleUpload = async (prefix: string) => {
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("file", file as FileType);
     });
-    return await uploadFiles(formData);
+    return await uploadFiles(formData, prefix);
   };
   return { handleUpload, onPreview, props, fileList, setFileList };
 };

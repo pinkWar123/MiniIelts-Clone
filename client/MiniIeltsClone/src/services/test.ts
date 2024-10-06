@@ -3,7 +3,7 @@ import {
   CreateTestDto,
   TestSubmitDto,
   UpdateTestDto,
-} from "../types/Request/Test";
+} from "../types/Request/test";
 import {
   ITest,
   TestDropDownViewDto,

@@ -2,7 +2,6 @@ import { Flex, Image, Typography } from "antd";
 import { FunctionComponent } from "react";
 import { replaceNewLinesWithBr } from "../../helpers/text";
 import { Highlighter, SelectionProvider } from "react-selection-highlighter";
-
 interface EssayProps {
   title: string;
   content: string;
@@ -34,7 +33,7 @@ const Essay: FunctionComponent<EssayProps> = ({ title, content, picture }) => {
       </Flex>
       <Typography.Paragraph style={{ paddingBottom: "150px" }}>
         <SelectionProvider>
-          <Highlighter minSelectionLength={5} htmlString={cleanedContent} />
+          <Highlighter minSelectionLength={1} htmlString={content} />
         </SelectionProvider>
       </Typography.Paragraph>
     </div>
