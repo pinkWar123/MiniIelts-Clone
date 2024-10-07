@@ -14,6 +14,7 @@ namespace MiniIeltsCloneServer.Mapping
         {
             CreateMap<CreatePostDto, Post>();
             CreateMap<Post, PostViewDto>();
+            CreateMap<Post, PostListingDto>();
         }
     }
 }

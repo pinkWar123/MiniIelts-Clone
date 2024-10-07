@@ -38,9 +38,10 @@ import FullTestResultByQuery from "./pages/FullTestResultPage/FullTestResultByQu
 import Series from "./pages/AdminPage/Series/Series";
 import SeriesPage from "./pages/SeriesPage/SeriesPage";
 import PostPage from "./pages/AdminPage/Post/PostPage";
-import PostEditor from "./pages/AdminPage/Post/PostEditor";
+import { default as PostViewpage } from "./pages/PostPage/PostPage";
 import CreatePost from "./pages/AdminPage/Post/CreatePost";
 import { PostProvider } from "./contexts/PostContext";
+import NormalLayout from "./layouts/NormalLayout/NormalLayout";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -265,6 +266,10 @@ function App() {
 
           <Route path="create-full-test" element={<CreateFullTestLayout />}>
             <Route index element={<CreateFullTestPage />} />
+          </Route>
+
+          <Route path="post" element={<NormalLayout />}>
+            <Route path=":id" element={<PostViewpage />} />
           </Route>
 
           <Route

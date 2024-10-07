@@ -45,7 +45,7 @@ namespace MiniIeltsCloneServer.Services.PostService
                 post.CreatedBy = currentUser.UserName;
                 post.AppUserId = currentUser.Id;
             }
-            
+
             await _unitOfWork.PostRepository.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
             return post.Id;
@@ -71,7 +71,7 @@ namespace MiniIeltsCloneServer.Services.PostService
             postViewDto.RatingResult = new RatingResult
             {
                 RatingCount = post.Ratings.Count,
-                AverageRating = post.Ratings.Average(r => r.Rating)
+                AverageRating = post.Ratings.Count > 0 ? post.Ratings.Average(r => r.Rating) : 0
             };
 
             return postViewDto;

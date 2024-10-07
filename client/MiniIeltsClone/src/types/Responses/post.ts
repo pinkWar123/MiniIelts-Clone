@@ -17,4 +17,5 @@ export interface PostListingDto {
   title: string;
   content: string;
   viewCount: number;
+  image?: string;
 }

@@ -12,7 +12,8 @@ export const getPostById = async (id: number) => {
 };
 
 export const getRandomPosts = async () => {
-  return await axiosInstance.get<IResponse<PostListingDto[]>>("Post/random");
+  return (await axiosInstance.get<IResponse<PostListingDto[]>>("Post/random"))
+    .data;
 };
 
 export const updatePostById = async (id: number, dto: UpdatePostDto) => {
