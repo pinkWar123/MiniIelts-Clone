@@ -1,3 +1,5 @@
+import { Skills } from "../../contants/skills";
+
 export interface RatingResult {
   ratingCount: number;
   averageRating: number;
@@ -10,6 +12,7 @@ export interface PostViewDto {
   image?: string;
   createdOn: string;
   createdBy: string;
+  tag: Skills;
 }
 
 export interface PostListingDto {
@@ -18,4 +21,5 @@ export interface PostListingDto {
   content: string;
   viewCount: number;
   image?: string;
+  tag: Skills;
 }

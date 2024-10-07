@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MiniIeltsCloneServer.Models.Dtos.Post;
 using MiniIeltsCloneServer.Services.PostService;
+using MiniIeltsCloneServer.Validators;
 using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Controllers
@@ -36,6 +37,13 @@ namespace MiniIeltsCloneServer.Controllers
         [HttpPost]
         public async Task<IResult> CreatePost([FromBody] CreatePostDto dto)
         {
+            var validator = new CreatePostValidator();
+            var result = await validator.ValidateAsync(dto);
+            if(!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+
+            }
             var newPostId = await _postService.CreateNewPost(dto);
             return Results.Created($"/post/{newPostId}", new Response<int>(newPostId));
         }
@@ -43,6 +51,13 @@ namespace MiniIeltsCloneServer.Controllers
         [HttpPut("{id}")]
         public async Task<IResult> UpdatePostById([FromRoute] int id, [FromBody] UpdatePostDto dto)
         {
+            var validator = new UpdatePostValidator();
+            var result = await validator.ValidateAsync(dto);
+            if(!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+
+            }
             await _postService.UpdatePostById(id, dto);
             return Results.Accepted();
         }

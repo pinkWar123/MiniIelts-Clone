@@ -10,6 +10,7 @@ interface PostPageProps {}
 import styles from "./PostPage.module.scss";
 import RelatedTips from "./RelatedTips";
 import UrlBox from "../../components/UrlBox/UrlBox";
+import { SKILL_COLORS, Skills } from "../../contants/skills";
 const PostPage: FunctionComponent<PostPageProps> = () => {
   const { id } = useParams();
   const [post, setPost] = useState<PostViewDto>();
@@ -47,10 +48,12 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
             ({post?.ratingResult.ratingCount} votes)
           </Flex>
           <Flex justify="space-between" style={{ width: "98%" }}>
-            <Space>
-              <TagOutlined />
-              <Tag>Reading tip</Tag>
-            </Space>
+            <Tag color={SKILL_COLORS[post?.tag ?? 0]}>
+              <Space>
+                <TagOutlined />
+                <div>{Skills[post?.tag ?? 0]} TIP</div>
+              </Space>
+            </Tag>
             <Space>
               <div>
                 <EyeOutlined /> 105,570

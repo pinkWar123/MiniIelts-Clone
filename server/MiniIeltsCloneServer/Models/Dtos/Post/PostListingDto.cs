@@ -12,5 +12,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.Post
         public string? Image { get; set; }
         public required string Content { get; set; }
         public int ViewCount { get; set; }
+        public Skill Tag { get; set; }
+
     }
 }

@@ -12,7 +12,7 @@ import { TestProvider } from "./contexts/TestContext";
 import useMessage from "antd/es/message/useMessage";
 import DoTestPage from "./pages/DoTestPage/DoTestPage";
 import { AnswersProvider } from "./contexts/AnswertContext";
-import { App as AntdApp, Button, Flex } from "antd";
+import { App as AntdApp, Button, Flex, message } from "antd";
 import axiosInstance from "./services/axiosConfig";
 import ViewSolutionPage from "./pages/TestResultPage/ViewSolutionPage";
 import ProfileLayout from "./layouts/ProfileLayout/ProfileLayout";
@@ -43,6 +43,7 @@ import CreatePost from "./pages/AdminPage/Post/CreatePost";
 import { PostProvider } from "./contexts/PostContext";
 import NormalLayout from "./layouts/NormalLayout/NormalLayout";
 import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
+import { handleAxiosError } from "./helpers/errorHandling";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -163,6 +164,8 @@ function App() {
             }
           });
         }
+
+        message.error(handleAxiosError(error));
 
         return Promise.reject(error);
       }

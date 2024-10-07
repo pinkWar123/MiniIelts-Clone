@@ -4,12 +4,12 @@ import { useUpload } from "../hooks/useUpload";
 import ReactQuill from "react-quill";
 import { IResponse } from "../types/Responses/response";
 import { UploadResultDto } from "../types/Responses/upload";
+import { CreatePostDto } from "../types/Request/post";
+import { Skills } from "../contants/skills";
 
 export interface PostContextProps {
-  title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
+  post: CreatePostDto;
+  setPost: React.Dispatch<React.SetStateAction<CreatePostDto>>;
   props: UploadProps<unknown>;
   onPreview: (file: UploadFile) => Promise<void>;
   quillRef: React.MutableRefObject<ReactQuill | null>;
@@ -25,17 +25,18 @@ export const PostContext = createContext<PostContextProps | undefined>(
 export const PostProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [post, setPost] = useState<CreatePostDto>({
+    title: "",
+    content: "",
+    tag: Skills.LISTENING,
+  });
   const { props, onPreview, fileList, setFileList, handleUpload } = useUpload();
   const quillRef = useRef<ReactQuill | null>(null);
   return (
     <PostContext.Provider
       value={{
-        title,
-        setTitle,
-        content,
-        setContent,
+        post,
+        setPost,
         props,
         onPreview,
         quillRef,

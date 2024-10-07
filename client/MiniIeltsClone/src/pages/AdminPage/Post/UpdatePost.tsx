@@ -5,28 +5,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getPostById, updatePostById } from "../../../services/post";
 import { UpdatePostDto } from "../../../types/Request/post";
 import { message } from "antd";
+import { Skills } from "../../../contants/skills";
 
 interface UpdatePostProps {}
 
 const UpdatePost: FunctionComponent<UpdatePostProps> = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {
-    title,
-    setTitle,
-    setContent,
-    setFileList,
-    content,
-    fileList,
-    handleUpload,
-  } = usePost();
+  const { post, setPost, setFileList, fileList, handleUpload } = usePost();
   useEffect(() => {
     if (!id) return;
     const fetchPost = async () => {
       const res = await getPostById(parseInt(id));
       const post = res.data;
-      setTitle(post.title);
-      setContent(post.content);
+      setPost({
+        title: post.title,
+        content: post.content,
+        image: post.image,
+        tag: post.tag,
+      });
       if (post.image)
         setFileList([
           {
@@ -37,7 +34,7 @@ const UpdatePost: FunctionComponent<UpdatePostProps> = () => {
         ]);
     };
     fetchPost();
-  }, [id, setContent, setFileList, setTitle]);
+  }, [id, setPost, setFileList]);
   const handleSubmit = async () => {
     // console.log(title);
     if (!id) return;
@@ -50,9 +47,10 @@ const UpdatePost: FunctionComponent<UpdatePostProps> = () => {
       }
     }
     const dto: UpdatePostDto = {
-      title,
-      content,
+      title: post?.title ?? "",
+      content: post?.content ?? "",
       image: fileName,
+      tag: post?.tag ?? Skills.LISTENING,
     };
     console.log(dto);
 

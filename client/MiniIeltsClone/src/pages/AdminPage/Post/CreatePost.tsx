@@ -5,16 +5,19 @@ import { CreatePostDto } from "../../../types/Request/post";
 import { createNewPost } from "../../../services/post";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
+import { Skills } from "../../../contants/skills";
 
 interface CreatePostProps {}
 
 const CreatePost: FunctionComponent<CreatePostProps> = () => {
-  const { title, content, fileList, handleUpload } = usePost();
+  const { post, fileList, handleUpload } = usePost();
   const navigate = useNavigate();
   const handleSubmit = async () => {
     const dto: CreatePostDto = {
-      title,
-      content,
+      content: post?.content ?? "",
+      image: post?.image,
+      tag: post?.tag ?? Skills.LISTENING,
+      title: post?.title ?? "",
     };
     if (fileList && fileList.length > 0) {
       const images = await handleUpload("post");

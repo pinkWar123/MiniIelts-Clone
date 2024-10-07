@@ -99,6 +99,7 @@ namespace MiniIeltsCloneServer.Services.PostService
             post.Title = dto.Title;
             post.Image = dto.Image;
             post.Content = dto.Content;
+            post.Tag = dto.Tag;
             await _unitOfWork.SaveChangesAsync();
         }
     }
