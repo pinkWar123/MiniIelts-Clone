@@ -37,6 +37,10 @@ import FullTestSolution from "./pages/FullTestResultPage/FullTestSolution";
 import FullTestResultByQuery from "./pages/FullTestResultPage/FullTestResultByQuery";
 import Series from "./pages/AdminPage/Series/Series";
 import SeriesPage from "./pages/SeriesPage/SeriesPage";
+import PostPage from "./pages/AdminPage/Post/PostPage";
+import PostEditor from "./pages/AdminPage/Post/PostEditor";
+import CreatePost from "./pages/AdminPage/Post/CreatePost";
+import { PostProvider } from "./contexts/PostContext";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -247,8 +251,17 @@ function App() {
             <Route path="test" element={<Test />} />
             <Route path="user" element={<Users />} />
             <Route path="series" element={<Series />} />
+            <Route path="post" element={<PostPage />} />
             <Route path="full-test" element={<FullTest />} />
           </Route>
+          <Route
+            path="post/create"
+            element={
+              <PostProvider>
+                <CreatePost />
+              </PostProvider>
+            }
+          />
 
           <Route path="create-full-test" element={<CreateFullTestLayout />}>
             <Route index element={<CreateFullTestPage />} />

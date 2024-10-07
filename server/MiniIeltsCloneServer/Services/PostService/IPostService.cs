@@ -8,7 +8,7 @@ namespace MiniIeltsCloneServer.Services.PostService
 {
     public interface IPostService
     {
-        Task CreateNewPost(CreatePostDto dto);
+        Task<int> CreateNewPost(CreatePostDto dto);
         Task UpdatePostById(int id, UpdatePostDto dto);
         Task<bool> HasPostTitleExisted(string title);
         Task<PostViewDto> GetPostById(int id);

@@ -22,5 +22,10 @@ export const items: MenuItem[] = [
     icon: <BarsOutlined />,
     label: "Series",
   },
+  {
+    key: "post",
+    icon: <BookOutlined />,
+    label: "Posts",
+  },
   { key: "user", icon: <UserOutlined />, label: "Users" },
 ];

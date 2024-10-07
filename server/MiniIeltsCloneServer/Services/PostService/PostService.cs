@@ -7,27 +7,48 @@ using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Exceptions.Post;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Post;
+using MiniIeltsCloneServer.Services.UserService;
 
 namespace MiniIeltsCloneServer.Services.PostService
 {
     public class PostService : IPostService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public PostService(IUnitOfWork unitOfWork, IMapper mapper)
+        public PostService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userService = userService;
         }
-        public async Task CreateNewPost(CreatePostDto dto)
+        public async Task<int> CreateNewPost(CreatePostDto dto)
         {
             var hasTitleExisted = await HasPostTitleExisted(dto.Title);
             if(hasTitleExisted)
             {
                 throw new BadHttpRequestException($"Post with title {dto.Title} already exists");
             }
-            await _unitOfWork.PostRepository.AddAsync(_mapper.Map<CreatePostDto, Post>(dto));
+
+            var currentUser = await _userService.GetCurrentUser();
+
+            var post = new Post
+            {
+                Title = dto.Title,
+                Image = dto.Image,
+                Content = dto.Content,
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            if(currentUser != null)
+            {
+                post.CreatedBy = currentUser.UserName;
+                post.AppUserId = currentUser.Id;
+            }
+            
+            await _unitOfWork.PostRepository.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
+            return post.Id;
         }
 
         public async Task DeletePostById(int id)
@@ -46,7 +67,14 @@ namespace MiniIeltsCloneServer.Services.PostService
                 throw new PostNotFoundException(id);
             }
 
-            return _mapper.Map<Post, PostViewDto>(post);
+            var postViewDto = _mapper.Map<Post, PostViewDto>(post);
+            postViewDto.RatingResult = new RatingResult
+            {
+                RatingCount = post.Ratings.Count,
+                AverageRating = post.Ratings.Average(r => r.Rating)
+            };
+
+            return postViewDto;
         }
 
         public async Task<List<PostListingDto>?> GetRandomTop5Posts()
@@ -61,7 +89,7 @@ namespace MiniIeltsCloneServer.Services.PostService
         public async Task<bool> HasPostTitleExisted(string title)
         {
             var posts = await _unitOfWork.PostRepository.FindAllAsync(p => p.Title.ToLower().Trim() == title.ToLower().Trim());
-            return posts != null;
+            return posts.Any();
         }
 
         public async Task UpdatePostById(int id, UpdatePostDto dto)

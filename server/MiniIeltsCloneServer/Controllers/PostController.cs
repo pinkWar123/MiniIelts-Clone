@@ -36,8 +36,8 @@ namespace MiniIeltsCloneServer.Controllers
         [HttpPost]
         public async Task<IResult> CreatePost([FromBody] CreatePostDto dto)
         {
-            await _postService.CreateNewPost(dto);
-            return Results.Accepted();
+            var newPostId = await _postService.CreateNewPost(dto);
+            return Results.Created($"/post/{newPostId}", new Response<int>(newPostId));
         }
 
         [HttpPut("{id}")]
