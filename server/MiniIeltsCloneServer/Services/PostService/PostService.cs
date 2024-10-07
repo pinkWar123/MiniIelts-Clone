@@ -94,7 +94,11 @@ namespace MiniIeltsCloneServer.Services.PostService
 
         public async Task UpdatePostById(int id, UpdatePostDto dto)
         {
-            await _unitOfWork.PostRepository.UpdateAsync(id, dto);
+            var post = await _unitOfWork.PostRepository.GetByIdAsync(id);
+            if(post == null) throw new PostNotFoundException(id);
+            post.Title = dto.Title;
+            post.Image = dto.Image;
+            post.Content = dto.Content;
             await _unitOfWork.SaveChangesAsync();
         }
     }

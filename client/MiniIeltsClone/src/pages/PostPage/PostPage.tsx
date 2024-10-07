@@ -60,7 +60,11 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
               </div>
             </Space>
           </Flex>
-          <div className={styles["essay"]}>{parse(post?.content ?? "")}</div>
+          <div className={styles["essay"]}>
+            <Typography.Paragraph>
+              {parse(post?.content ?? "")}
+            </Typography.Paragraph>
+          </div>
           <Col span={8} offset={8} className={styles["url-box"]}>
             <UrlBox />
           </Col>

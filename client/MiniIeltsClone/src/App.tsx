@@ -42,6 +42,7 @@ import { default as PostViewpage } from "./pages/PostPage/PostPage";
 import CreatePost from "./pages/AdminPage/Post/CreatePost";
 import { PostProvider } from "./contexts/PostContext";
 import NormalLayout from "./layouts/NormalLayout/NormalLayout";
+import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -260,6 +261,14 @@ function App() {
             element={
               <PostProvider>
                 <CreatePost />
+              </PostProvider>
+            }
+          />
+          <Route
+            path="post/update/:id"
+            element={
+              <PostProvider>
+                <UpdatePost />
               </PostProvider>
             }
           />

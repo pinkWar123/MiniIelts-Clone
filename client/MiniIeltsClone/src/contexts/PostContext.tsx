@@ -14,6 +14,7 @@ export interface PostContextProps {
   onPreview: (file: UploadFile) => Promise<void>;
   quillRef: React.MutableRefObject<ReactQuill | null>;
   fileList: UploadFile<unknown>[];
+  setFileList: React.Dispatch<React.SetStateAction<UploadFile<unknown>[]>>;
   handleUpload: (prefix: string) => Promise<IResponse<UploadResultDto>>;
 }
 
@@ -26,7 +27,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const { props, onPreview, fileList, handleUpload } = useUpload();
+  const { props, onPreview, fileList, setFileList, handleUpload } = useUpload();
   const quillRef = useRef<ReactQuill | null>(null);
   return (
     <PostContext.Provider
@@ -39,6 +40,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({
         onPreview,
         quillRef,
         fileList,
+        setFileList,
         handleUpload,
       }}
     >
