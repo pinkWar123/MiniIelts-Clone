@@ -8,6 +8,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExerciseChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.PostRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionRepo;
 using MiniIeltsCloneServer.Data.Repositories.ResultRepo;
@@ -34,6 +35,7 @@ namespace MiniIeltsCloneServer.Data
         IFullTestResultRepository FullTestResultRepository { get; }
         ISeriesFullTestRepository SeriesFullTestRepository { get; }
         ISeriesRepository SeriesRepository { get; }
+        IPostRepository PostRepository { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();
