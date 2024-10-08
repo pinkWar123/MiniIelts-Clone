@@ -13,6 +13,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.PostRepo
     {
         Task<List<Post>> GetRandomPosts(int postCount);
         Task<PagedData<Post>> GetPosts(PostQueryObject query);
-        
+        Task CreateNewVote(int post, string userId, double vote);
     }
 }

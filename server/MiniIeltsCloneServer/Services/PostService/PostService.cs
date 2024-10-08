@@ -114,5 +114,33 @@ namespace MiniIeltsCloneServer.Services.PostService
             post.Tag = dto.Tag;
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<RatingResult> VotePostById(int id, double vote)
+        {
+            var currentUser = await _userService.GetCurrentUser();
+            if(currentUser == null) throw new UnauthorizedAccessException();
+            var post =  await _unitOfWork.PostRepository.GetByIdAsync(id);
+            if(post == null) throw new PostNotFoundException(id);
+            
+            var userVote = post.Ratings.FirstOrDefault(r => r.AppUserId == currentUser.Id);
+            
+            if(userVote != null)
+            {
+                userVote.Rating = vote;
+                await _unitOfWork.SaveChangesAsync();
+            }
+            else
+            {
+                await _unitOfWork.PostRepository.CreateNewVote(id, currentUser.Id, vote);
+            }
+
+            post =  await _unitOfWork.PostRepository.GetByIdAsync(id);
+
+            return new RatingResult
+            {
+                RatingCount = post?.Ratings.Count ?? 0,
+                AverageRating = post?.Ratings?.Count > 0 ? post.Ratings.Average(r => r.Rating) : 0
+            };
+        }
     }
 }

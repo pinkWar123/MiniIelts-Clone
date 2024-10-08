@@ -16,5 +16,6 @@ namespace MiniIeltsCloneServer.Services.PostService
         Task<List<PostListingDto>?> GetRandomTop5Posts();
         Task DeletePostById(int id);
         Task<PagedData<PostListingDto>> GetPosts(PostQueryObject query);
+        Task<RatingResult> VotePostById(int id, double vote);
     }
 }

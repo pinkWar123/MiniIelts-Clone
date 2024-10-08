@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MiniIeltsCloneServer.Exceptions.Post;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Repositories;
 using MiniIeltsCloneServer.Services.PostService;
@@ -15,6 +16,20 @@ namespace MiniIeltsCloneServer.Data.Repositories.PostRepo
     {
         public PostRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
+        }
+
+        public async Task CreateNewVote(int postId, string userId, double vote)
+        {
+            var post = await GetByIdAsync(postId);
+            if(post == null) throw new PostNotFoundException(postId);
+            var postRating = new PostRating
+            {
+                AppUserId = userId,
+                Rating = vote,
+                PostId = postId
+            };
+            post.Ratings.Add(postRating);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<PagedData<Post>> GetPosts(PostQueryObject query)

@@ -15,3 +15,7 @@ export interface PostQuery extends BaseQuery {
   tag?: Skills;
   sortBy?: string;
 }
+
+export interface PostVoteDto {
+  vote: number;
+}

@@ -1,5 +1,14 @@
-import { CreatePostDto, PostQuery, UpdatePostDto } from "../types/Request/post";
-import { PostListingDto, PostViewDto } from "../types/Responses/post";
+import {
+  CreatePostDto,
+  PostQuery,
+  PostVoteDto,
+  UpdatePostDto,
+} from "../types/Request/post";
+import {
+  PostListingDto,
+  PostViewDto,
+  RatingResult,
+} from "../types/Responses/post";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
 import axiosInstance from "./axiosConfig";
 
@@ -30,4 +39,10 @@ export const updatePostById = async (id: number, dto: UpdatePostDto) => {
 
 export const deletePostById = async (id: number) => {
   return await axiosInstance.delete(`Post/${id}`);
+};
+
+export const votePostById = async (id: number, dto: PostVoteDto) => {
+  return (
+    await axiosInstance.post<IResponse<RatingResult>>(`Post/${id}/vote`, dto)
+  ).data;
 };

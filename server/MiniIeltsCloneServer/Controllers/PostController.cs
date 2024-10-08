@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models.Dtos.Post;
@@ -58,6 +59,14 @@ namespace MiniIeltsCloneServer.Controllers
             }
             var newPostId = await _postService.CreateNewPost(dto);
             return Results.Created($"/post/{newPostId}", new Response<int>(newPostId));
+        }
+
+        [HttpPost("{id}/vote")]
+        [Authorize]
+        public async Task<IResult> VotePost([FromRoute] int id, [FromBody] PostVoteDto dto)
+        {
+            var voteResult = await _postService.VotePostById(id, dto.Vote);
+            return Results.Ok(new Response<RatingResult>(voteResult));
         }
 
         [HttpPut("{id}")]

@@ -1,8 +1,18 @@
-import { Col, Flex, Rate, Row, Space, Tag, Typography } from "antd";
+import {
+  Col,
+  Flex,
+  message,
+  Rate,
+  Row,
+  Space,
+  Spin,
+  Tag,
+  Typography,
+} from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PostViewDto } from "../../types/Responses/post";
-import { getPostById } from "../../services/post";
+import { getPostById, votePostById } from "../../services/post";
 import CustomImage from "../../components/CustomImage";
 import { CalendarOutlined, EyeOutlined, TagOutlined } from "@ant-design/icons";
 import parse from "html-react-parser";
@@ -11,9 +21,13 @@ import styles from "./PostPage.module.scss";
 import RelatedTips from "./RelatedTips";
 import UrlBox from "../../components/UrlBox/UrlBox";
 import { SKILL_COLORS, Skills } from "../../contants/skills";
+import { PostVoteDto } from "../../types/Request/post";
+import useUser from "../../hooks/useUser";
 const PostPage: FunctionComponent<PostPageProps> = () => {
   const { id } = useParams();
+  const { user } = useUser();
   const [post, setPost] = useState<PostViewDto>();
+  const [isVoting, setIsVoting] = useState<boolean>(false);
   useEffect(() => {
     if (!id) return;
     const fetchPost = async () => {
@@ -23,6 +37,38 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
     };
     fetchPost();
   }, [id]);
+  const handleVotePost = async (vote: number) => {
+    if (!id) return;
+    if (!user) {
+      message.error("You have to log in to leave a vote");
+      return;
+    }
+    setIsVoting(true);
+    setPost((prev) =>
+      prev
+        ? {
+            ...prev,
+            ratingResult: {
+              ...prev.ratingResult,
+              averageRating: vote,
+            },
+          }
+        : prev
+    );
+    const voteDto: PostVoteDto = { vote };
+    const res = await votePostById(parseInt(id), voteDto);
+    setPost((prev) =>
+      prev
+        ? {
+            ...prev,
+            ratingResult: {
+              ...res.data,
+            },
+          }
+        : prev
+    );
+    setIsVoting(false);
+  };
   return (
     <>
       <Row className={styles["container"]}>
@@ -44,8 +90,10 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
               style={{ fontSize: "16px" }}
               allowHalf
               value={post?.ratingResult.averageRating}
+              onChange={(value) => handleVotePost(value)}
             />
-            ({post?.ratingResult.ratingCount} votes)
+            {isVoting && <Spin spinning />}({post?.ratingResult.ratingCount}{" "}
+            votes)
           </Flex>
           <Flex justify="space-between" style={{ width: "98%" }}>
             <Tag color={SKILL_COLORS[post?.tag ?? 0]}>
