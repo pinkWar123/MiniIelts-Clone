@@ -19,6 +19,7 @@ const CreatePost: FunctionComponent<CreatePostProps> = () => {
       tag: post?.tag ?? Skills.LISTENING,
       title: post?.title ?? "",
     };
+    console.log(dto);
     if (fileList && fileList.length > 0) {
       const images = await handleUpload("post");
       const fileNames = images.data.fileNames;

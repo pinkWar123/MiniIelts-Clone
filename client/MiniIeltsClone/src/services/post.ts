@@ -1,6 +1,6 @@
-import { CreatePostDto, UpdatePostDto } from "../types/Request/post";
+import { CreatePostDto, PostQuery, UpdatePostDto } from "../types/Request/post";
 import { PostListingDto, PostViewDto } from "../types/Responses/post";
-import { IResponse } from "../types/Responses/response";
+import { IPagedResponse, IResponse } from "../types/Responses/response";
 import axiosInstance from "./axiosConfig";
 
 export const createNewPost = async (dto: CreatePostDto) => {
@@ -14,6 +14,14 @@ export const getPostById = async (id: number) => {
 export const getRandomPosts = async () => {
   return (await axiosInstance.get<IResponse<PostListingDto[]>>("Post/random"))
     .data;
+};
+
+export const getPosts = async (query: PostQuery) => {
+  return (
+    await axiosInstance.get<IPagedResponse<PostListingDto[]>>("Post", {
+      params: query,
+    })
+  ).data;
 };
 
 export const updatePostById = async (id: number, dto: UpdatePostDto) => {

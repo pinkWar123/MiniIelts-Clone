@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models.Dtos.Post;
 using MiniIeltsCloneServer.Services.PostService;
+using MiniIeltsCloneServer.Services.UriService;
 using MiniIeltsCloneServer.Validators;
 using MiniIeltsCloneServer.Wrappers;
 
@@ -15,9 +17,11 @@ namespace MiniIeltsCloneServer.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
-        public PostController(IPostService postService)
+        private readonly IUriService _uriService;
+        public PostController(IPostService postService, IUriService uriService)
         {
             _postService = postService;
+            _uriService = uriService;
         }
 
         [HttpGet("{id}")]
@@ -32,6 +36,14 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var posts = await _postService.GetRandomTop5Posts();
             return Results.Ok(new Response<List<PostListingDto>>(posts));
+        }
+
+        [HttpGet]
+        public async Task<IResult> GetPosts([FromQuery] PostQueryObject query)
+        {
+            var posts = await _postService.GetPosts(query);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(posts.Value, posts.TotalRecords, new Wrappers.Filter.PaginationFilter(query.PageNumber, query.PageSize), _uriService, Request.Path.Value);
+            return Results.Ok(pagedResponse);
         }
 
         [HttpPost]

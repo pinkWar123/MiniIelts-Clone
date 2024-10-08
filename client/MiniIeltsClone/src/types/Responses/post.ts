@@ -22,4 +22,5 @@ export interface PostListingDto {
   viewCount: number;
   image?: string;
   tag: Skills;
+  createdOn: string;
 }

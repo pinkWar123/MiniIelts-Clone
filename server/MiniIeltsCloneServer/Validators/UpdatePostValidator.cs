@@ -11,9 +11,8 @@ namespace MiniIeltsCloneServer.Validators
     {
         public UpdatePostValidator()
         {
-            RuleFor(c => c.Title).NotEmpty().MinimumLength(10).MaximumLength(50);
+            RuleFor(c => c.Title).NotEmpty().MinimumLength(10).MaximumLength(100);
             RuleFor(c => c.Content).NotEmpty().MinimumLength(100);
-            RuleFor(c => c.Tag).NotEmpty();
         }
     }
 }

@@ -8,6 +8,7 @@ using MiniIeltsCloneServer.Exceptions.Post;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Post;
 using MiniIeltsCloneServer.Services.UserService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.PostService
 {
@@ -38,6 +39,7 @@ namespace MiniIeltsCloneServer.Services.PostService
                 Image = dto.Image,
                 Content = dto.Content,
                 CreatedOn = DateTime.UtcNow,
+                Tag = dto.Tag
             };
 
             if(currentUser != null)
@@ -75,6 +77,16 @@ namespace MiniIeltsCloneServer.Services.PostService
             };
 
             return postViewDto;
+        }
+
+        public async Task<PagedData<PostListingDto>> GetPosts(PostQueryObject query)
+        {
+            var posts = await _unitOfWork.PostRepository.GetPosts(query);
+            return new PagedData<PostListingDto>
+            {
+                TotalRecords = posts.TotalRecords,
+                Value = posts.Value.Select(p => _mapper.Map<Post, PostListingDto>(p)).ToList()
+            };
         }
 
         public async Task<List<PostListingDto>?> GetRandomTop5Posts()
