@@ -12,7 +12,7 @@ import { TestProvider } from "./contexts/TestContext";
 import useMessage from "antd/es/message/useMessage";
 import DoTestPage from "./pages/DoTestPage/DoTestPage";
 import { AnswersProvider } from "./contexts/AnswertContext";
-import { App as AntdApp, Button, Flex } from "antd";
+import { App as AntdApp, Button, Flex, message } from "antd";
 import axiosInstance from "./services/axiosConfig";
 import ViewSolutionPage from "./pages/TestResultPage/ViewSolutionPage";
 import ProfileLayout from "./layouts/ProfileLayout/ProfileLayout";
@@ -37,6 +37,13 @@ import FullTestSolution from "./pages/FullTestResultPage/FullTestSolution";
 import FullTestResultByQuery from "./pages/FullTestResultPage/FullTestResultByQuery";
 import Series from "./pages/AdminPage/Series/Series";
 import SeriesPage from "./pages/SeriesPage/SeriesPage";
+import PostPage from "./pages/AdminPage/Post/PostPage";
+import { default as PostViewpage } from "./pages/PostPage/PostPage";
+import CreatePost from "./pages/AdminPage/Post/CreatePost";
+import { PostProvider } from "./contexts/PostContext";
+import NormalLayout from "./layouts/NormalLayout/NormalLayout";
+import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
+import { handleAxiosError } from "./helpers/errorHandling";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -158,6 +165,8 @@ function App() {
           });
         }
 
+        message.error(handleAxiosError(error));
+
         return Promise.reject(error);
       }
     );
@@ -174,7 +183,7 @@ function App() {
       {contextHolder[1]}
       <>
         <Routes>
-          <Route path="/home" element={<SearchPage />} />
+          <Route path="/test" element={<SearchPage />} />
           <Route path="auth" element={<AuthLayout />}>
             <Route path="register" element={<RegisterPage />} />
             <Route path="login" element={<LoginPage />} />
@@ -247,11 +256,32 @@ function App() {
             <Route path="test" element={<Test />} />
             <Route path="user" element={<Users />} />
             <Route path="series" element={<Series />} />
+            <Route path="post" element={<PostPage />} />
             <Route path="full-test" element={<FullTest />} />
           </Route>
+          <Route
+            path="post/create"
+            element={
+              <PostProvider>
+                <CreatePost />
+              </PostProvider>
+            }
+          />
+          <Route
+            path="post/update/:id"
+            element={
+              <PostProvider>
+                <UpdatePost />
+              </PostProvider>
+            }
+          />
 
           <Route path="create-full-test" element={<CreateFullTestLayout />}>
             <Route index element={<CreateFullTestPage />} />
+          </Route>
+
+          <Route path="post" element={<NormalLayout />}>
+            <Route path=":id" element={<PostViewpage />} />
           </Route>
 
           <Route
@@ -283,7 +313,9 @@ function App() {
               element={<FullTestResultByIdPage />}
             />
           </Route>
-          <Route path="series" element={<SeriesPage />}></Route>
+          <Route path="series" element={<NormalLayout />}>
+            <Route index element={<SeriesPage />} />
+          </Route>
         </Routes>
       </>
     </>

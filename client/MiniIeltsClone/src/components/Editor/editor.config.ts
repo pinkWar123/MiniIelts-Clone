@@ -1,7 +1,6 @@
 export const MODULES = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
-    [{ list: "ordered" }, { list: "bullet" }],
     ["bold", "italic", "underline", "strike", "blockquote"],
     ["link", "image"],
     ["clean"],

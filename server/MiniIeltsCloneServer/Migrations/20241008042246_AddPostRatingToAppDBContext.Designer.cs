@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniIeltsCloneServer.Data;
 
@@ -11,9 +12,11 @@ using MiniIeltsCloneServer.Data;
 namespace MiniIeltsCloneServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008042246_AddPostRatingToAppDBContext")]
+    partial class AddPostRatingToAppDBContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -888,7 +891,7 @@ namespace MiniIeltsCloneServer.Migrations
 
                             b1.HasIndex("AppUserId");
 
-                            b1.ToTable("PostRating");
+                            b1.ToTable("PostRatings");
 
                             b1.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
                                 .WithMany()

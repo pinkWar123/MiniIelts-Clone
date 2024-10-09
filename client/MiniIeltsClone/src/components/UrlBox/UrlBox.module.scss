@@ -1,0 +1,31 @@
+.share-score-wrapper {
+  border: 1px solid #294563;
+  padding: 20px;
+  .title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.url-box {
+  background-color: #f1f1f1; /* Light grey background */
+  padding: 10px 20px; /* Adjust padding */
+  border-radius: 50px; /* Rounded corners */
+  display: inline-block; /* Allow it to shrink/grow with content */
+  max-width: 100%; /* Prevent the box from being too wide */
+  overflow: hidden; /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add "..." when content overflows */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.url-box a {
+  text-decoration: none; /* Remove underline */
+  color: #666; /* Grey text color */
+  font-family: Arial, sans-serif; /* Choose font */
+  font-size: 14px; /* Font size */
+  font-style: italic; /* Italic text */
+  display: block; /* Keep it block-level for easy styling */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Ellipsis for long text */
+  white-space: nowrap; /* No wrapping */
+}

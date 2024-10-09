@@ -38,6 +38,8 @@ using MiniIeltsCloneServer.Services.FullTestResultService;
 using MiniIeltsCloneServer.Services.SeriesService;
 using MiniIeltsCloneServer.Data.Repositories.SeriesRepo;
 using MiniIeltsCloneServer.Data.Repositories.SeriesFullTestRepo;
+using MiniIeltsCloneServer.Services.PostService;
+using MiniIeltsCloneServer.Data.Repositories.PostRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,6 +158,7 @@ builder.Services.AddScoped<IFullTestRepository, FullTestRepository>();
 builder.Services.AddScoped<IFullTestResultRepository, FullTestResultRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ISeriesFullTestRepository, SeriesFullTestRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -168,6 +171,7 @@ builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddScoped<IFullTestService, FullTestService>();
 builder.Services.AddScoped<IFullTestResultService, FullTestResultService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IHangfireService, HangfireService>();
 // builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 // builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();

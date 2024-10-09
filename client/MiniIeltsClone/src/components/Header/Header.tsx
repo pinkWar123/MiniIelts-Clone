@@ -1,9 +1,9 @@
 import { Header } from "antd/es/layout/layout";
 import { FunctionComponent } from "react";
 import styles from "./Header.module.scss";
-import { Button, Dropdown, MenuProps } from "antd";
+import { Button, Dropdown, Flex, MenuProps } from "antd";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { logout } from "../../services/authentication";
 export interface HeaderProps {
@@ -11,12 +11,28 @@ export interface HeaderProps {
   items: MenuProps["items"];
 }
 
+const navItems = [
+  {
+    label: "Single Test",
+    key: "test",
+  },
+  {
+    label: "Series",
+    key: "series",
+  },
+  {
+    label: "Post",
+    key: "post",
+  },
+];
+
 const MainHeader: FunctionComponent<HeaderProps> = ({
   canLogOut = true,
   items,
 }) => {
   const navigate = useNavigate();
   const { setUser, user } = useUser();
+  const location = useLocation();
   const handleLogOut = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("access_token");
@@ -34,9 +50,29 @@ const MainHeader: FunctionComponent<HeaderProps> = ({
 
   return (
     <Header className={styles["header"]}>
-      <div className={styles["logo"]} onClick={() => navigate("/home")}>
-        MiniIelts
-      </div>
+      <Flex>
+        <div className={styles["logo"]}>MiniIelts</div>
+        <Flex style={{ color: "white" }}>
+          {/* <div className={`${styles["nav-item"]} ${styles["active"]}`}>
+            Single Test
+          </div>
+          <div className={styles["nav-item"]}>Full Test</div>
+          <div className={styles["nav-item"]}>Post</div> */}
+          {navItems.map((item) => (
+            <div
+              key={item.key}
+              className={`${styles["nav-item"]} ${
+                item.key === location.pathname.substring(1)
+                  ? styles["active"]
+                  : ""
+              }`}
+              onClick={() => navigate({ pathname: `/${item.key}` })}
+            >
+              {item.label}
+            </div>
+          ))}
+        </Flex>
+      </Flex>
       {!user && canLogOut && (
         <Button
           icon={<LoginOutlined />}

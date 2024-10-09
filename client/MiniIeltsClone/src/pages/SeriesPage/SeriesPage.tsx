@@ -1,26 +1,32 @@
-import { Flex, Layout } from "antd";
+import { Col, Layout, Row } from "antd";
 import { FunctionComponent } from "react";
-import useUser from "../../hooks/useUser";
-import AdminHeader from "../../components/Header/AdminHeader";
-import NormalHeader from "../../components/Header/NormalHeader";
-import { Content } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
 import Series from "./Series/Series";
+import RelatedTips from "../PostPage/RelatedTips";
 
 interface SeriesPageProps {}
 
 const SeriesPage: FunctionComponent<SeriesPageProps> = () => {
-  const { user } = useUser();
   return (
     <Layout>
-      {user && user.roles ? <AdminHeader /> : <NormalHeader />}
-      <Layout style={{ display: "flex", justifyContent: "center" }}>
-        <Flex justify="center" style={{ width: "75%" }}>
-          <Content style={{ width: "80%" }}>
-            <Series />
-          </Content>
-          <Sider style={{ flex: 1 }}>This is sider</Sider>
-        </Flex>
+      <Layout>
+        <Row>
+          <Col>
+            <Row justify={"center"} gutter={16}>
+              <Col sm={20} xs={20} md={16} lg={16}>
+                <Series />
+              </Col>
+              <Col
+                sm={20}
+                xs={20}
+                md={6}
+                lg={6}
+                style={{ backgroundColor: "#fff", padding: "20px" }}
+              >
+                <RelatedTips />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Layout>
     </Layout>
   );

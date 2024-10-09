@@ -2,17 +2,18 @@ import { Button, Form, Input } from "antd";
 import { FunctionComponent } from "react";
 import { validatePassword } from "../../helpers/registerValidator";
 import AuthForm from "../../components/AuthForm/AuthForm";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./AuthPage.module.scss";
 import { RegisterDto } from "../../types/auth";
 import { register } from "../../services/authentication";
 interface RegisterPageProps {}
 
 const RegisterPage: FunctionComponent<RegisterPageProps> = () => {
+  const navigate = useNavigate();
   const onFinish = async (data: RegisterDto) => {
     console.log(data);
-    const res = await register(data);
-    console.log(res);
+    await register(data);
+    navigate("/auth/login");
   };
   return (
     <AuthForm type="signup">
