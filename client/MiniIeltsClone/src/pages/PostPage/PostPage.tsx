@@ -23,6 +23,7 @@ import UrlBox from "../../components/UrlBox/UrlBox";
 import { SKILL_COLORS, Skills } from "../../contants/skills";
 import { PostVoteDto } from "../../types/Request/post";
 import useUser from "../../hooks/useUser";
+import { formatDate } from "../../helpers/time";
 const PostPage: FunctionComponent<PostPageProps> = () => {
   const { id } = useParams();
   const { user } = useUser();
@@ -102,12 +103,12 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
                 <div>{Skills[post?.tag ?? 0]} TIP</div>
               </Space>
             </Tag>
-            <Space>
+            <Space size="large">
               <div>
-                <EyeOutlined /> 105,570
+                <EyeOutlined /> {post?.viewCount}
               </div>
               <div>
-                <CalendarOutlined /> 12/01/2018
+                <CalendarOutlined /> {formatDate(post?.createdOn ?? "")}
               </div>
             </Space>
           </Flex>

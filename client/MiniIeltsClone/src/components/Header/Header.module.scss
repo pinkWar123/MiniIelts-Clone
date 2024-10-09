@@ -11,7 +11,29 @@
 
 .logo {
   color: white;
+  font-size: 30px;
+  font-weight: 700;
+  margin-right: 100px;
   cursor: pointer;
+}
+
+.nav-item {
+  // margin-right: 20px;
+  font-size: 16px;
+  font-weight: 700px;
+  cursor: pointer;
+  background-color: #333;
+  transition: background-color 0.3s ease;
+  padding: 0 20px;
+
+  &:hover {
+    background-color: #555;
+  }
+
+  &.active {
+    background-color: #777;
+    outline: none; /* remove default focus outline */
+  }
 }
 
 .main-layout {

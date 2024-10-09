@@ -64,10 +64,14 @@ namespace MiniIeltsCloneServer.Services.PostService
         public async Task<PostViewDto> GetPostById(int id)
         {
             var post = await _unitOfWork.PostRepository.GetByIdAsync(id);
+            
             if(post == null)
             {
                 throw new PostNotFoundException(id);
             }
+
+            post.ViewCount++;
+            await _unitOfWork.SaveChangesAsync();
 
             var postViewDto = _mapper.Map<Post, PostViewDto>(post);
             postViewDto.RatingResult = new RatingResult

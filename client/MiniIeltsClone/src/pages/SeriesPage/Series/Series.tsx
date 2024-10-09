@@ -20,7 +20,7 @@ const Series: FunctionComponent<SeriesProps> = () => {
     order?: string;
   }>();
   const navigate = useNavigate();
-  const { pagination, setPagination, handleChangePage } = usePagination(1);
+  const { pagination, setPagination, handleChangePage } = usePagination();
   const fetchSeries = useCallback(async () => {
     const query: SeriesQuery = {
       pageNumber: pagination.pageNumber,
@@ -63,7 +63,7 @@ const Series: FunctionComponent<SeriesProps> = () => {
     });
   };
   return (
-    <>
+    <div style={{ marginTop: "20px" }}>
       <Typography.Title>IELTS EXAM LIBRARY</Typography.Title>
       <Row gutter={16}>
         <Col span={20}>
@@ -121,7 +121,7 @@ const Series: FunctionComponent<SeriesProps> = () => {
         total={pagination.totalRecords}
         onChange={(config) => handleChangePage(config)}
       />
-    </>
+    </div>
   );
 };
 

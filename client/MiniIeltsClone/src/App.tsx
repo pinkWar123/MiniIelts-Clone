@@ -183,7 +183,7 @@ function App() {
       {contextHolder[1]}
       <>
         <Routes>
-          <Route path="/home" element={<SearchPage />} />
+          <Route path="/test" element={<SearchPage />} />
           <Route path="auth" element={<AuthLayout />}>
             <Route path="register" element={<RegisterPage />} />
             <Route path="login" element={<LoginPage />} />
@@ -313,7 +313,9 @@ function App() {
               element={<FullTestResultByIdPage />}
             />
           </Route>
-          <Route path="series" element={<SeriesPage />}></Route>
+          <Route path="series" element={<NormalLayout />}>
+            <Route index element={<SeriesPage />} />
+          </Route>
         </Routes>
       </>
     </>

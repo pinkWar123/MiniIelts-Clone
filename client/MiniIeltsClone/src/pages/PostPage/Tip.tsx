@@ -11,6 +11,7 @@ interface TipProps {
   content: string;
   tag: Skills;
   id: number;
+  viewCount: number;
 }
 
 const Tip: FunctionComponent<TipProps> = ({
@@ -19,6 +20,7 @@ const Tip: FunctionComponent<TipProps> = ({
   content,
   id,
   tag,
+  viewCount,
 }) => {
   return (
     <>
@@ -43,7 +45,7 @@ const Tip: FunctionComponent<TipProps> = ({
 
             <Flex gap="small">
               <EyeOutlined />
-              105,575
+              {viewCount}
             </Flex>
           </Flex>
         </Col>
