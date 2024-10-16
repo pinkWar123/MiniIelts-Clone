@@ -49,6 +49,7 @@ const SummaryCompletion: FunctionComponent<SummaryCompletionProps> = ({
                   <Input
                     disabled={showAnswer}
                     key={placeholderIndex + startQuestion}
+                    id={`question-${placeholderIndex + startQuestion}`}
                     style={{
                       width: "100px",
                       marginLeft: "10px",

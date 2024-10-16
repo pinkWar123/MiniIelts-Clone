@@ -8,6 +8,7 @@ import Exercise from "../Exercise";
 import ExerciseDivider from "../../../../components/create-test/ExerciseDivider";
 import { convertQuestionTypeEnumToDescription } from "../../../../helpers/convertQuestionType";
 import HeadingEditor from "./HeadingEditor";
+import useTest from "../../../../hooks/useTest";
 
 interface MatchingHeadingProps extends IExerciseProps {}
 
@@ -17,6 +18,7 @@ const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
   exerciseOrder,
 }) => {
   const [headingCount, setHeadingCount] = useState<number>(1);
+  const { handleUpdateExercise, findExercise } = useTest();
   const generateOptions = () => {
     return Array.from(
       { length: headingCount },
@@ -36,7 +38,13 @@ const MatchingHeading: FunctionComponent<MatchingHeadingProps> = ({
         <TypedInputNumber
           min={1}
           value={headingCount}
-          onChange={(value) => setHeadingCount(value ?? 1)}
+          onChange={(value) => {
+            setHeadingCount(value ?? 1);
+            const newExcercise = findExercise(exerciseOrder);
+            if (!newExcercise) return;
+            newExcercise.choiceCount = value ?? 1;
+            handleUpdateExercise(newExcercise, exerciseOrder);
+          }}
         />
       </Form.Item>
 

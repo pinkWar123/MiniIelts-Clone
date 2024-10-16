@@ -54,6 +54,7 @@ const SentenceCompletion: FunctionComponent<SentenceCompletionProps> = ({
                       marginLeft: "10px",
                       marginRight: "10px",
                     }}
+                    id={`question-${index + startQuestion}`}
                     onChange={(e) => {
                       handleUpdateAnswer(index + startQuestion, e.target.value);
                     }}

@@ -16,7 +16,7 @@ const TFNG: FunctionComponent<TFNGProps> = ({
   showAnswer,
 }) => {
   return (
-    <>
+    <div>
       <Typography.Paragraph>
         {formatText(generateTFNGDescription(startQuestion, endQuestion))}
       </Typography.Paragraph>
@@ -34,7 +34,7 @@ const TFNG: FunctionComponent<TFNGProps> = ({
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

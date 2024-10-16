@@ -73,6 +73,7 @@ const ChooseMany: FunctionComponent<ChooseManyProps> = ({
                   endQuestion - startQuestion + 1 &&
                 !checkedIndex.includes(index)
               }
+              id={`question-${startQuestion}`}
               key={`choosemany-${index}`}
               value={choice.value}
               onChange={(e) =>
