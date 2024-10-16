@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import {
+  callGetFullTestHistory,
   callGetTestHistory,
   callGetTestHistoryByAdmin,
 } from "../../../../services/profile";
@@ -18,6 +19,7 @@ const PerformanceAnalytics: FunctionComponent<
   PerformanceAnalyticsProps
 > = () => {
   const [testHistory, setTestHistory] = useState<TestHistory[]>();
+  const [fullTestHistory, setFullTestHistory] = useState<TestHistory[]>();
   const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +27,17 @@ const PerformanceAnalytics: FunctionComponent<
       if (id) res = await callGetTestHistoryByAdmin(id, 1, 10);
       else res = await callGetTestHistory(1, 10);
       if (res.data) setTestHistory(res.data);
+    };
+
+    fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let res: IPagedResponse<TestHistory[]>;
+      if (id) res = await callGetFullTestHistory(1, 10);
+      else res = await callGetFullTestHistory(1, 10);
+      if (res.data) setFullTestHistory(res.data);
     };
 
     fetchData();
@@ -43,16 +56,17 @@ const PerformanceAnalytics: FunctionComponent<
     <>
       <Card className={styles["container"]}>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
             <PerformanceChart histories={getChartDetails() ?? []} />
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
             <QuestionTypes />
           </Col>
         </Row>
       </Card>
 
-      <TestHistoryList histories={testHistory ?? []} />
+      <TestHistoryList type="test" histories={testHistory ?? []} />
+      <TestHistoryList type="full-test" histories={fullTestHistory ?? []} />
     </>
   );
 };

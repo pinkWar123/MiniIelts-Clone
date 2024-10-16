@@ -105,7 +105,7 @@ namespace MiniIeltsCloneServer.Data.Repositories.ResultRepo
         {
             var historyCount = await _context.Results.Where(r => r.AppUserId == userId).CountAsync();
             var query = (from result in _context.Results
-                            where result.AppUserId == userId
+                            where result.AppUserId == userId && result.FullTestResultId == null
                             join test in _context.Tests
                             on result.TestId equals test.Id
                             orderby result.CreatedOn descending

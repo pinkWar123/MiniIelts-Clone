@@ -24,7 +24,7 @@ export const callGetTestHistory = async (
 ) => {
   return (
     await axiosInstance.get<IPagedResponse<TestHistory[]>>(
-      "Dashboard/history",
+      "Dashboard/test/history",
       {
         params: { pageNumber, pageSize },
       }
@@ -40,6 +40,20 @@ export const callGetTestHistoryByAdmin = async (
   return (
     await axiosInstance.get<IPagedResponse<TestHistory[]>>(
       `Dashboard/history/${id}`,
+      {
+        params: { pageNumber, pageSize },
+      }
+    )
+  ).data;
+};
+
+export const callGetFullTestHistory = async (
+  pageNumber: number,
+  pageSize: number
+) => {
+  return (
+    await axiosInstance.get<IPagedResponse<TestHistory[]>>(
+      `Dashboard/full-test/history`,
       {
         params: { pageNumber, pageSize },
       }

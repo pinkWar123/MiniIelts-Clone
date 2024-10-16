@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Col, Layout, Row } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import SearchBox from "../../components/Search";
@@ -18,15 +18,24 @@ const SearchPage: React.FC = () => {
       ) : (
         <NormalHeader />
       )}
-      <Layout className={styles["main-layout"]}>
-        <Sider className={styles["sider"]} width="250px">
+      <Row justify={"center"} className={styles["main-layout"]}>
+        <Col xs={20} sm={20} md={6} lg={6} xl={6} className={styles["sider"]}>
           <SearchBox />
-        </Sider>
-        <Content className={styles["content"]}>
-          <Category></Category>
+        </Col>
+        <Col
+          xs={20}
+          sm={20}
+          md={18}
+          lg={18}
+          xl={18}
+          className={styles["content"]}
+        >
+          <div style={{ marginBottom: "20px" }}>
+            <Category></Category>
+          </div>
           <TestSelection />
-        </Content>
-      </Layout>
+        </Col>
+      </Row>
     </Layout>
   );
 };

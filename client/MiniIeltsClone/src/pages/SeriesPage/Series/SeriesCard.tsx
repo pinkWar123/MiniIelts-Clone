@@ -23,10 +23,12 @@ const SeriesCard: FunctionComponent<SeriesCardProps> = ({
           <CustomImage picture={image ?? ""} />
         </Col>
         <Col span={20}>
-          <Typography.Title level={4}>{title}</Typography.Title>
+          <Typography.Title ellipsis={{ rows: 2 }} level={4}>
+            {title}
+          </Typography.Title>
           <Row gutter={16}>
             {tests.map((test, index) => (
-              <Col span={12} key={index}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12} key={index}>
                 <TestItem {...test} />
               </Col>
             ))}

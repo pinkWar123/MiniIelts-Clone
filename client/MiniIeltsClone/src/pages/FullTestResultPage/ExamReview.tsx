@@ -36,7 +36,13 @@ const ExamReview: FunctionComponent<ExamReviewProps> = () => {
             <Test exercises={test?.exercises ?? []} showAnswer mode="review" />
           </>
         }
-        essay={<Essay title={test?.title ?? ""} content={test?.essay ?? ""} />}
+        essay={
+          <Essay
+            title={test?.title ?? ""}
+            content={test?.essay ?? ""}
+            picture={test?.picture}
+          />
+        }
       />
       {activeTestIndex > 0 && (
         <div className={styles["prev-nav-wrapper"]}>

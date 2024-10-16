@@ -13,13 +13,22 @@ namespace MiniIeltsCloneServer.Services.DashboardService
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IResultRepository _resultRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
 
-        public DashboardService(IResultRepository resultRepository, IUserService userService)
+        public DashboardService(IUnitOfWork unitOfWork, IUserService userService)
         {
-            _resultRepository = resultRepository;
+            _unitOfWork = unitOfWork;
             _userService = userService;
+        }
+
+        public async Task<PagedData<TestHistory>> GetFullTestHistory(DashboardQueryObject @object)
+        {
+            var user = await _userService.GetCurrentUser();
+            if(user == null)
+                throw new UnauthorizedAccessException();
+            var history = await _unitOfWork.FullTestResultRepository.GetFullTestHistory(user.Id, @object);
+            return history;
         }
 
         public async Task<Performance> GetOverallEvaluation()
@@ -27,13 +36,13 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             var user = await _userService.GetCurrentUser();
             if(user == null)
                 throw new UnauthorizedAccessException();
-            var performance = await _resultRepository.GetOverallResult(user.Id);
+            var performance = await _unitOfWork.ResultRepository.GetOverallResult(user.Id);
             return performance;
         }
 
         public async Task<Performance> GetOverallEvaluationByAdmin(string userId)
         {
-            return await _resultRepository.GetOverallResult(userId);
+            return await _unitOfWork.ResultRepository.GetOverallResult(userId);
         }
 
         public async Task<List<QuestionStatistics>> GetQuestionStatistics()
@@ -41,13 +50,13 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             var user = await _userService.GetCurrentUser();
             if(user == null)
                 throw new UnauthorizedAccessException();
-            var statistics = await _resultRepository.GetQuestionStatistics(user.Id);
+            var statistics = await _unitOfWork.ResultRepository.GetQuestionStatistics(user.Id);
             return statistics;
         }
 
         public async Task<List<QuestionStatistics>> GetQuestionStatisticsByAdmin(string userId)
         {
-            return await _resultRepository.GetQuestionStatistics(userId);
+            return await _unitOfWork.ResultRepository.GetQuestionStatistics(userId);
         }
 
         public async Task<PagedData<TestHistory>> GetTestHistory(DashboardQueryObject @object)
@@ -55,13 +64,13 @@ namespace MiniIeltsCloneServer.Services.DashboardService
             var user = await _userService.GetCurrentUser();
             if(user == null)
                 throw new UnauthorizedAccessException();
-            var history = await _resultRepository.GetTestHistory(user.Id, @object);
+            var history = await _unitOfWork.ResultRepository.GetTestHistory(user.Id, @object);
             return history;
         }
 
         public async Task<PagedData<TestHistory>> GetTestHistoryByAdmin(string userId, DashboardQueryObject @object)
         {
-            return await _resultRepository.GetTestHistory(userId, @object);
+            return await _unitOfWork.ResultRepository.GetTestHistory(userId, @object);
         }
     }
 }

@@ -72,8 +72,17 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
   };
   return (
     <>
-      <Row className={styles["container"]}>
-        <Col span={13} offset={2} style={{ width: "98%" }}>
+      <Row justify={"center"} className={styles["container"]}>
+        <Col
+          xxl={13}
+          xl={13}
+          lg={13}
+          md={20}
+          sm={20}
+          xs={20}
+          // offset={2}
+          style={{ width: "98%" }}
+        >
           <div className={styles["image"]}>
             <CustomImage
               picture={post?.image ?? ""}
@@ -122,7 +131,15 @@ const PostPage: FunctionComponent<PostPageProps> = () => {
           </Col>
         </Col>
 
-        <Col span={7} className={styles["sec-column"]}>
+        <Col
+          xxl={7}
+          xl={7}
+          lg={7}
+          md={20}
+          sm={20}
+          xs={20}
+          className={styles["sec-column"]}
+        >
           <Row>
             <Col offset={2} span={20}>
               <RelatedTips />

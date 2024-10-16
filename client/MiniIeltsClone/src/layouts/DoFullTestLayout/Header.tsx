@@ -21,11 +21,29 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
   const location = useLocation();
   const { modal } = App.useApp();
   const { id } = useParams();
-  const [time, setTime] = useState<number>(initialTime);
+  const [initialTime, setInitialTime] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
   const [start, setStart] = useState<boolean>();
   useEffect(() => {
     setStart(user !== null);
   }, [user]);
+  useEffect(() => {
+    const search = new URLSearchParams(location.search);
+    const limit = search.get("limit");
+    if (limit === null) {
+      setInitialTime(60 * 60);
+      setTime(60 * 60);
+      return;
+    }
+    const limitToNumber = parseInt(limit);
+    if (limitToNumber === 0) {
+      setInitialTime(-1);
+      setTime(-1);
+      return;
+    }
+    setInitialTime(limitToNumber);
+    setTime(limitToNumber);
+  }, [location.search]);
   const handleSubmit = useCallback(async () => {
     if (!id || !answers || answers.length === 0) return;
     const dto: SubmitFullTestDto = {
@@ -80,12 +98,14 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
       <Header style={{ backgroundColor: "white" }}>
         <Flex justify="space-between">
           <div>MiniIelts</div>
+
           <Time
             onTimeOut={handleSubmit}
             time={time}
             setTime={setTime}
             start={start ?? false}
           />
+
           <div>
             <Space>
               <Button

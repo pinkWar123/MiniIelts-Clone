@@ -30,8 +30,16 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
         <NormalHeader />
       )}
       <Flex justify="center">
-        <Row gutter={50} className={styles["container"]}>
-          <Col span={5} className={styles["first-col"]}>
+        <Row justify={"center"} gutter={50} className={styles["container"]}>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={5}
+            xl={5}
+            xxl={5}
+            className={styles["first-col"]}
+          >
             {navigateItems.map((item) => (
               <NavigateItem
                 {...item}
@@ -42,7 +50,7 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
               />
             ))}
           </Col>
-          <Col span={19}>
+          <Col xs={24} sm={24} md={24} lg={19} xl={19} xxl={19}>
             <Outlet />
           </Col>
         </Row>

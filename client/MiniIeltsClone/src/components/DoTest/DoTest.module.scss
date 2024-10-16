@@ -12,6 +12,7 @@
   justify-content: center;
   border: solid 1px #ddd;
   background: #f0f0f0;
+  // padding: 20px;
 }
 
 .right-container {
@@ -25,6 +26,7 @@
   padding: 20px;
   overflow-y: scroll;
   min-height: 100vh;
+  margin-left: 10px;
 }
 
 /* Apply to the left-container and right-container specifically */
