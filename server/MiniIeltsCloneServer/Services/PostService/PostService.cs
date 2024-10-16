@@ -86,10 +86,21 @@ namespace MiniIeltsCloneServer.Services.PostService
         public async Task<PagedData<PostListingDto>> GetPosts(PostQueryObject query)
         {
             var posts = await _unitOfWork.PostRepository.GetPosts(query);
+            var postListingDtos = posts.Value
+                .Select(p => {
+                    var postListingDto = _mapper.Map<Post, PostListingDto>(p);
+                    postListingDto.RatingResult = new RatingResult
+                    {
+                        RatingCount = p.Ratings.Count,
+                        AverageRating = p.Ratings.Count > 0 ? p.Ratings.Average(r => r.Rating) : 0
+                    };
+                    return postListingDto;
+                    })
+                .ToList();
             return new PagedData<PostListingDto>
             {
                 TotalRecords = posts.TotalRecords,
-                Value = posts.Value.Select(p => _mapper.Map<Post, PostListingDto>(p)).ToList()
+                Value = postListingDtos
             };
         }
 

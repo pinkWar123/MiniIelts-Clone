@@ -23,4 +23,5 @@ export interface PostListingDto {
   image?: string;
   tag: Skills;
   createdOn: string;
+  ratingResult: RatingResult;
 }

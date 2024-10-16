@@ -44,6 +44,7 @@ import { PostProvider } from "./contexts/PostContext";
 import NormalLayout from "./layouts/NormalLayout/NormalLayout";
 import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
 import { handleAxiosError } from "./helpers/errorHandling";
+import Posts from "./pages/PostPage/Posts";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -281,6 +282,7 @@ function App() {
           </Route>
 
           <Route path="post" element={<NormalLayout />}>
+            <Route index element={<Posts />} />
             <Route path=":id" element={<PostViewpage />} />
           </Route>
 
