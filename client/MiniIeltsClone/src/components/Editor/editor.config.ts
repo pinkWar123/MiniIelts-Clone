@@ -1,3 +1,4 @@
+import QuillBetterTable from "quill-better-table";
 export const MODULES = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -5,6 +6,19 @@ export const MODULES = {
     ["link", "image"],
     ["clean"],
   ],
+  table: false, // disable table module
+  "better-table": {
+    operationMenu: {
+      items: {
+        unmergeCells: {
+          text: "Another unmerge cells name",
+        },
+      },
+    },
+  },
+  keyboard: {
+    bindings: QuillBetterTable.keyboardBindings,
+  },
 };
 
 export const FORMATS = [
