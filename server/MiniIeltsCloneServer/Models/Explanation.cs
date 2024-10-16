@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace MiniIeltsCloneServer.Models
 {
-    public class Explanation
+    public class Explanation : Base
     {
-        
+        public required string Content { get; set; }
+        public int QuestionId { get; set; }
+        public Question Question { get; set; }
     }
 }

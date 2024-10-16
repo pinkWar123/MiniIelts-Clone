@@ -24,6 +24,7 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<Series> Series { get; set; }
         public DbSet<SeriesFullTest> SeriesFullTests { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Explanation> Explanations { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -92,6 +93,13 @@ namespace MiniIeltsCloneServer.Data
             {
                 rating.WithOwner(r => r.Post).HasForeignKey(r => r.PostId);
             });
+
+            builder.Entity<Question>()
+            .HasOne(q => q.Explanation)
+            .WithOne(e => e.Question)
+            .HasForeignKey<Explanation>(a => a.QuestionId)
+            .IsRequired()
+            ;
         }
     }
 }

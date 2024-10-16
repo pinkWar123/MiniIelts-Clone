@@ -15,5 +15,6 @@ namespace MiniIeltsCloneServer.Models
         public string? Answer { get; set; }
         public int Order { get; set; }
         public List<QuestionChoice> Choices { get; set; } = new List<QuestionChoice>();
+        public Explanation? Explanation { get; set; }
     }
 }
