@@ -42,27 +42,47 @@ const Dashboard: FunctionComponent<ProfilePageProps> = () => {
 
       <div>
         <Row gutter={16}>
-          <Col span={6}>
-            <StatisticCard icon={<AimOutlined />} title="Goal" value="7.0" />
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+            <StatisticCard
+              icon={<AimOutlined />}
+              title={
+                <Typography.Title level={5} ellipsis={{ rows: 1 }}>
+                  Goal
+                </Typography.Title>
+              }
+              value="7.0"
+            />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <StatisticCard
               icon={<RiseOutlined />}
-              title="Average Score"
+              title={
+                <Typography.Title level={5} ellipsis={{ rows: 1 }}>
+                  Average Score
+                </Typography.Title>
+              }
               value={performance?.averageScore ?? 0}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <StatisticCard
               icon={<FileOutlined />}
-              title="Number of tests taken"
+              title={
+                <Typography.Title level={5} ellipsis={{ rows: 1 }}>
+                  Number of tests taken
+                </Typography.Title>
+              }
               value={performance?.testCount ?? 0}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <StatisticCard
               icon={<FieldTimeOutlined />}
-              title="Average Time"
+              title={
+                <Typography.Title level={5} ellipsis={{ rows: 1 }}>
+                  Average Time
+                </Typography.Title>
+              }
               value={performance?.averageTime ?? 0}
             />
           </Col>

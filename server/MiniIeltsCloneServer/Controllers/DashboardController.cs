@@ -42,11 +42,20 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(new Response<Performance>(result));
         }
 
-        [HttpGet("history")]
+        [HttpGet("test/history")]
         [Authorize]
         public async Task<IActionResult> GetTestHistory([FromQuery] DashboardQueryObject @object)
         {
             var result = await _dashboardService.GetTestHistory(@object);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(result.Value, result.TotalRecords, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request?.Path.Value ?? "");
+            return Ok(pagedResponse);
+        }
+
+        [HttpGet("full-test/history")]
+        [Authorize]
+        public async Task<IActionResult> GetFullTestHistory([FromQuery] DashboardQueryObject @object)
+        {
+            var result = await _dashboardService.GetFullTestHistory(@object);
             var pagedResponse = PaginationHelper.CreatePagedResponse(result.Value, result.TotalRecords, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request?.Path.Value ?? "");
             return Ok(pagedResponse);
         }

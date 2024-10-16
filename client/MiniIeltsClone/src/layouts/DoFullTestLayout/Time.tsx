@@ -30,14 +30,16 @@ const Time: FunctionComponent<TimeProps> = ({
   }, [time, setTime, onTimeOut, start]);
   return (
     <div>
-      <Space>
-        {" "}
-        <ClockCircleOutlined className={styles["clock-logo"]} />
-        <span className={styles["minute"]}>
-          {convertSecondsToMinute(time)}
-        </span>{" "}
-        {time >= 60 ? "minutes" : "seconds"} remaining
-      </Space>
+      {time >= 0 && (
+        <Space>
+          {" "}
+          <ClockCircleOutlined className={styles["clock-logo"]} />
+          <span className={styles["minute"]}>
+            {convertSecondsToMinute(time)}
+          </span>{" "}
+          {time >= 60 ? "minutes" : "seconds"} remaining
+        </Space>
+      )}
     </div>
   );
 };

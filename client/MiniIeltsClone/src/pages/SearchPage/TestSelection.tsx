@@ -26,7 +26,7 @@ const TestSelection: FunctionComponent<TestSelectionProps> = () => {
       <PaddingContainer padding={20}>
         <Row gutter={16}>
           {tests?.map((test, index) => (
-            <Col xs={24} md={6} lg={6} id={`test-${index}`}>
+            <Col xs={24} sm={12} md={12} lg={6} xxl={6} id={`test-${index}`}>
               <TestCard {...test} />
             </Col>
           ))}

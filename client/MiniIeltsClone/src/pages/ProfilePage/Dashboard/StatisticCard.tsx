@@ -2,7 +2,7 @@ import { Card, Flex, Statistic } from "antd";
 import { FunctionComponent } from "react";
 import styles from "./Dashboard.module.scss";
 interface StatisticTitleProps {
-  title: string;
+  title: string | React.ReactNode;
   icon: React.ReactNode;
 }
 interface StatisticCardProps extends StatisticTitleProps {

@@ -18,6 +18,7 @@ const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = (
   return (
     <>
       <Row
+        justify={"center"}
         style={{
           width: "100%",
           display: "flex",
@@ -25,12 +26,13 @@ const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = (
           marginTop: "50px",
         }}
       >
-        <Col span={2}></Col>
-        <Col span={14}>
+        <Col lg={14} xl={14} xxl={14} md={22} sm={22} xs={22} offset={2}>
           <ResultDisplay {...props} />
         </Col>
-        <Col span={6}>
-          <UrlBox />
+        <Col lg={6} xl={6} xxl={6} md={14} sm={14} xs={14}>
+          <div style={{ marginBottom: "20px" }}>
+            <UrlBox />
+          </div>
         </Col>
         <Col span={2} />
       </Row>

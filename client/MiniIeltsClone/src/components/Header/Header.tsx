@@ -1,8 +1,8 @@
 import { Header } from "antd/es/layout/layout";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import styles from "./Header.module.scss";
-import { Button, Dropdown, Flex, MenuProps } from "antd";
-import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Button, Drawer, Dropdown, Flex, MenuProps } from "antd";
+import { LoginOutlined, LogoutOutlined, MenuOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { logout } from "../../services/authentication";
@@ -39,6 +39,10 @@ const MainHeader: FunctionComponent<HeaderProps> = ({
     await logout();
     setUser(null);
   };
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const showDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
   const headerItems: MenuProps["items"] = [
     {
       key: "3",
@@ -50,14 +54,16 @@ const MainHeader: FunctionComponent<HeaderProps> = ({
 
   return (
     <Header className={styles["header"]}>
-      <Flex>
+      <Flex justify="space-between" align="center">
         <div className={styles["logo"]}>MiniIelts</div>
+        {/* Hamburger Menu for Mobile */}
+        <div className={styles["menu-button"]}>
+          <MenuOutlined
+            onClick={showDrawer}
+            style={{ fontSize: "24px", color: "white" }}
+          />
+        </div>
         <Flex style={{ color: "white" }}>
-          {/* <div className={`${styles["nav-item"]} ${styles["active"]}`}>
-            Single Test
-          </div>
-          <div className={styles["nav-item"]}>Full Test</div>
-          <div className={styles["nav-item"]}>Post</div> */}
           {navItems.map((item) => (
             <div
               key={item.key}
@@ -93,6 +99,25 @@ const MainHeader: FunctionComponent<HeaderProps> = ({
       {user && !canLogOut && (
         <div className={styles["dropdown"]}>Welcome {user.username}</div>
       )}
+      <Drawer
+        title={user ? `Welcome ${user.username}` : `Login`}
+        placement="right"
+        onClose={closeDrawer}
+        open={drawerVisible}
+      >
+        {navItems.map((item) => (
+          <div
+            key={item.key}
+            className={styles["drawer-item"]}
+            onClick={() => {
+              navigate({ pathname: `/${item.key}` });
+              setDrawerVisible(false);
+            }}
+          >
+            {item.label}
+          </div>
+        ))}
+      </Drawer>
     </Header>
   );
 };

@@ -17,3 +17,51 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 }
+
+.modal {
+  width: 90vh;
+  .title {
+    color: green;
+    font-weight: 700;
+  }
+
+  .card {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    height: 60vh;
+    position: relative;
+    margin-bottom: 20px;
+    .title-icon {
+      font-size: 45px;
+    }
+    .desc-icon {
+      font-size: 30px;
+    }
+    .desc-text {
+      font-size: 16px;
+    }
+    .content {
+      margin-top: 20px;
+    }
+    .content,
+    .card-title,
+    .title-icon {
+      color: #294563;
+    }
+    .button {
+      margin-bottom: 16px;
+      position: absolute;
+      bottom: 0;
+      background-color: green;
+      color: white;
+      font-size: 16px;
+      width: 150px;
+      height: 40px;
+      transition: background-color 0.3s ease; /* Smooth transition */
+      &:hover {
+        background-color: darkgreen;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        color: white;
+      }
+    }
+  }
+}

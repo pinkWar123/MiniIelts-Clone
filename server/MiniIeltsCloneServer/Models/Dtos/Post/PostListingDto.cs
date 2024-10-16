@@ -14,6 +14,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.Post
         public int ViewCount { get; set; }
         public Skill Tag { get; set; }
         public DateTime CreatedOn { get; set; }
-
+        public RatingResult? RatingResult { get; set; }
     }
 }

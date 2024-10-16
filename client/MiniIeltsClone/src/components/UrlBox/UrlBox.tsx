@@ -8,17 +8,18 @@ const UrlBox: FunctionComponent<UrlBoxProps> = () => {
   return (
     <div className={styles["share-score-wrapper"]}>
       <Flex className={styles["title"]} justify="center">
-        Share your score
+        Share this
       </Flex>
-      <div className={styles["url-box"]}>
+      <Flex justify="center" className={styles["url-box"]}>
         <a
           href={window.location.href}
           target="_blank"
           rel="noopener noreferrer"
+          style={{ textAlign: "center" }}
         >
           {window.location.href}
         </a>
-      </div>
+      </Flex>
       <Flex justify="center">
         <Tooltip title="Copy link">
           <Button

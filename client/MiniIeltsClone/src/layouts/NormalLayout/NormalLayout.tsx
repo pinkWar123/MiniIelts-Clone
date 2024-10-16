@@ -21,8 +21,15 @@ const NormalLayout: FunctionComponent<NormalLayoutProps> = () => {
       <div className={styles["footer"]}>
         <Row>
           <Col span={20} offset={2}>
-            <Row gutter={16} style={{ padding: "50px 0" }}>
-              <Col span={6} className={styles["list"]}>
+            <Row justify={"center"} gutter={16} style={{ padding: "50px 0" }}>
+              <Col
+                xs={24}
+                sm={24}
+                md={6}
+                xl={6}
+                xxl={6}
+                className={styles["list"]}
+              >
                 <div className={styles["list-item"]}>Contact with us</div>
                 <div className={styles["list-item"]}>Privacy policy</div>
                 <div className={styles["list-item"]}>Sitemap</div>
@@ -35,7 +42,7 @@ const NormalLayout: FunctionComponent<NormalLayoutProps> = () => {
                   Coordinate opportunities
                 </div>
               </Col>
-              <Col span={18}>
+              <Col xs={24} sm={24} md={14} xl={14} xxl={14}>
                 <Typography.Title level={3} className={styles["white-text"]}>
                   About Us
                 </Typography.Title>

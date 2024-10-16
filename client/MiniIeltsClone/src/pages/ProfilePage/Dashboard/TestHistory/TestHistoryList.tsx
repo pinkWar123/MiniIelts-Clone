@@ -1,20 +1,38 @@
-import { Button, Card, Col, Flex, Row, Typography } from "antd";
-import { FunctionComponent } from "react";
+import { Card, Col, Flex, Row, Typography } from "antd";
+import { FunctionComponent, useEffect, useState } from "react";
 import styles from "../Dashboard.module.scss";
 import testStyles from "./TestHistoryList.module.scss";
 import { TestHistory } from "../../../../types/Responses/history";
 import dayjs from "dayjs";
 import { convertSecondsToMinuteAndSecond } from "../../../../helpers/time";
-import { BookOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import ReviewButton from "./ReviewButton";
+import HistoryItem from "./HistoryItem";
 interface TestHistoryProps {
   histories: TestHistory[];
+  type: "test" | "full-test";
 }
+
+const breakpoint = 768;
 
 const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
   histories,
+  type,
 }) => {
-  const navigate = useNavigate();
+  const [renderAsCard, setRenderAsCard] = useState<boolean>(
+    window.innerWidth < breakpoint
+  );
+  useEffect(() => {
+    function handleResize() {
+      setRenderAsCard(window.innerWidth < breakpoint);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const renderList = () => {
     let cols: React.ReactElement[] = [];
     cols = cols.concat([
@@ -38,13 +56,11 @@ const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
               <Flex gap={"middle"}>
                 <div>{convertSecondsToMinuteAndSecond(history.time)}</div>
                 <div>
-                  <Button
-                    style={{ marginTop: "-20px" }}
-                    icon={<BookOutlined />}
-                    onClick={() => navigate(`/result/${history.resultId}`)}
-                  >
-                    Review
-                  </Button>
+                  <ReviewButton
+                    type={type}
+                    resultId={history.resultId}
+                    testId={history.testId}
+                  />
                 </div>
               </Flex>
             </Col>
@@ -54,14 +70,32 @@ const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
     return cols;
   };
 
-  return (
-    <>
-      <Typography.Title level={4} className={styles["title"]}>
-        Test history
-      </Typography.Title>
+  if (!renderAsCard)
+    return (
+      <div style={{ marginTop: "50px" }}>
+        <Typography.Title level={4} className={styles["title"]}>
+          {type === "test" ? "Test" : "Full Test"} history
+        </Typography.Title>
 
-      <Card>{renderList()}</Card>
-    </>
+        <Card>{renderList()}</Card>
+      </div>
+    );
+
+  return (
+    <div style={{ marginTop: "50px" }}>
+      <Typography.Title level={4} className={styles["title"]}>
+        {type === "test" ? "Test" : "Full Test"} history
+      </Typography.Title>
+      <Card>
+        {histories.map((history) => (
+          <HistoryItem
+            type={type}
+            resultId={history.resultId}
+            testId={history.testId}
+          />
+        ))}
+      </Card>
+    </div>
   );
 };
 

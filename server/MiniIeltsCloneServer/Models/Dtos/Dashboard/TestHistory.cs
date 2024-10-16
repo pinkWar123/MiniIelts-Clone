@@ -10,6 +10,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.Dashboard
         public DateTime TestTakenDate { get; set; }
         public required string TestTitle { get; set; }
         public double Score { get; set; }
+        public int? TestId { get; set; }
         public int Time { get; set; }
         public int ResultId { get; set; }
     }
