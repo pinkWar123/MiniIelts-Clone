@@ -13,7 +13,12 @@ import CustomImage from "../../../components/CustomImage";
 import { usePagination } from "../../../hooks/usePagination";
 import SearchBox from "../../../components/Search";
 import { useSearchTest } from "../../../hooks/useSearchTest";
-import { AuditOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  AuditOutlined,
+  BulbOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { deleteTestById } from "../../../services/test";
 
 interface TestProps {}
@@ -60,6 +65,11 @@ const Test: FunctionComponent<TestProps> = () => {
             <Tooltip title="Edit test">
               <a href={`../../update-test/${record.id}`} target="blank">
                 <EditOutlined />
+              </a>
+            </Tooltip>
+            <Tooltip title="Edit explanation">
+              <a href={`../../update-explanation/${record.id}`} target="blank">
+                <BulbOutlined />
               </a>
             </Tooltip>
             <Tooltip title="Delete test">

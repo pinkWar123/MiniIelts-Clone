@@ -36,6 +36,14 @@ export const getFullTestByIdAsync = async (id: string) => {
     .data;
 };
 
+export const getFullTestByIdWithExplanation = async (id: string) => {
+  return (
+    await axiosInstance.get<IResponse<FullTestViewDto>>(
+      `FullTest/${id}/explanation`
+    )
+  ).data;
+};
+
 export const submitFullTest = async (id: number, dto: SubmitFullTestDto) => {
   return (
     await axiosInstance.post<IResponse<number>>(`FullTest/${id}/submit`, dto)

@@ -146,5 +146,29 @@ namespace MiniIeltsCloneServer.Controllers
             await _testService.DeleteTestById(id);
             return NoContent();
         }
+
+        [HttpGet("{id}/explanation")]
+        public async Task<IActionResult> GetTestWithExplanationsById([FromRoute] int id)
+        {
+            var test = await _testService.GetTestWithExplanations(id);
+            if(test == null)
+            {
+                var response = new Response<TestViewDto>
+                {
+                    Data = null,
+                    Succeeded = false,
+                    Message = "Test not found"
+                };
+                return BadRequest(response);
+            }
+            return Ok(new Response<TestViewDto>(test));
+        }
+
+        [HttpPut("explanation")]
+        public async Task<IResult> UpdateTestExplanation([FromBody] UpdateTestExplanationDto dto)
+        {
+            await _testService.UpdateExplanation(dto);
+            return Results.Accepted();            
+        }
     }
 }

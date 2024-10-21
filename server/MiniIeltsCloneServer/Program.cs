@@ -40,6 +40,7 @@ using MiniIeltsCloneServer.Data.Repositories.SeriesRepo;
 using MiniIeltsCloneServer.Data.Repositories.SeriesFullTestRepo;
 using MiniIeltsCloneServer.Services.PostService;
 using MiniIeltsCloneServer.Data.Repositories.PostRepo;
+using MiniIeltsCloneServer.Data.Repositories.ExplanationRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -159,6 +160,7 @@ builder.Services.AddScoped<IFullTestResultRepository, FullTestResultRepository>(
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ISeriesFullTestRepository, SeriesFullTestRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IExplanationRepository, ExplanationRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();

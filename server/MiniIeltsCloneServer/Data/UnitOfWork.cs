@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MiniIeltsCloneServer.Data.Repositories.AnswerRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseChoiceRepo;
 using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
+using MiniIeltsCloneServer.Data.Repositories.ExplanationRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.PostRepo;
@@ -41,6 +42,7 @@ namespace MiniIeltsCloneServer.Data
             SeriesRepository = new SeriesRepository(_context);
             SeriesFullTestRepository = new SeriesFullTestRepository(_context);
             PostRepository = new PostRepository(_context);
+            ExplanationRepository = new ExplanationRepository(_context);
         }
 
         public ITestRepository TestRepository { get; private set; }
@@ -62,6 +64,8 @@ namespace MiniIeltsCloneServer.Data
         public ISeriesRepository SeriesRepository { get; private set; }
         public ISeriesFullTestRepository SeriesFullTestRepository { get; private set; }
         public IPostRepository PostRepository { get; private set; }
+
+        public IExplanationRepository ExplanationRepository { get; private set; }
 
         public void Dispose()
         {

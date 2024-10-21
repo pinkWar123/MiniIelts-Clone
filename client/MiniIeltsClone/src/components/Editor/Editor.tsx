@@ -47,7 +47,6 @@ import {
   TableToolbar,
   TextPartLanguage,
   TextTransformation,
-  Title,
   Underline,
   Undo,
 } from "ckeditor5";
@@ -57,13 +56,13 @@ import "ckeditor5/ckeditor5.css";
 interface EditorProps {
   editorHtml: string;
   setEditorHtml: (htmlString: string) => void;
-  quillRef: React.MutableRefObject<ReactQuill | null>;
+  disabled?: boolean;
 }
 
 const Editor: FunctionComponent<EditorProps> = ({
   editorHtml,
   setEditorHtml,
-  quillRef,
+  disabled,
 }) => {
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
@@ -306,6 +305,7 @@ const Editor: FunctionComponent<EditorProps> = ({
             <div ref={editorRef}>
               {isLayoutReady && (
                 <CKEditor
+                  disabled={disabled}
                   editor={ClassicEditor}
                   config={editorConfig}
                   onChange={(_, editor) => setEditorHtml(editor.getData())}

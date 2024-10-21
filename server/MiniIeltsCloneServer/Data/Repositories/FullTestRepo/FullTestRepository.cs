@@ -70,5 +70,24 @@ namespace MiniIeltsCloneServer.Data.Repositories.FullTestRepo
                 Value = values
             };
         }
+
+        public async Task<FullTest> GetFullTestWithExplanation(int testId)
+        {
+            var test = await GetContext()
+            .AsSplitQuery()
+            .Include(f => f.Tests)
+                .ThenInclude(x => x.Excercises)
+                    .ThenInclude(x => x.ChooseManyChoices)
+            .Include(x => x.Tests)
+                .ThenInclude(x => x.Excercises)
+                    .ThenInclude(x => x.Questions)
+                        .ThenInclude(x => x.Choices)
+            .Include(x => x.Tests)
+                .ThenInclude(x => x.Excercises)
+                    .ThenInclude(x => x.Questions)
+                        .ThenInclude(x => x.Explanation)
+            .FirstOrDefaultAsync(x => x.Id == testId);
+            return test;
+        }
     }
 }

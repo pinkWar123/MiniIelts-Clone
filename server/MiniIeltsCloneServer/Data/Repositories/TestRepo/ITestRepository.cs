@@ -12,5 +12,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
         Task<PagedData<Test>> GetTestSearchViews(TestQueryObject @object);
         Task<int> CountAsync(Expression<Func<Test, bool>>? predicate);
         Task<List<TestDropdownViewDto>> GetTestDropdownViewDtos(string testName);
+        Task<Test?> GetTestWithExplanations(int testId);
     }
 }
