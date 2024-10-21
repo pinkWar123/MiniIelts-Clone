@@ -9,6 +9,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.QuestionRepo
 {
     public interface IQuestionRepository : IGenericRepository<Question>
     {
-
+        Task<Question?> GetQuestionWithExplanation(int questionId);
     }
 }

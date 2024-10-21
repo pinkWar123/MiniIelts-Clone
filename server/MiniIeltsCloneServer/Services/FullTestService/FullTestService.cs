@@ -112,6 +112,13 @@ namespace MiniIeltsCloneServer.Services.FullTestService
             return _mapper.Map<FullTestViewDto>(fullTest);
         }
 
+        public async Task<FullTestViewDto> GetFullTestByIdWithExplanation(int id)
+        {
+            var fullTest = await _unitOfWork.FullTestRepository.GetFullTestWithExplanation(id);
+            if(fullTest == null) throw new FullTestNotFoundException(id);
+            return _mapper.Map<FullTestViewDto>(fullTest);
+        }
+
         public async Task<FullTestKeyDto> GetFullTestKey(int fullTestId)
         {
             var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(fullTestId);

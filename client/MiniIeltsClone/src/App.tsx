@@ -45,6 +45,7 @@ import NormalLayout from "./layouts/NormalLayout/NormalLayout";
 import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
 import { handleAxiosError } from "./helpers/errorHandling";
 import Posts from "./pages/PostPage/Posts";
+import ExplanationEditor from "./pages/AdminPage/Explanation/ExplanationEditor";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -318,6 +319,16 @@ function App() {
           <Route path="series" element={<NormalLayout />}>
             <Route index element={<SeriesPage />} />
           </Route>
+          <Route
+            path="update-explanation/:id"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <ExplanationEditor />
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          />
         </Routes>
       </>
     </>

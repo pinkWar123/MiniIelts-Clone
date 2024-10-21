@@ -7,7 +7,7 @@ import {
 const useAnswers = (): AnswersContextProps => {
   const context = useContext(AnswersContext);
   if (!context) {
-    throw new Error("useUser must be used within a AnswersProvider");
+    throw new Error("useAnswer must be used within a AnswersProvider");
   }
   return context;
 };

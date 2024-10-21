@@ -3,7 +3,7 @@ import TestDisplay from "../../components/DoTest/TestDisplay";
 import Test from "../../components/DoTest/RenderTest/Test";
 import Essay from "../../components/DoTest/Essay";
 import { FullTestViewDto } from "../../types/Responses/fullTest";
-import { getFullTestByIdAsync } from "../../services/fullTest";
+import { getFullTestByIdWithExplanation } from "../../services/fullTest";
 import { useParams } from "react-router-dom";
 import styles from "./FullTestResultPage.module.scss";
 import { Button, Empty } from "antd";
@@ -17,7 +17,7 @@ const ExamReview: FunctionComponent<ExamReviewProps> = () => {
   useEffect(() => {
     const fetchTest = async () => {
       if (!id) return;
-      const res = await getFullTestByIdAsync(id);
+      const res = await getFullTestByIdWithExplanation(id);
       setFullTest(res.data);
     };
     fetchTest();

@@ -25,6 +25,7 @@ const Labelling: FunctionComponent<LabellingProps> = ({
             <Form.Item
               key={`labelling_question-${startQuestion + index}`}
               label={`${startQuestion + index}`}
+              id={`question-${startQuestion + index}`}
             >
               <Input
                 onChange={(e) =>

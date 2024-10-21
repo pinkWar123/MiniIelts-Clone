@@ -349,6 +349,40 @@ namespace MiniIeltsCloneServer.Migrations
                     b.ToTable("ExerciseChoices");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.Explanation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("Explanations");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTest", b =>
                 {
                     b.Property<int>("Id")
@@ -829,6 +863,23 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("Excercise");
                 });
 
+            modelBuilder.Entity("MiniIeltsCloneServer.Models.Explanation", b =>
+                {
+                    b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("MiniIeltsCloneServer.Models.Question", "Question")
+                        .WithOne("Explanation")
+                        .HasForeignKey("MiniIeltsCloneServer.Models.Explanation", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("MiniIeltsCloneServer.Models.FullTest", b =>
                 {
                     b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
@@ -1031,6 +1082,8 @@ namespace MiniIeltsCloneServer.Migrations
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Question", b =>
                 {
                     b.Navigation("Choices");
+
+                    b.Navigation("Explanation");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.Result", b =>

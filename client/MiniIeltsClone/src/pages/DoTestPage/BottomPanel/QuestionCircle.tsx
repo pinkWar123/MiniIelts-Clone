@@ -11,12 +11,12 @@ const QuestionCircle: FunctionComponent<QuestionCircleProps> = ({
   done,
 }) => {
   return (
-    <>
+    <a href={`#question-${order - 1}`}>
       <Circle
         order={order}
         className={`${styles["question-circle"]} ${done && styles["active"]}`}
       />
-    </>
+    </a>
   );
 };
 

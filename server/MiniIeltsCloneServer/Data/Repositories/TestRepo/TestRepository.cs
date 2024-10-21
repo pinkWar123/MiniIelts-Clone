@@ -24,7 +24,7 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
 
         public override async Task<Test?> GetByIdAsync(int id)
         {
-            var test = await GetContext().AsQueryable()
+            var test = await GetContext().AsSplitQuery()
             .Include(x => x.Excercises)
                     .ThenInclude(x => x.ChooseManyChoices)
                 .Include(x => x.Excercises)
@@ -94,6 +94,22 @@ namespace MiniIeltsCloneServer.Data.Repositories.TestRepo
                 TotalRecords = totalRecords,
                 Value = tests
             };
+        }
+
+        public async Task<Test?> GetTestWithExplanations(int testId)
+        {
+            // Step 1: Fetch the Test and its related Exercises
+            var test = await GetContext().AsSplitQuery()
+                    .Include(x => x.Excercises)
+                            .ThenInclude(x => x.ChooseManyChoices)
+                        .Include(x => x.Excercises)
+                            .ThenInclude(x => x.Questions)
+                                .ThenInclude(x => x.Choices)
+                    .Include(x => x.Excercises)
+                        .ThenInclude(e => e.Questions)
+                            .ThenInclude(q => q.Explanation)
+                    .FirstOrDefaultAsync(x => x.Id == testId);
+                    return test;
         }
     }
 }

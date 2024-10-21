@@ -36,12 +36,12 @@ const FullTestResultPage: FunctionComponent<FullTestResultPageProps> = (
         </Col>
         <Col span={2} />
       </Row>
-      <Row>
-        <Col span={1} />
+      <Row justify={"center"}>
+        {/* <Col span={1} /> */}
         <Col span={22}>
           <ExamReview />
         </Col>
-        <Col span={1} />
+        {/* <Col span={1} /> */}
       </Row>
     </>
   );

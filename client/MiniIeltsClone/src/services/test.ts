@@ -11,7 +11,12 @@ import {
 } from "../types/Model/Test";
 import axiosInstance from "./axiosConfig";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
-import { TestSubmitResultDto } from "../types/Responses/Test";
+import {
+  TestSubmitResultDto,
+  TestWithExplanationDto,
+} from "../types/Responses/Test";
+import { IExplanation } from "../types/Model/Explanation";
+import { UpdateExplanationDto } from "../types/Request/explanation";
 
 export const createTest = async (
   createTestDto: CreateTestDto
@@ -76,4 +81,16 @@ export const incrementTestViewCount = async (id: number) => {
 
 export const deleteTestById = async (id: number) => {
   return (await axiosInstance.delete(`Test/${id}`)).data;
+};
+
+export const getTestWithExplanation = async (testId: number) => {
+  return (
+    await axiosInstance.get<IResponse<TestWithExplanationDto>>(
+      `Test/${testId}/explanation`
+    )
+  ).data;
+};
+
+export const updateTestExplanation = async (dtos: UpdateExplanationDto) => {
+  return await axiosInstance.put("Test/explanation", dtos);
 };

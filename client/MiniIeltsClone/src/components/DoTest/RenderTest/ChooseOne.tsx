@@ -60,6 +60,7 @@ const ChooseOne: FunctionComponent<ChooseOneProps> = ({
         return (
           <div
             key={`chooseone-choice-question=${index + startQuestion}`}
+            id={`question-${index + startQuestion}`}
             style={{ marginBottom: "12px" }}
           >
             <div>

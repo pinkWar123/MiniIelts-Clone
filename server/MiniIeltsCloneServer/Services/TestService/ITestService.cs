@@ -17,5 +17,9 @@ namespace MiniIeltsCloneServer.Services.TestService
         Task DeleteTestById(int id);        
         double GetTestMark(int correct, int questionCount);
         Task IncrementTestViewCount(int testId);
+        Task<TestViewDto> GetTestWithExplanations(int testId);
+        Task UpdateTestExplanationById(int testId, UpdateTestExplanationDto dto);
+
+        Task UpdateExplanation(UpdateTestExplanationDto dto);
     }
 }

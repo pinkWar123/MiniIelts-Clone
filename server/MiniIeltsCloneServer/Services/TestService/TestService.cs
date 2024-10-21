@@ -1,12 +1,15 @@
 using System.Security.Claims;
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
+using MiniIeltsCloneServer.Exceptions.Question;
 using MiniIeltsCloneServer.Exceptions.Test;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Answer;
+using MiniIeltsCloneServer.Models.Dtos.Question;
 using MiniIeltsCloneServer.Models.Dtos.Test;
 using MiniIeltsCloneServer.Services.AnswerService;
 using MiniIeltsCloneServer.Services.UserService;
@@ -170,6 +173,14 @@ namespace MiniIeltsCloneServer.Services.TestService
             return testResultDto;
         }
 
+        public async Task<TestViewDto> GetTestWithExplanations(int testId)
+        {
+            var test = await _unitOfWork.TestRepository.GetTestWithExplanations(testId);
+            if(test == null) return null;
+            var dto = _mapper.Map<TestViewDto>(test);
+            return dto;
+        }
+
         public async Task IncrementTestViewCount(int testId)
         {
             var test = await _unitOfWork.TestRepository.GetByIdAsync(testId);
@@ -247,6 +258,53 @@ namespace MiniIeltsCloneServer.Services.TestService
 
             
         }
+
+        public async Task UpdateExplanation(UpdateTestExplanationDto dto)
+        {
+            Console.WriteLine(dto.Explanations[0].Content.Length);
+            using (var transaction = await _unitOfWork.BeginTransactionAsync())
+            {
+                try
+                {
+                    var currentUser = await _userService.GetCurrentUser();
+                    foreach(var e in dto.Explanations)
+                    {
+                        var question = await _unitOfWork.QuestionRepository.GetQuestionWithExplanation(e.QuestionId);
+                        if(question == null) throw new QuestionNotFoundException(e.QuestionId);
+                        if (question.Explanation != null)
+                        {
+                            Console.WriteLine(question.Explanation.Content);
+                            // Update existing explanation
+                            question.Explanation.Content = e.Content;
+                        }
+                        else
+                        {
+                            // Add new explanation
+                            var explanation = new Explanation
+                            {
+                                Content = e.Content,
+                                QuestionId = e.QuestionId,
+                                CreatedOn = DateTime.Now,
+                                CreatedBy = currentUser.UserName,
+                                AppUserId = currentUser.Id
+                            };
+                            await _unitOfWork.ExplanationRepository.AddAsync(explanation);
+                            
+                        }
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.CommitAsync();
+                }
+                catch (System.Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            
+            }
+        }
+
         public async Task UpdateTestAsync(int testId, UpdateTestDto updateTestDto)
         {
             var test = await _testRepo.GetByIdAsync(testId);
@@ -260,5 +318,11 @@ namespace MiniIeltsCloneServer.Services.TestService
             await _testRepo.UpdateAsync(testId, entity);
             await _testRepo.SaveChangesAsync();
         }
+
+        public Task UpdateTestExplanationById(int testId, UpdateTestExplanationDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

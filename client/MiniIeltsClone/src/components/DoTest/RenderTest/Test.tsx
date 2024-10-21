@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { IExercise } from "../../../types/Model/Exercise";
 import TFNG from "./TFNG";
 import { QuestionTypeEnum } from "../../../contants/questionType";
@@ -6,7 +6,7 @@ import SummaryCompletion from "./SummaryCompletion";
 import { TestBase } from "./base";
 import MatchingHeading from "./MatchingHeadings";
 import ChooseMany from "./ChooseMany";
-import { Divider, Flex, Typography } from "antd";
+import { Button, Divider, Flex, Typography } from "antd";
 import MatchingInformation from "./MatchingInformation";
 import YNNG from "./YNNG";
 import Labelling from "./Labelling";
@@ -14,10 +14,13 @@ import ChooseOne from "./ChooseOne";
 import SentenceCompletion from "./SentenceCompletion";
 import SubmitButton from "../../Buttons/SubmitButton";
 import useAnswers from "../../../hooks/useAnswers";
+import parse from "html-react-parser";
+import styles from "./RenderTest.module.scss";
+import { CommentOutlined } from "@ant-design/icons";
 interface TestProps {
   exercises: IExercise[];
   showAnswer?: boolean;
-  mode: "review" | "do-test";
+  mode: "review" | "do-test" | "edit-explanation";
   questionRefs?: React.RefObject<HTMLDivElement>[];
 }
 
@@ -27,6 +30,12 @@ const Test: FunctionComponent<TestProps> = ({
   mode,
 }) => {
   const { handleSubmit } = useAnswers();
+  const [showExplanation, setShowExplanation] = useState<boolean[]>(
+    Array.from(
+      { length: exercises.flatMap((e) => e.questions).length },
+      () => false
+    )
+  );
   const renderExercises = (exercise: IExercise, index: number) => {
     const {
       startQuestion,
@@ -94,12 +103,63 @@ const Test: FunctionComponent<TestProps> = ({
       }
     };
     return (
-      <>
+      <div style={{ width: "98%" }}>
         <Typography.Title level={3}>
           Question {startQuestion} - {endQuestion}
         </Typography.Title>
         {renderExercise()}
-      </>
+        {mode === "review" &&
+          Array.from(
+            { length: endQuestion - startQuestion + 1 },
+            (_, index) => (
+              <div key={`explanation-${index + startQuestion}`}>
+                <strong>
+                  {index + startQuestion}. Answer:{" "}
+                  <span
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {exercise?.questions[index]?.answer}
+                  </span>
+                </strong>
+
+                <div style={{ marginTop: "10px", marginBottom: "20px" }}>
+                  <Button
+                    icon={<CommentOutlined />}
+                    onClick={() =>
+                      setShowExplanation((prev) =>
+                        prev.map((value, _index) =>
+                          _index === index ? !value : value
+                        )
+                      )
+                    }
+                  >
+                    Explain
+                  </Button>
+                </div>
+
+                <div
+                  className={`${styles["explanation-wrapper"]} ${
+                    showExplanation[index]
+                      ? styles["expanded"]
+                      : styles["collapsed"]
+                  }`}
+                >
+                  <div className="explanation-content">
+                    <Flex justify="center">
+                      {parse(
+                        exercise?.questions[index]?.explanation?.content ?? ""
+                      )}
+                    </Flex>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+      </div>
     );
   };
   return (

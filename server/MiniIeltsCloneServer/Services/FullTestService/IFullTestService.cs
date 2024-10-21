@@ -20,5 +20,7 @@ namespace MiniIeltsCloneServer.Services.FullTestService
         Task<FullTestResultDto> GetFullTestResultById(int id);
         Task<FullTestResultDto> GetFullTestResult(int fullTestId, SubmitFullTestDto dto);
         Task DeleteFullTestById(int id);
+        Task<FullTestViewDto> GetFullTestByIdWithExplanation(int id);
+
     }
 }

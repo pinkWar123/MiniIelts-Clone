@@ -10,14 +10,15 @@
 .left-container {
   align-items: center;
   justify-content: center;
-  border: solid 1px #ddd;
-  background: #f0f0f0;
+  // background: #f0f0f0;
   // padding: 20px;
 }
 
 .right-container {
   flex: 1;
   overflow-y: scroll;
+  max-width: 98%;
+  // min-width: 98%;
   max-height: 100vh;
 }
 
@@ -25,6 +26,7 @@
 .right-container {
   padding: 20px;
   overflow-y: scroll;
+  overflow-x: scroll;
   min-height: 100vh;
   margin-left: 10px;
 }

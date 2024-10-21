@@ -32,7 +32,7 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
     );
   };
   return (
-    <>
+    <div id={`question-${order}`}>
       <Flex gap="small">
         <strong>{order}</strong>
         <Form.Item key={`select-${content}`}>
@@ -50,7 +50,7 @@ const SelectQuestion: FunctionComponent<SelectQuestionProps> = ({
         </Form.Item>
         <Form.Item key={"content"}>{content}</Form.Item>
       </Flex>
-    </>
+    </div>
   );
 };
 
