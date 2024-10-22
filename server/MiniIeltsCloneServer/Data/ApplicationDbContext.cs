@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Constants;
 using MiniIeltsCloneServer.Data.Seeding;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Listening;
 
 namespace MiniIeltsCloneServer.Data
 {
@@ -25,6 +26,12 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<SeriesFullTest> SeriesFullTests { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Explanation> Explanations { get; set; }
+        public DbSet<ListeningExercise> ListeningExercises { get; set; }
+        public DbSet<ListeningPart> ListeningParts { get; set; }
+        public DbSet<ListeningTest> ListeningTests { get; set; }
+
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -95,11 +102,23 @@ namespace MiniIeltsCloneServer.Data
             });
 
             builder.Entity<Question>()
-            .HasOne(q => q.Explanation)
-            .WithOne(e => e.Question)
-            .HasForeignKey<Explanation>(a => a.QuestionId)
-            .IsRequired()
-            ;
+                .HasOne(q => q.Explanation)
+                .WithOne(e => e.Question)
+                .HasForeignKey<Explanation>(a => a.QuestionId)
+                .IsRequired()
+                ;
+
+            builder.Entity<ListeningTest>()
+                .HasMany(lt => lt.ListeningParts)
+                .WithOne(lp => lp.ListeningTest)
+                .HasForeignKey(lp => lp.ListeningTestId)
+                .IsRequired();
+
+            builder.Entity<ListeningPart>()
+                .HasMany(lp => lp.ListeningExercises)
+                .WithOne(e => e.ListeningPart)
+                .HasForeignKey(e => e.ListeningPartId)
+                .IsRequired();
         }
     }
 }
