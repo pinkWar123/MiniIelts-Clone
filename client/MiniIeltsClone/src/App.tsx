@@ -46,6 +46,8 @@ import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
 import { handleAxiosError } from "./helpers/errorHandling";
 import Posts from "./pages/PostPage/Posts";
 import ExplanationEditor from "./pages/AdminPage/Explanation/ExplanationEditor";
+import PlayGround from "./pages/PlayGround";
+import CreateListeningTestPage from "./pages/CreateTestPage/CreateListeningTestPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -199,6 +201,14 @@ function App() {
             }
           />
           <Route
+            path="create-listening-test"
+            element={
+              <TestProvider>
+                <CreateListeningTestPage />
+              </TestProvider>
+            }
+          />
+          <Route
             path="update-test/:id"
             element={
               <TestProvider>
@@ -329,6 +339,7 @@ function App() {
               </StartTestProvider>
             }
           />
+          <Route path="playground" element={<PlayGround />} />
         </Routes>
       </>
     </>

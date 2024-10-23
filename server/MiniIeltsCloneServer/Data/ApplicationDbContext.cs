@@ -30,8 +30,6 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<ListeningPart> ListeningParts { get; set; }
         public DbSet<ListeningTest> ListeningTests { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -119,6 +117,19 @@ namespace MiniIeltsCloneServer.Data
                 .WithOne(e => e.ListeningPart)
                 .HasForeignKey(e => e.ListeningPartId)
                 .IsRequired();
+
+            builder.Entity<ListeningExercise>()
+                .HasMany(le => le.Questions)
+                .WithOne(q => q.ListeningExercise)
+                .HasForeignKey(q => q.ListeningExerciseId)
+                .IsRequired(false);
+            
+            builder.Entity<ListeningExercise>()
+                .HasMany(le => le.ChooseManyChoices)
+                .WithOne(cmc => cmc.ListeningExercise)
+                .HasForeignKey(cmc => cmc.ListeningExerciseId)
+                .IsRequired(false);
+
         }
     }
 }

@@ -1,5 +1,5 @@
 import { App, Button, Form, Input, Typography } from "antd";
-import { FunctionComponent, useRef } from "react";
+import { FunctionComponent } from "react";
 import styles from "./CreateTestPage.module.scss";
 import AddExercise from "./AddExercise";
 import useTest from "../../hooks/useTest";
@@ -9,7 +9,6 @@ import { CreateTestDto } from "../../types/Request/test";
 import UploadHandler from "../../components/UploadHandler";
 import { useUpload } from "../../hooks/useUpload";
 import Editor from "../../components/Editor/Editor";
-import ReactQuill from "react-quill";
 
 interface CreateTestPageProps {}
 const formItemLayout = {
@@ -25,7 +24,6 @@ const formItemLayout = {
 
 const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
   const { test, setTest } = useTest();
-  const essayRef = useRef<ReactQuill | null>(null);
   const { modal } = App.useApp();
   const { handleUpload, props, onPreview } = useUpload();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +69,6 @@ const CreateTestPage: FunctionComponent<CreateTestPageProps> = () => {
         </Form.Item>
         <Form.Item label="Essay" required>
           <Editor
-            quillRef={essayRef}
             editorHtml={test?.essay ?? ""}
             setEditorHtml={(value) =>
               setTest((prev) => (prev ? { ...prev, essay: value } : prev))
