@@ -2,18 +2,22 @@ import { FunctionComponent, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import FullTestHeader from "./Header";
 
-interface DoFullTestLayoutProps {}
+interface DoFullTestLayoutProps {
+  hideOverflow?: boolean;
+}
 
-const DoFullTestLayout: FunctionComponent<DoFullTestLayoutProps> = () => {
+const DoFullTestLayout: FunctionComponent<DoFullTestLayoutProps> = ({
+  hideOverflow = true,
+}) => {
   useEffect(() => {
     // Add the overflow-hidden class when this component mounts
-    document.body.style.overflow = "hidden";
+    if (hideOverflow) document.body.style.overflow = "hidden";
 
     // Clean up: Reset the body overflow when the component unmounts
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, []);
+  }, [hideOverflow]);
   return (
     <>
       <FullTestHeader />

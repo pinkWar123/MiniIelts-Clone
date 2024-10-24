@@ -12,8 +12,6 @@ import useUser from "../../hooks/useUser";
 import AskLoginModal from "../../components/AuthForm/AskLoginModal";
 interface FullTestHeaderProps {}
 
-const initialTime = 60 * 60;
-
 const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
   const { user } = useUser();
   const { answers } = useAnswers();

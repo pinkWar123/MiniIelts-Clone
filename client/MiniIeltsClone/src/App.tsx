@@ -46,8 +46,9 @@ import UpdatePost from "./pages/AdminPage/Post/UpdatePost";
 import { handleAxiosError } from "./helpers/errorHandling";
 import Posts from "./pages/PostPage/Posts";
 import ExplanationEditor from "./pages/AdminPage/Explanation/ExplanationEditor";
-import PlayGround from "./pages/PlayGround";
+import PlayGround from "./components/AudioPlayer";
 import CreateListeningTestPage from "./pages/CreateTestPage/CreateListeningTestPage";
+import DoListeningTestPage from "./pages/DoFullTestPage/DoListeningTestPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -339,7 +340,19 @@ function App() {
               </StartTestProvider>
             }
           />
-          <Route path="playground" element={<PlayGround />} />
+          <Route path="playground" element={<PlayGround videoId="1" />} />
+          <Route
+            path="listening"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <DoFullTestLayout hideOverflow={false}></DoFullTestLayout>
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          >
+            <Route path=":id" element={<DoListeningTestPage />} />
+          </Route>
         </Routes>
       </>
     </>
