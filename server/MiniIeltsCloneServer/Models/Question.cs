@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MiniIeltsCloneServer.Constants;
+using MiniIeltsCloneServer.Models.Listening;
 
 namespace MiniIeltsCloneServer.Models
 {
     public class Question : Base
     {
-        public int ExerciseId { get; set; }
+        public int? ListeningExerciseId { get; set; }
+        public ListeningExercise? ListeningExercise { get; set; }
+        public int? ExerciseId { get; set; }
         public Excercise? Excercise { get; set; }
         public QuestionTypeEnum QuestionType { get; set; }
         public string? Content { get; set; }

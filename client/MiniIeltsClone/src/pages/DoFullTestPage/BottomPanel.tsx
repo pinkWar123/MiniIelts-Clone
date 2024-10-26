@@ -3,16 +3,43 @@ import { FunctionComponent } from "react";
 import QuestionCircle from "../DoTestPage/BottomPanel/QuestionCircle";
 import useAnswers from "../../hooks/useAnswers";
 import styles from "./DoFullTestPage.module.scss";
+interface Column {
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+}
 interface BottomPanelProps {
   info: { order: number; start: number; end: number }[];
   activeOrder: number;
   onChange: (value: number) => void;
+  activeColumn?: Column;
+  inactiveColumn?: Column;
 }
+
+const DEFAULT_ACTIVE_COLUMN = {
+  xs: 24,
+  sm: 24,
+  md: 24,
+  lg: 18,
+  xl: 11,
+};
+
+const DEFAULT_INACTIVE_COLUMN = {
+  xs: 0,
+  sm: 0,
+  md: 0,
+  lg: 3,
+  xl: 6,
+};
 
 const BottomPanel: FunctionComponent<BottomPanelProps> = ({
   info,
   activeOrder,
   onChange,
+  activeColumn = DEFAULT_ACTIVE_COLUMN,
+  inactiveColumn = DEFAULT_INACTIVE_COLUMN,
 }) => {
   const { getAnswerByOrder } = useAnswers();
   return (
@@ -27,14 +54,7 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = ({
         {info.map((info) => {
           if (info.order === activeOrder) {
             return (
-              <Col
-                xs={24}
-                sm={24}
-                md={24}
-                lg={18}
-                xl={11}
-                onClick={() => onChange(info.order)}
-              >
+              <Col {...activeColumn} onClick={() => onChange(info.order)}>
                 <Space
                   className={styles["section-wrapper"]}
                   style={{
@@ -62,14 +82,7 @@ const BottomPanel: FunctionComponent<BottomPanelProps> = ({
           }
 
           return (
-            <Col
-              xs={0}
-              sm={0}
-              md={0}
-              lg={3}
-              xl={6}
-              onClick={() => onChange(info.order)}
-            >
+            <Col {...inactiveColumn} onClick={() => onChange(info.order)}>
               <div className={styles["section-wrapper"]}>
                 Part {info.order} : {info.end - info.start + 1} questions
               </div>

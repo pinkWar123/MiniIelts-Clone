@@ -121,7 +121,7 @@ namespace MiniIeltsCloneServer.Services.FullTestService
 
         public async Task<FullTestKeyDto> GetFullTestKey(int fullTestId)
         {
-            var fullTest = await _unitOfWork.FullTestRepository.GetByIdAsync(fullTestId);
+            var fullTest = await _unitOfWork.FullTestRepository.GetFullTestWithExplanation(fullTestId);
             if(fullTest == null) throw new FullTestNotFoundException(fullTestId);
             
             var part = 1;
@@ -136,7 +136,8 @@ namespace MiniIeltsCloneServer.Services.FullTestService
                     Keys = t.Excercises.SelectMany(e => e.Questions).Select(q => new QuestionKeyDto
                     {
                         Order = q.Order + offset,
-                        Answer = q.Answer
+                        Answer = q.Answer,
+                        Explanation = q.Explanation
                     }).ToList() 
                 };
                 offset += t.QuestionCount;

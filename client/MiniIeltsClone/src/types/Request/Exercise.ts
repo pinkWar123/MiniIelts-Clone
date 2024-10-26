@@ -1,6 +1,6 @@
 import { QuestionTypeEnum } from "../../contants/questionType";
 import { CreateChoiceDto } from "./Choice";
-import { CreateQuestionDto } from "./Question";
+import { CreateQuestionDto } from "./question";
 
 export interface CreateExerciseDto {
   order: number;

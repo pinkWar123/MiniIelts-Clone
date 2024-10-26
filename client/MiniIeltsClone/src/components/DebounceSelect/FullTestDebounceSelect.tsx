@@ -13,11 +13,6 @@ interface FullTestDebounceSelectProps {
   onChange: (dtos: FullTestNameDto[]) => void;
   maxCount?: number;
 }
-// const fetchOptions: (testName: string) => Promise<{
-//   key: number;
-//   label: string;
-//   value: number;
-// }[]>
 
 const FullTestDebounceSelect: FunctionComponent<
   FullTestDebounceSelectProps

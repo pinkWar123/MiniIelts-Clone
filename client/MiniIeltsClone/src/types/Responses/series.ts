@@ -8,5 +8,6 @@ export interface SeriesViewDto {
   image?: string;
   createdOn?: string;
   tests: FullTestNameDto[];
+  listeningTests: FullTestNameDto[];
   testCount: number;
 }

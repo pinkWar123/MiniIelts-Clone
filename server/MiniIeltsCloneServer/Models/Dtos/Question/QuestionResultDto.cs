@@ -9,6 +9,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.Question
     {
         public int Order { get; set; }
         public required string Answer { get; set; }
+        public Explanation Explanation { get; set; }
 
     }
     public class QuestionResultDto

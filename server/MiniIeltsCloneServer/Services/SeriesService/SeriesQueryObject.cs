@@ -10,5 +10,6 @@ namespace MiniIeltsCloneServer.Services.SeriesService
     {
         public string? Title { get; set; }
         public string? Sort { get; set; }
+        public string? Skill { get; set; }
     }
 }

@@ -8,14 +8,15 @@ interface SeriesCardProps {
   image?: string;
   title: string;
   tests: FullTestNameDto[];
+  skill: string;
 }
 
 const SeriesCard: FunctionComponent<SeriesCardProps> = ({
   image,
   title,
   tests,
+  skill,
 }) => {
-  console.log(image);
   return (
     <div className={styles["series-card"]}>
       <Row gutter={16}>
@@ -29,7 +30,7 @@ const SeriesCard: FunctionComponent<SeriesCardProps> = ({
           <Row gutter={16}>
             {tests.map((test, index) => (
               <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12} key={index}>
-                <TestItem {...test} />
+                <TestItem {...test} skill={skill} />
               </Col>
             ))}
           </Row>

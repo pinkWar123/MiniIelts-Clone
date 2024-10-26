@@ -5,6 +5,7 @@ import UploadHandler from "../../../components/UploadHandler";
 import FullTestDebounceSelect from "../../../components/DebounceSelect/FullTestDebounceSelect";
 import { CreateSeriesDto } from "../../../types/Request/series";
 import { createNewSeries } from "../../../services/series";
+import ListeningTestDebounceSelect from "../../../components/DebounceSelect/ListeningDebounceSelect";
 
 interface CreateSeriesModalProps {
   onClose: () => void;
@@ -21,7 +22,8 @@ const CreateSeriesModal: FunctionComponent<CreateSeriesModalProps> = ({
   const handleSubmit = async () => {
     const dto: CreateSeriesDto = {
       title: form.getFieldValue("title"),
-      fullTestIds: form.getFieldValue("fullTestId"),
+      fullTestIds: form.getFieldValue("fullTestIds"),
+      listeningTestIds: form.getFieldValue("listeningTestIds"),
     };
     setSubmitLoading(true);
     try {
@@ -58,7 +60,17 @@ const CreateSeriesModal: FunctionComponent<CreateSeriesModalProps> = ({
           <FullTestDebounceSelect
             onChange={(dtos) =>
               form.setFieldValue(
-                "fullTestId",
+                "fullTestIds",
+                dtos.map((dto) => dto.id)
+              )
+            }
+          />
+        </Form.Item>
+        <Form.Item name={"listeningTestIds"} label="Listening Tests">
+          <ListeningTestDebounceSelect
+            onChange={(dtos) =>
+              form.setFieldValue(
+                "listeningTestIds",
                 dtos.map((dto) => dto.id)
               )
             }

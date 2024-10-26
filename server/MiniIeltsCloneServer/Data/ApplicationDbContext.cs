@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniIeltsCloneServer.Constants;
 using MiniIeltsCloneServer.Data.Seeding;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Listening;
 
 namespace MiniIeltsCloneServer.Data
 {
@@ -25,6 +26,12 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<SeriesFullTest> SeriesFullTests { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Explanation> Explanations { get; set; }
+        public DbSet<ListeningExercise> ListeningExercises { get; set; }
+        public DbSet<ListeningPart> ListeningParts { get; set; }
+        public DbSet<ListeningTest> ListeningTests { get; set; }
+        public DbSet<SeriesListeningTest> SeriesListeningTests { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -95,11 +102,49 @@ namespace MiniIeltsCloneServer.Data
             });
 
             builder.Entity<Question>()
-            .HasOne(q => q.Explanation)
-            .WithOne(e => e.Question)
-            .HasForeignKey<Explanation>(a => a.QuestionId)
-            .IsRequired()
-            ;
+                .HasOne(q => q.Explanation)
+                .WithOne(e => e.Question)
+                .HasForeignKey<Explanation>(a => a.QuestionId)
+                .IsRequired()
+                ;
+
+            builder.Entity<ListeningTest>()
+                .HasMany(lt => lt.ListeningParts)
+                .WithOne(lp => lp.ListeningTest)
+                .HasForeignKey(lp => lp.ListeningTestId)
+                .IsRequired();
+
+            builder.Entity<ListeningPart>()
+                .HasMany(lp => lp.ListeningExercises)
+                .WithOne(e => e.ListeningPart)
+                .HasForeignKey(e => e.ListeningPartId)
+                .IsRequired();
+
+            builder.Entity<ListeningExercise>()
+                .HasMany(le => le.Questions)
+                .WithOne(q => q.ListeningExercise)
+                .HasForeignKey(q => q.ListeningExerciseId)
+                .IsRequired(false);
+            
+            builder.Entity<ListeningExercise>()
+                .HasMany(le => le.ChooseManyChoices)
+                .WithOne(cmc => cmc.ListeningExercise)
+                .HasForeignKey(cmc => cmc.ListeningExerciseId)
+                .IsRequired(false);
+
+            builder.Entity<SeriesListeningTest>()
+                .HasKey(s => new {s.SeriesId, s.ListeningTestId});
+
+            builder.Entity<SeriesListeningTest>()
+                .HasOne(s => s.Series)
+                .WithMany(s => s.SeriesListeningTests)
+                .HasForeignKey(s => s.SeriesId);
+
+            builder.Entity<SeriesListeningTest>()
+                .HasOne(s => s.ListeningTest)
+                .WithMany(f => f.SeriesListeningTests)
+                .HasForeignKey(f => f.ListeningTestId);
+
         }
     }
 }

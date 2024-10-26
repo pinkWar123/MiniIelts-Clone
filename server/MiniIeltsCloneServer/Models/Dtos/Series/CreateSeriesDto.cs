@@ -10,5 +10,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.Series
         public string? Image { get; set; }
         public required string Title { get; set; }
         public List<int> FullTestIds { get; set; } = new List<int>();
+        public List<int> ListeningTestIds { get; set; } = new List<int>();
     }
 }

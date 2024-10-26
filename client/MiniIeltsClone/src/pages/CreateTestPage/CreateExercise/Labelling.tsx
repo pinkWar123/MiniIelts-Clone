@@ -10,7 +10,7 @@ import UploadHandler from "../../../components/UploadHandler";
 import { useUpload } from "../../../hooks/useUpload";
 import { IExercise } from "../../../types/Model/Exercise";
 import Editor from "../../../components/Editor/Editor";
-import ReactQuill from "react-quill";
+import CancelButton from "../../../components/create-test/CancelButton";
 
 interface LabellingProps extends IExerciseProps {}
 // export interface IQuestion {
@@ -26,7 +26,6 @@ const Labelling: FunctionComponent<LabellingProps> = ({
   exerciseOrder,
 }) => {
   const { props, onPreview, handleUpload, fileList, setFileList } = useUpload();
-  const quillRef = useRef<ReactQuill | null>(null);
   const {
     handleUpdateQuestion,
     handleUpdateExercise,
@@ -96,7 +95,6 @@ const Labelling: FunctionComponent<LabellingProps> = ({
       />
 
       <Editor
-        quillRef={quillRef}
         editorHtml={findExercise(exerciseOrder)?.description ?? ""}
         setEditorHtml={handleDescriptionChange}
       />
@@ -112,6 +110,7 @@ const Labelling: FunctionComponent<LabellingProps> = ({
           />
         </Form.Item>
       ))}
+      <CancelButton exerciseOrder={exerciseOrder} />
     </>
   );
 };

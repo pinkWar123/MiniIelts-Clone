@@ -1,3 +1,4 @@
+import { IExplanation } from "../Model/Explanation";
 import { ITest } from "../Model/Test";
 import { QuestionSubmitDto } from "../Request/test";
 import { QuestionResultDto } from "./Test";
@@ -38,6 +39,7 @@ export interface FullTestResultDto {
 interface QuestionKeyDto {
   order: number;
   answer: string;
+  explanation: IExplanation;
 }
 
 export interface TestKeyDto {

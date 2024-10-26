@@ -1,5 +1,5 @@
 export const convertSecondsToMinuteAndSecond = (seconds: number) => {
-  const second = seconds % 60;
+  const second = Math.floor(seconds % 60);
   let minute = Math.floor(seconds / 60);
   if (minute < 60)
     return `${minute.toString().padStart(2, "0")}:${second

@@ -119,7 +119,7 @@ const DoFullTestPage: FunctionComponent<DoFullTestPageProps> = () => {
           <div key={`test=${activeIndex}`}>
             <Test
               exercises={fullTest.tests[activeIndex].exercises}
-              mode="review"
+              mode="do-test"
             />
           </div>
         }

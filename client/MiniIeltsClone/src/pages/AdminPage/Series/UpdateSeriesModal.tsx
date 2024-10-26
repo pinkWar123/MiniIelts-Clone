@@ -54,6 +54,13 @@ const UpdateSeriesModal: FunctionComponent<UpdateSeriesModalProps> = ({
     });
   }, []);
 
+  const setListeningTests = useCallback((tests: FullTestNameDto[]) => {
+    setSeries((prev) => {
+      if (!prev) return prev;
+      return { ...prev, listeningTests: tests };
+    });
+  }, []);
+
   const handleSubmit = async () => {
     try {
       setSubmitLoading(true);
@@ -73,6 +80,8 @@ const UpdateSeriesModal: FunctionComponent<UpdateSeriesModalProps> = ({
       const dto: UpdateSeriesDto = {
         title: series?.title ?? "",
         fullTestIds: series?.tests.map((t) => t.id.toString()) ?? [],
+        listeningTestIds:
+          series?.listeningTests.map((lt) => lt.id.toString()) ?? [],
         image: fileName,
       };
 
@@ -96,6 +105,16 @@ const UpdateSeriesModal: FunctionComponent<UpdateSeriesModalProps> = ({
       setTests(newTests);
     },
     [series?.tests, setTests]
+  );
+
+  const removeListeningTest = useCallback(
+    (index: number) => {
+      if (!series?.listeningTests) return;
+      const newTests = [...series.listeningTests];
+      newTests.splice(index, 1);
+      setListeningTests(newTests);
+    },
+    [series?.listeningTests, setListeningTests]
   );
 
   return (
@@ -128,6 +147,17 @@ const UpdateSeriesModal: FunctionComponent<UpdateSeriesModalProps> = ({
               tests={series?.tests ?? []}
               setTests={setTests}
               removeTest={removeTest}
+              type="reading"
+            />
+          </DndProvider>
+        </Form.Item>
+        <Form.Item name={"listeningTests"} label="Listening Tests">
+          <DndProvider backend={HTML5Backend}>
+            <TestList
+              tests={series?.listeningTests ?? []}
+              setTests={setListeningTests}
+              removeTest={removeListeningTest}
+              type="listening"
             />
           </DndProvider>
         </Form.Item>

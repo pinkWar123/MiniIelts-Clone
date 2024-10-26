@@ -25,6 +25,8 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
             return await GetContext()
                 .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
                     .ThenInclude(sf => sf.FullTest)
+                .Include(s =>  s.SeriesListeningTests.OrderBy(sft => sft.ListeningTestOrder))
+                    .ThenInclude(slt => slt.ListeningTest)
                 .Where(s => s.Id == id)
                 .FirstOrDefaultAsync();
         }
@@ -41,10 +43,29 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
             }
 
             var count = await query.CountAsync();
-
-            query = query
-                .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
-                    .ThenInclude(sf => sf.FullTest);
+            var skill = seriesQueryObject.Skill;
+            if(!String.IsNullOrEmpty(skill))
+            {
+                if(skill.ToLower().Trim() == "Listening".ToLower().Trim())
+                {
+                    query = query.Include(s => s.SeriesListeningTests.OrderBy(sf => sf.ListeningTestOrder))
+                        .ThenInclude(sf => sf.ListeningTest);
+                }
+                else if(skill.ToLower().Trim() == "Reading".ToLower().Trim())
+                {
+                    query = query.Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
+                        .ThenInclude(sf => sf.FullTest);
+                }
+                else if(skill.ToLower().Trim() == "All".ToLower().Trim())
+                {
+                    query = query
+                        .Include(s => s.SeriesListeningTests.OrderBy(sf => sf.ListeningTestOrder))
+                            .ThenInclude(sf => sf.ListeningTest)
+                        .Include(s => s.SeriesFullTests.OrderBy(sf => sf.FullTestOrder))
+                            .ThenInclude(sf => sf.FullTest);
+                }
+            }
+            
             if(!String.IsNullOrEmpty(seriesQueryObject.Sort))
             {
                 switch (seriesQueryObject.Sort)
