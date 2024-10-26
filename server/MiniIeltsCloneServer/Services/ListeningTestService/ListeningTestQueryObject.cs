@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MiniIeltsCloneServer.Helpers;
 
-namespace MiniIeltsCloneServer.Services.SeriesService
+namespace MiniIeltsCloneServer.Services.ListeningTestService
 {
-    public class SeriesQueryObject : QueryObject
+    public class ListeningTestQueryObject : QueryObject
     {
         public string? Title { get; set; }
-        public string? Sort { get; set; }
-        public string? Skill { get; set; }
+        public string? OrderBy { get; set; }
     }
 }

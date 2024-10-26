@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 interface TestItemProps {
   title: string;
   id: number;
+  skill: string;
 }
 interface StartButtonProps {
   onClick: () => void;
@@ -26,7 +27,7 @@ const StartButton: FunctionComponent<StartButtonProps> = ({ onClick }) => {
 
 const timeOptions = Array.from({ length: 11 }, (_, index) => (index + 2) * 5);
 
-const TestItem: FunctionComponent<TestItemProps> = ({ title, id }) => {
+const TestItem: FunctionComponent<TestItemProps> = ({ title, id, skill }) => {
   const navigate = useNavigate();
   const [timeLimit, setTimeLimit] = useState<number>(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -35,16 +36,20 @@ const TestItem: FunctionComponent<TestItemProps> = ({ title, id }) => {
     document.body.style.overflow = "hidden"; // Prevent scrolling
   };
 
+  const getPathName = () => {
+    if (skill == "listening") return "listening";
+    else if (skill == "reading") return "full-test";
+  };
   const handleTakePracticeMode = () => {
     setOpenModal(false);
     document.body.style.overflow = "auto"; // Restore scrolling
-    navigate(`/full-test/${id}?limit=${timeLimit * 60}`);
+    navigate(`/${getPathName()}/${id}?limit=${timeLimit * 60}`);
   };
 
   const handleTakeSimulationMode = () => {
     setOpenModal(false);
     document.body.style.overflow = "auto"; // Restore scrolling
-    navigate(`/full-test/${id}`);
+    navigate(`/${getPathName()}/${id}`);
   };
   const handleCancel = () => {
     setOpenModal(false);

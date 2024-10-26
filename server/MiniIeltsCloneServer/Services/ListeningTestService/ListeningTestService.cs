@@ -6,6 +6,8 @@ using AutoMapper;
 using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.ListeningTest;
+using MiniIeltsCloneServer.Services.FullTestService;
+using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Services.ListeningTestService
 {
@@ -29,6 +31,22 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
         {
             var test = await _unitOfWork.ListeningTestRepository.GetByIdAsync(id);
             return _mapper.Map<ListeningTestViewDto>(test);
+        }
+
+        public async Task<PagedData<ListeningDropDownDto>> GetListeningTests(ListeningTestQueryObject @object)
+        {
+            var listeningTests = await _unitOfWork.ListeningTestRepository.GetListeningTests(@object);
+            var values = listeningTests.Value.Select(f => new ListeningDropDownDto
+            {
+                Title = f.Title,
+                Id = f.Id
+            }).ToList();
+
+            return new PagedData<ListeningDropDownDto>
+            {
+                Value = values,
+                TotalRecords = listeningTests.TotalRecords
+            };
         }
     }
 }

@@ -32,6 +32,11 @@ namespace MiniIeltsCloneServer.Models.Dtos.ListeningTest
         public required string Title { get; set; }
         public required string VideoId { get; set; }
         public List<ListeningPartViewDto> ListeningParts { get; set; } = new List<ListeningPartViewDto>();
+    }
 
+    public class ListeningDropDownDto
+    {
+        public required string Title { get; set; }
+        public int Id { get; set; }
     }
 }

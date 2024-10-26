@@ -65,3 +65,50 @@
     }
   }
 }
+
+.skill-wrapper {
+  border: 1px solid #9da9b7;
+  border-radius: 30px;
+  padding: 0.6rem 1rem;
+  color: #294563;
+  background: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  transition: all ease 0.2s;
+
+  &.active,
+  &:hover {
+    color: #fff;
+  }
+}
+
+#all:hover,
+#all.active {
+  background: linear-gradient(180deg, #294563 0%, #1d3146 100%);
+}
+
+#reading:hover,
+#reading.active {
+  border: 1px solid #37854d;
+  background: linear-gradient(180deg, #337845 0%, #265a35 100%);
+}
+
+#listening:hover,
+#listening.active {
+  border: 1px solid #32b4c8;
+  background: linear-gradient(180deg, #33b2c7 0%, #268695 100%);
+}
+
+#writing:hover,
+#writing.active {
+  border: 1px solid #f9a95a;
+  background: linear-gradient(180deg, #faa859 0%, #bb7f44 100%);
+}
+
+#speaking:hover,
+#speaking.active {
+  order: 1px solid #c76378;
+  background: linear-gradient(180deg, #c86478 0%, #954b5a 100%);
+}

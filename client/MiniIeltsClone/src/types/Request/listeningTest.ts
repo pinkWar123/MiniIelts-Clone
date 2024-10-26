@@ -1,4 +1,5 @@
 import { QuestionTypeEnum } from "../../contants/questionType";
+import { BaseQuery } from "./base";
 import { CreateChoiceDto } from "./Choice";
 import { CreateQuestionDto } from "./question";
 
@@ -22,4 +23,11 @@ export interface CreateListeningTestDto {
   title: string;
   videoId: string;
   listeningParts: CreateListeningPart[];
+}
+
+export interface ListeningTestQuery extends BaseQuery {
+  pageNumber: number;
+  pageSize: number;
+  title?: string;
+  orderBy?: "newest" | "popular";
 }

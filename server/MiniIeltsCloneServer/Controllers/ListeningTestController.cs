@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.ListeningTest;
 using MiniIeltsCloneServer.Services.ListeningTestService;
+using MiniIeltsCloneServer.Services.UriService;
 using MiniIeltsCloneServer.Wrappers;
 
 namespace MiniIeltsCloneServer.Controllers
@@ -14,10 +16,12 @@ namespace MiniIeltsCloneServer.Controllers
     [Route("api/[controller]")]
     public class ListeningTestController : ControllerBase
     {
+        private readonly IUriService _uriService;
         private readonly IListeningTestService _listeningTestService;
-        public ListeningTestController(IListeningTestService listeningTestService)
+        public ListeningTestController(IListeningTestService listeningTestService, IUriService uriService)
         {
             _listeningTestService = listeningTestService;
+            _uriService = uriService;
         }
         [HttpPost]
         public async Task<IResult> CreateListeningTest([FromBody] CreateListeningTestDto dto)
@@ -30,6 +34,14 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var test = await _listeningTestService.GetListeningTestById(id);
             return Results.Ok(new Response<ListeningTestViewDto>(test));
+        }
+
+        [HttpGet]
+        public async Task<IResult> GetListeningTests([FromQuery] ListeningTestQueryObject query)
+        {
+            var listeningTests =  await _listeningTestService.GetListeningTests(query);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(listeningTests.Value, listeningTests.TotalRecords, new Wrappers.Filter.PaginationFilter(query.PageNumber, query.PageSize), _uriService, Request.Path.Value);
+            return Results.Ok(pagedResponse);
         }
     }
 }

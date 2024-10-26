@@ -5,16 +5,19 @@ import { FullTestNameDto } from "../../../types/Responses/series";
 import { Button, Divider, Flex } from "antd";
 import FullTestDebounceSelect from "../../../components/DebounceSelect/FullTestDebounceSelect";
 import { CheckOutlined, XOutlined } from "@ant-design/icons";
+import ListeningTestDebounceSelect from "../../../components/DebounceSelect/ListeningDebounceSelect";
 interface TestListProps {
   tests: FullTestNameDto[];
   setTests: (dtos: FullTestNameDto[]) => void;
   removeTest: (index: number) => void;
+  type: "listening" | "reading";
 }
 
 const TestList: FunctionComponent<TestListProps> = ({
   tests,
   setTests,
   removeTest,
+  type,
 }) => {
   const [adding, setAdding] = useState<boolean>(false);
   const [newTest, setNewTest] = useState<FullTestNameDto>();
@@ -33,8 +36,6 @@ const TestList: FunctionComponent<TestListProps> = ({
     },
     [tests, setTests]
   );
-
-  console.log(tests);
 
   const onCancel = () => {
     setAdding(false);
@@ -67,10 +68,17 @@ const TestList: FunctionComponent<TestListProps> = ({
       {adding && (
         <>
           <div>
-            <FullTestDebounceSelect
-              maxCount={1}
-              onChange={(dtos) => setNewTest(dtos[0])}
-            />
+            {type === "reading" ? (
+              <FullTestDebounceSelect
+                maxCount={1}
+                onChange={(dtos) => setNewTest(dtos[0])}
+              />
+            ) : (
+              <ListeningTestDebounceSelect
+                maxCount={1}
+                onChange={(dtos) => setNewTest(dtos[0])}
+              />
+            )}
           </div>
           <Flex justify="flex-end" gap={"small"} style={{ marginTop: "12px" }}>
             <Button

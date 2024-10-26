@@ -6,6 +6,7 @@ using AutoMapper;
 using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Exceptions.Series;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Dtos.ListeningTest;
 using MiniIeltsCloneServer.Models.Dtos.Series;
 using MiniIeltsCloneServer.Services.UserService;
 using MiniIeltsCloneServer.Wrappers;
@@ -48,6 +49,7 @@ namespace MiniIeltsCloneServer.Services.SeriesService
                     await _unitOfWork.SaveChangesAsync();
 
                     var seriesFullTests = new List<SeriesFullTest>();
+                    var listeningFullTests = new List<SeriesListeningTest>();
 
                     foreach(var id in dto.FullTestIds)
                     {
@@ -59,7 +61,18 @@ namespace MiniIeltsCloneServer.Services.SeriesService
                         seriesFullTests.Add(newEntity);
                     }
 
+                    foreach(var id  in dto.ListeningTestIds)
+                    {
+                        var newEntity = new SeriesListeningTest
+                        {
+                            SeriesId = series.Id,
+                            ListeningTestId = id
+                        };
+                        listeningFullTests.Add(newEntity);
+                    }
+
                     await _unitOfWork.SeriesFullTestRepository.AddRangeAsync(seriesFullTests);
+                    await _unitOfWork.SeriesListeningTestRepository.AddRangeAsync(listeningFullTests);
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitAsync();
                 }
@@ -86,6 +99,11 @@ namespace MiniIeltsCloneServer.Services.SeriesService
                 {
                     Id = s.FullTest.Id,
                     Title = s.FullTest.Title
+                }).ToList(),
+                ListeningTests = series.SeriesListeningTests.Select(s => new ListeningDropDownDto
+                {
+                    Id = s.ListeningTestId,
+                    Title = s.ListeningTest.Title
                 }).ToList()
             };
         }
@@ -108,6 +126,11 @@ namespace MiniIeltsCloneServer.Services.SeriesService
                     {
                         Id = s.FullTest.Id,
                         Title = s.FullTest.Title
+                    }).ToList(),
+                    ListeningTests = s.SeriesListeningTests.Select(s => new ListeningDropDownDto
+                    {
+                        Id = s.ListeningTestId,
+                        Title = s.ListeningTest.Title
                     }).ToList()
                 }).ToList()
             };
@@ -123,7 +146,7 @@ namespace MiniIeltsCloneServer.Services.SeriesService
             series.Title = title;
             var curIds = series.SeriesFullTests.Select(sf => sf.FullTestId).ToList();
             var oldEntities = await _unitOfWork.SeriesFullTestRepository.FindAllAsync(e => curIds.Contains(e.FullTestId));
-            _unitOfWork.SeriesFullTestRepository.RemoveRange(oldEntities);
+            if(oldEntities != null) _unitOfWork.SeriesFullTestRepository.RemoveRange(oldEntities);
             var order = 1;
             
             var newEntities = dto.FullTestIds.Select(id => new SeriesFullTest
@@ -133,7 +156,20 @@ namespace MiniIeltsCloneServer.Services.SeriesService
                 FullTestOrder = order++
             }).ToList();
 
+            curIds = series.SeriesListeningTests.Select(sf => sf.ListeningTestId).ToList();
+            var oldListeningEntities = await _unitOfWork.SeriesListeningTestRepository.FindAllAsync(e => curIds.Contains(e.ListeningTestId));
+            if(oldListeningEntities != null) _unitOfWork.SeriesListeningTestRepository.RemoveRange(oldListeningEntities);
+            order = 1;
+
+            var newListeningEntites = dto.ListeningTestIds.Select(id => new SeriesListeningTest
+            {
+                SeriesId = series.Id,
+                ListeningTestId = id,
+                ListeningTestOrder = order++
+            }).ToList();
+
             await _unitOfWork.SeriesFullTestRepository.AddRangeAsync(newEntities);
+            await _unitOfWork.SeriesListeningTestRepository.AddRangeAsync(newListeningEntites);
             await _unitOfWork.SaveChangesAsync();
         }
 

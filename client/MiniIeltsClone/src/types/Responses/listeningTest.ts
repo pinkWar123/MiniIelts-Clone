@@ -8,6 +8,11 @@ export interface ListeningTestViewDto {
   listeningParts: ListeningPartViewDto[];
 }
 
+export interface ListeningDropDownDto {
+  title: string;
+  id: number;
+}
+
 export interface ListeningPartViewDto {
   listeningTestId: number;
   listeningExercises: ListeningExerciseViewDto[];

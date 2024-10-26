@@ -29,6 +29,8 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<ListeningExercise> ListeningExercises { get; set; }
         public DbSet<ListeningPart> ListeningParts { get; set; }
         public DbSet<ListeningTest> ListeningTests { get; set; }
+        public DbSet<SeriesListeningTest> SeriesListeningTests { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -129,6 +131,19 @@ namespace MiniIeltsCloneServer.Data
                 .WithOne(cmc => cmc.ListeningExercise)
                 .HasForeignKey(cmc => cmc.ListeningExerciseId)
                 .IsRequired(false);
+
+            builder.Entity<SeriesListeningTest>()
+                .HasKey(s => new {s.SeriesId, s.ListeningTestId});
+
+            builder.Entity<SeriesListeningTest>()
+                .HasOne(s => s.Series)
+                .WithMany(s => s.SeriesListeningTests)
+                .HasForeignKey(s => s.SeriesId);
+
+            builder.Entity<SeriesListeningTest>()
+                .HasOne(s => s.ListeningTest)
+                .WithMany(f => f.SeriesListeningTests)
+                .HasForeignKey(f => f.ListeningTestId);
 
         }
     }

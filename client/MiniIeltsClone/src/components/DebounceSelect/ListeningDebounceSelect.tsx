@@ -1,29 +1,29 @@
 import { FunctionComponent, useCallback } from "react";
 import DebounceSelect from "./DebounceSelect";
-import { FullTestQueryObject } from "../../types/Request/fullTest";
-import { getFullTests } from "../../services/fullTest";
 import { FullTestNameDto } from "../../types/Responses/series";
+import { ListeningTestQuery } from "../../types/Request/listeningTest";
+import { getListeningTests } from "../../services/listeningTest";
 
-interface FullTestDropDownValue {
+interface ListeningTestDropDownValue {
   key: string;
   label: string;
   value: string;
 }
-interface FullTestDebounceSelectProps {
+interface ListeningTestDebounceSelectProps {
   onChange: (dtos: FullTestNameDto[]) => void;
   maxCount?: number;
 }
 
-const FullTestDebounceSelect: FunctionComponent<
-  FullTestDebounceSelectProps
+const ListeningTestDebounceSelect: FunctionComponent<
+  ListeningTestDebounceSelectProps
 > = ({ onChange, maxCount }) => {
   const fetchOptions = useCallback(async (testName: string) => {
-    const query: FullTestQueryObject = {
+    const query: ListeningTestQuery = {
       pageNumber: 1,
       pageSize: 50,
       title: testName,
     };
-    const res = await getFullTests(query);
+    const res = await getListeningTests(query);
     return res.data.map((test) => ({
       key: test.id.toString(),
       label: test.title,
@@ -38,7 +38,7 @@ const FullTestDebounceSelect: FunctionComponent<
         mode="multiple"
         fetchOptions={fetchOptions}
         onChange={(items) => {
-          const _items = items as unknown as FullTestDropDownValue[];
+          const _items = items as unknown as ListeningTestDropDownValue[];
           onChange(
             _items.map((item) => ({
               title: item.label,
@@ -52,4 +52,4 @@ const FullTestDebounceSelect: FunctionComponent<
   );
 };
 
-export default FullTestDebounceSelect;
+export default ListeningTestDebounceSelect;

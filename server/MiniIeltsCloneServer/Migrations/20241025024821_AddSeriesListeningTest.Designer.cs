@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniIeltsCloneServer.Data;
 
@@ -11,9 +12,11 @@ using MiniIeltsCloneServer.Data;
 namespace MiniIeltsCloneServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241025024821_AddSeriesListeningTest")]
+    partial class AddSeriesListeningTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -807,9 +810,6 @@ namespace MiniIeltsCloneServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ListeningTestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListeningTestOrder")
                         .HasColumnType("int");
 
                     b.HasKey("SeriesId", "ListeningTestId");
