@@ -71,7 +71,7 @@ namespace MiniIeltsCloneServer.Data.Repositories.FullTestRepo
             };
         }
 
-        public async Task<FullTest> GetFullTestWithExplanation(int testId)
+        public async Task<FullTest?> GetFullTestWithExplanation(int testId)
         {
             var test = await GetContext()
             .AsSplitQuery()

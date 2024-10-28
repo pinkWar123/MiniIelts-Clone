@@ -1,8 +1,18 @@
-import { Col, Input, Pagination, Row, Select, Space, Typography } from "antd";
+import {
+  Card,
+  Col,
+  Flex,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Space,
+  Typography,
+} from "antd";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { SeriesViewDto } from "../../../types/Responses/series";
 import { usePagination } from "../../../hooks/usePagination";
-import { getAllSeries } from "../../../services/series";
+import { getAllSeries, getSeriesCollections } from "../../../services/series";
 import { SeriesQuery } from "../../../types/Request/series";
 import SeriesCard from "./SeriesCard";
 import {
@@ -16,6 +26,7 @@ import {
 import useQueryParams from "../../../hooks/useQueryParam";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Series.module.scss";
+import CustomImage from "../../../components/CustomImage";
 interface SeriesProps {}
 
 const Series: FunctionComponent<SeriesProps> = () => {
@@ -40,6 +51,25 @@ const Series: FunctionComponent<SeriesProps> = () => {
     if (order) query.sort = order;
     const skill = getQueryParamWithSingleValue("skill");
     if (skill) query.skill = skill;
+    if (skill?.toLowerCase() == "all") {
+      const res = await getSeriesCollections(query);
+      console.log(res);
+      setSeries(
+        res.data.map((series) => ({
+          id: series.id,
+          title: series.title,
+          tests: series.collections.map((collection) => ({
+            title: collection.title,
+            id: collection.order,
+          })),
+          listeningTests: [],
+          testCount: series.collections.length,
+          image: series.image,
+        }))
+      );
+      setPagination((prev) => ({ ...prev, totalRecords: res.totalRecords }));
+      return;
+    }
     const res = await getAllSeries(query);
     setSeries(res.data);
     setPagination((prev) => ({ ...prev, totalRecords: res.totalRecords }));
@@ -62,7 +92,7 @@ const Series: FunctionComponent<SeriesProps> = () => {
   const getTests = (series: SeriesViewDto) => {
     if (search?.skill === "listening") {
       return series.listeningTests;
-    } else if (search?.skill === "reading") {
+    } else if (search?.skill === "reading" || search?.skill === "all") {
       return series.tests;
     }
     return [];
@@ -215,15 +245,35 @@ const Series: FunctionComponent<SeriesProps> = () => {
           />
         </Col>
       </Row>
-      {series?.map((series, index) => (
-        <SeriesCard
-          title={series.title}
-          tests={getTests(series)}
-          image={series.image}
-          key={index}
-          skill={getQueryParamWithSingleValue("skill") ?? ""}
-        />
-      ))}
+      {search?.skill?.toLowerCase() !== "all" &&
+        series?.map((series, index) => (
+          <SeriesCard
+            title={series.title}
+            tests={getTests(series)}
+            image={series.image}
+            key={index}
+            skill={getQueryParamWithSingleValue("skill") ?? ""}
+          />
+        ))}
+      {search?.skill?.toLowerCase() === "all" && (
+        <>
+          {series?.map((series, index) => (
+            <Card key={`series-${index}`}>
+              <Flex justify="center">
+                <CustomImage
+                  style={{ width: "200px", height: "200px" }}
+                  picture={series.image ?? ""}
+                />
+              </Flex>
+              <Flex justify="center">
+                <a href={`series/${series.id}/collection`}>
+                  <Typography.Title level={3}>{series.title}</Typography.Title>
+                </a>
+              </Flex>
+            </Card>
+          ))}
+        </>
+      )}
 
       <Pagination
         pageSize={pagination.pageSize}

@@ -73,5 +73,26 @@ namespace MiniIeltsCloneServer.Controllers
             await _seriesService.DeleteSeriesById(id);
             return Results.Accepted();
         }
+
+        [HttpGet("{id}/collection")]
+        public async Task<IResult> GetCollectionsBySeriesId([FromRoute] int id)
+        {
+            var collections = await _seriesService.GetCollectionsBySeriesId(id);
+            return Results.Ok(new Response<SeriesCollectionViewDto?>(collections));
+        }
+
+        [HttpGet("collection")]
+        public async Task<IResult> GetSeriesCollections([FromQuery] SeriesQueryObject query)
+        {
+            var seriesViewDtos = await _seriesService.GetSeriesCollections(query);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(
+                                seriesViewDtos.Value,
+                                seriesViewDtos.TotalRecords, 
+                                new Wrappers.Filter.PaginationFilter(query.PageNumber, query.PageSize),
+                                _uriService,
+                                Request.Path.Value);
+
+            return Results.Ok(pagedResponse);
+        }
     }
 }

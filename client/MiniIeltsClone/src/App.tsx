@@ -49,6 +49,7 @@ import ExplanationEditor from "./pages/AdminPage/Explanation/ExplanationEditor";
 import PlayGround from "./components/AudioPlayer";
 import CreateListeningTestPage from "./pages/CreateTestPage/CreateListeningTestPage";
 import DoListeningTestPage from "./pages/DoFullTestPage/DoListeningTestPage";
+import CollectionPage from "./pages/SeriesPage/Series/CollectionPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -329,6 +330,7 @@ function App() {
           </Route>
           <Route path="series" element={<NormalLayout />}>
             <Route index element={<SeriesPage />} />
+            <Route path=":id/collection" element={<CollectionPage />} />
           </Route>
           <Route
             path="update-explanation/:id"

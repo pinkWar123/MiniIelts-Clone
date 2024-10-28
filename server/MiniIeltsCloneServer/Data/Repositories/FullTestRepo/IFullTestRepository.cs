@@ -13,6 +13,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.FullTestRepo
     public interface IFullTestRepository : IGenericRepository<FullTest>
     {
         Task<PagedData<FullTest>> GetFullTests(FullTestQueryObject @object);
-        Task<FullTest> GetFullTestWithExplanation(int testId);
+        Task<FullTest?> GetFullTestWithExplanation(int testId);
     }
 }
