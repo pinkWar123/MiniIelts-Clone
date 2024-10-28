@@ -180,5 +180,19 @@ namespace MiniIeltsCloneServer.Services.SeriesService
             _unitOfWork.SeriesRepository.Remove(series);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<SeriesCollectionViewDto?> GetCollectionsBySeriesId(int seriesId)
+        {
+            var series = await _unitOfWork.SeriesRepository.GetByIdAsync(seriesId);
+            if(series == null) throw new SeriesNotFoundException(seriesId);
+
+            return await _unitOfWork.SeriesRepository.GetCollectionsBySeriesId(seriesId);
+        }
+
+        public async Task<PagedData<SeriesCollectionViewDto>> GetSeriesCollections(SeriesQueryObject query)
+        {
+            var series = await _unitOfWork.SeriesRepository.GetSeriesCollections(query);
+            return series;
+        }
     }
 }

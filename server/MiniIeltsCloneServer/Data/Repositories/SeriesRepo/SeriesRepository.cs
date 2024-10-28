@@ -93,5 +93,74 @@ namespace MiniIeltsCloneServer.Data.Repositories.SeriesRepo
                 Value = data
             };
         }
+
+        public async Task<SeriesCollectionViewDto?> GetCollectionsBySeriesId(int seriesId)
+        {
+            var seriesWithCollections = await _context.Series
+                .Where(s => s.Id == seriesId)
+                .Select(sr => new SeriesCollectionViewDto
+                {
+                    Title = sr.Title,
+                    Image = sr.Image,
+                    CreatedOn = sr.CreatedOn,
+                    Id = sr.Id,
+                    Collections = _context.SeriesListeningTests
+                        .Where(slt => slt.SeriesId == sr.Id)
+                        .Join(
+                            _context.SeriesFullTests,
+                            slt => new { Order = slt.ListeningTestOrder, slt.SeriesId },
+                            sft => new { Order = sft.FullTestOrder, sft.SeriesId },
+                            (slt, sft) => new CollectionViewDto
+                            {
+                                Title = $"Practice test {slt.ListeningTestOrder}",
+                                ListeningTestId = slt.ListeningTestId,
+                                ReadingTestId = sft.FullTestId,
+                                Order = slt.ListeningTestOrder // or sft.FullTestOrder, since they are expected to be equal
+                            }
+                        )
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return seriesWithCollections;
+        }
+
+        public async Task<PagedData<SeriesCollectionViewDto>> GetSeriesCollections(SeriesQueryObject query)
+        {
+            var seriesWithCollectionsQuery = _context.Series
+                .Select(sr => new SeriesCollectionViewDto
+                {
+                    Title = sr.Title,
+                    Image = sr.Image,
+                    Id = sr.Id,
+                    Collections = _context.SeriesListeningTests
+                        .Where(slt => slt.SeriesId == sr.Id)
+                        .Join(
+                            _context.SeriesFullTests,
+                            slt => new { Order = slt.ListeningTestOrder, slt.SeriesId },
+                            sft => new { Order = sft.FullTestOrder, sft.SeriesId },
+                            (slt, sft) => new CollectionViewDto
+                            {
+                                Title = $"Practice test {slt.ListeningTestOrder}",
+                                ListeningTestId = slt.ListeningTestId,
+                                ReadingTestId = sft.FullTestId,
+                                Order = slt.ListeningTestOrder // or sft.FullTestOrder, since they are expected to be equal
+                            }
+                        )
+                        .ToList()
+                });
+            var totalRecords = await seriesWithCollectionsQuery.CountAsync();
+            var values = await seriesWithCollectionsQuery
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+
+            return new PagedData<SeriesCollectionViewDto>
+            {
+                TotalRecords = totalRecords,
+                Value = values
+            };
+
+        }
     }
 }

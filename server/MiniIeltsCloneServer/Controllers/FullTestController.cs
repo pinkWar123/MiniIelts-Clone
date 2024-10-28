@@ -80,10 +80,10 @@ namespace MiniIeltsCloneServer.Controllers
         }
 
         [HttpGet("{id}/solution")]
-        public async Task<IResult> GetFullTestSolution([FromRoute] int id)
+        public async Task<IActionResult> GetFullTestSolution([FromRoute] int id)
         {
             var solution = await _fullTestService.GetFullTestKey(id);
-            return Results.Ok(new Response<FullTestKeyDto>(solution));
+            return Ok(new Response<FullTestKeyDto>(solution));
         }
 
         [HttpPost("{id}/result")]
