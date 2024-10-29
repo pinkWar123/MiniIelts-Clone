@@ -1,9 +1,11 @@
 import {
   CreateListeningTestDto,
   ListeningTestQuery,
+  UpdateListeningTestDto,
 } from "../types/Request/listeningTest";
 import {
   ListeningDropDownDto,
+  ListeningTestKeyDto,
   ListeningTestViewDto,
 } from "../types/Responses/listeningTest";
 import { IPagedResponse, IResponse } from "../types/Responses/response";
@@ -28,6 +30,21 @@ export const getListeningTests = async (query: ListeningTestQuery) => {
       {
         params: query,
       }
+    )
+  ).data;
+};
+
+export const updateListeningTestById = async (
+  id: number,
+  dto: UpdateListeningTestDto
+) => {
+  return await axiosInstance.put(`ListeningTest/${id}`, dto);
+};
+
+export const getListeningTestSolution = async (id: number) => {
+  return (
+    await axiosInstance.get<IResponse<ListeningTestKeyDto>>(
+      `ListeningTest/${id}/solution`
     )
   ).data;
 };

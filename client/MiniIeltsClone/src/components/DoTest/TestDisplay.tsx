@@ -26,28 +26,14 @@ const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
   }, []);
   return (
     <>
-      {/* <div className={styles["wrapper"]}> */}
       <Splitter
         className={styles["wrapper"]}
         // layout={isVertical ? "vertical" : "horizontal"}
       >
         <Splitter.Panel
           min={"30%"}
-          style={{ height: isVertical ? "50%" : "auto" }}
-          // defaultSize={{ width: "50%", height: "200" }}
-          // maxWidth={"70%"}
-          // minWidth={"30%"}
           className={styles["left-container"]}
-          // enable={{
-          //   top: false,
-          //   right: true,
-          //   bottom: false,
-          //   left: true,
-          //   topRight: false,
-          //   bottomRight: false,
-          //   bottomLeft: false,
-          //   topLeft: false,
-          // }}
+          style={{ height: isVertical ? "50%" : "600px" }}
         >
           {essay}
         </Splitter.Panel>
@@ -55,7 +41,6 @@ const TestDisplay: FunctionComponent<TestDisplayProps> = ({ essay, test }) => {
           {test}
         </Splitter.Panel>
       </Splitter>
-      {/* </div> */}
     </>
   );
 };

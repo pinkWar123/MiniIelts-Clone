@@ -25,7 +25,7 @@ const AudioPlayer: FunctionComponent<AudioPlayerProps> = ({ videoId }) => {
     height: "0", // Set height to 0 to hide the video
     width: "0", // Set width to 0 to hide the video
     playerVars: {
-      autoplay: 1 as 0 | 1, // Automatically start playing the audio
+      autoplay: 0 as 0 | 1, // Automatically start playing the audio
       controls: 1 as 0 | 1, // Hide YouTube controls
     },
   };

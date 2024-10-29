@@ -1,6 +1,7 @@
 import {
   BarsOutlined,
   BookOutlined,
+  CustomerServiceOutlined,
   EditOutlined,
   LineChartOutlined,
   UserOutlined,
@@ -16,6 +17,11 @@ export const items: MenuItem[] = [
     key: "full-test",
     icon: <BookOutlined />,
     label: "Full Tests",
+  },
+  {
+    key: "listening-test",
+    icon: <CustomerServiceOutlined />,
+    label: "Listening Tests",
   },
   {
     key: "series",

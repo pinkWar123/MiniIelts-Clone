@@ -50,6 +50,8 @@ import PlayGround from "./components/AudioPlayer";
 import CreateListeningTestPage from "./pages/CreateTestPage/CreateListeningTestPage";
 import DoListeningTestPage from "./pages/DoFullTestPage/DoListeningTestPage";
 import CollectionPage from "./pages/SeriesPage/Series/CollectionPage";
+import ListeningTest from "./pages/AdminPage/ListeningTest/ListeningTest";
+import ListeningSolutionPage from "./pages/Listening/ListeningSolutionPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -203,10 +205,18 @@ function App() {
             }
           />
           <Route
-            path="create-listening-test"
+            path="listening-test/create"
             element={
               <TestProvider>
                 <CreateListeningTestPage />
+              </TestProvider>
+            }
+          />
+          <Route
+            path="listening-test/edit/:id"
+            element={
+              <TestProvider>
+                <CreateListeningTestPage mode="edit" />
               </TestProvider>
             }
           />
@@ -248,6 +258,18 @@ function App() {
               </StartTestProvider>
             }
           />
+          <Route path="listening/:id" element={<NormalLayout />}>
+            <Route
+              path="solution"
+              element={
+                <StartTestProvider>
+                  <AnswersProvider>
+                    <ListeningSolutionPage />
+                  </AnswersProvider>
+                </StartTestProvider>
+              }
+            />
+          </Route>
           <Route
             path="result/:id"
             element={
@@ -271,6 +293,7 @@ function App() {
             <Route path="user" element={<Users />} />
             <Route path="series" element={<Series />} />
             <Route path="post" element={<PostPage />} />
+            <Route path="listening-test" element={<ListeningTest />} />
             <Route path="full-test" element={<FullTest />} />
           </Route>
           <Route

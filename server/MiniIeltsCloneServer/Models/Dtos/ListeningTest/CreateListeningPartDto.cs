@@ -8,5 +8,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.ListeningTest
     public class CreateListeningPartDto
     {
         public List<CreateListeningExerciseDto> ListeningExercises { get; set; } = new List<CreateListeningExerciseDto>();
+        public string Transcript { get; set; }
     }
 }

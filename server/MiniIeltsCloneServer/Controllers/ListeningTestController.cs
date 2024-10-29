@@ -43,5 +43,19 @@ namespace MiniIeltsCloneServer.Controllers
             var pagedResponse = PaginationHelper.CreatePagedResponse(listeningTests.Value, listeningTests.TotalRecords, new Wrappers.Filter.PaginationFilter(query.PageNumber, query.PageSize), _uriService, Request.Path.Value);
             return Results.Ok(pagedResponse);
         }
+
+        [HttpGet("{id}/solution")]
+        public async Task<IResult> GetListeningTestSolution([FromRoute] int id)
+        {
+            var listeningTest = await _listeningTestService.GetListeningTestKey(id);
+            return Results.Ok(new Response<ListeningTestKeyDto>(listeningTest));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IResult> UpdateListeningTestById([FromRoute] int id, [FromBody] UpdateListeningTestDto dto)
+        {
+            await _listeningTestService.UpdateListeningTest(id, dto);
+            return Results.Accepted();
+        }
     }
 }

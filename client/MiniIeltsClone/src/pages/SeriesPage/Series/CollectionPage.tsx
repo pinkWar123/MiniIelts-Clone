@@ -74,7 +74,14 @@ const CollectionPage: FunctionComponent<CollectionPageProps> = () => {
 
                     <div style={{ width: "100%" }}>
                       <Flex justify="center">
-                        <Button shape="circle" icon={<KeyOutlined />}></Button>
+                        <a
+                          href={`/listening/${collection.listeningTestId}/solution`}
+                        >
+                          <Button
+                            shape="circle"
+                            icon={<KeyOutlined />}
+                          ></Button>
+                        </a>
                       </Flex>
                     </div>
                   </div>

@@ -25,6 +25,7 @@ namespace MiniIeltsCloneServer.Models.Dtos.ListeningTest
     public class ListeningPartViewDto
     {
         public int ListeningTestId { get; set; }
+        public string Transcript { get; set; }
         public List<ListeningExerciseViewDto> ListeningExercises { get; set; } = new List<ListeningExerciseViewDto>();
     }
     public class ListeningTestViewDto
@@ -38,5 +39,6 @@ namespace MiniIeltsCloneServer.Models.Dtos.ListeningTest
     {
         public required string Title { get; set; }
         public int Id { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
