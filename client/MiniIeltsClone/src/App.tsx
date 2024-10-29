@@ -258,6 +258,18 @@ function App() {
               </StartTestProvider>
             }
           />
+          <Route
+            path="listening"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <DoFullTestLayout hideOverflow={false}></DoFullTestLayout>
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          >
+            <Route path=":id" element={<DoListeningTestPage />} />
+          </Route>
           <Route path="listening/:id" element={<NormalLayout />}>
             <Route
               path="solution"
@@ -366,18 +378,6 @@ function App() {
             }
           />
           <Route path="playground" element={<PlayGround videoId="1" />} />
-          <Route
-            path="listening"
-            element={
-              <StartTestProvider>
-                <AnswersProvider>
-                  <DoFullTestLayout hideOverflow={false}></DoFullTestLayout>
-                </AnswersProvider>
-              </StartTestProvider>
-            }
-          >
-            <Route path=":id" element={<DoListeningTestPage />} />
-          </Route>
         </Routes>
       </>
     </>

@@ -7,6 +7,7 @@ using MiniIeltsCloneServer.Data;
 using MiniIeltsCloneServer.Data.Repositories.TestRepo;
 using MiniIeltsCloneServer.Exceptions.Question;
 using MiniIeltsCloneServer.Exceptions.Test;
+using MiniIeltsCloneServer.Extensions;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.Answer;
 using MiniIeltsCloneServer.Models.Dtos.Question;
@@ -159,7 +160,7 @@ namespace MiniIeltsCloneServer.Services.TestService
                     Order = question.Order,
                     UserAnswer = testSubmitDto.QuestionSubmitDtos[i].Value.Trim(),
                     Answer = question?.Answer?.Trim() ?? "",
-                    IsTrue = question?.Answer?.ToLower().Trim() == testSubmitDto.QuestionSubmitDtos[i].Value.ToLower().Trim()
+                    IsTrue = question?.Answer?.GenerateAnswerVariations().Contains(testSubmitDto.QuestionSubmitDtos[i].Value.ToLower().Trim()) ?? false
                 });
             }
 

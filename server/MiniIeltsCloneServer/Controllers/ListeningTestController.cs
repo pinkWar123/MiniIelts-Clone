@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MiniIeltsCloneServer.Extensions;
 using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models;
 using MiniIeltsCloneServer.Models.Dtos.ListeningTest;
@@ -56,6 +57,13 @@ namespace MiniIeltsCloneServer.Controllers
         {
             await _listeningTestService.UpdateListeningTest(id, dto);
             return Results.Accepted();
+        }
+
+        [HttpGet("regex/{word}")]
+        public async Task<IResult> GetVariations([FromRoute] string word)
+        {
+            var words = word.GenerateAnswerVariations();
+            return Results.Ok(words);
         }
     }
 }
