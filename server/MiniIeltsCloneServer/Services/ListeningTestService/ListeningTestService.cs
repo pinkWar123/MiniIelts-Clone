@@ -261,7 +261,7 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
                 QuestionCount = 40,
                 Time = listeningTestResult.Time,
                 Results = results,
-                CreatedOn = listeningTestResult.ListeningTest.CreatedOn,
+                CreatedOn = DateTime.UtcNow,
                 VideoId = listeningTestResult.ListeningTest.VideoId,
                 Transcripts = listeningTestResult.ListeningTest.ListeningParts.Select(lp => lp.Transcript).ToList()
             };
