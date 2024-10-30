@@ -207,7 +207,7 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
             }
         }
 
-        public async Task<FullTestResultDto> GetListeningTestResultById(int id)
+        public async Task<ListeningResultDto> GetListeningTestResultById(int id)
         {
             var listeningTestResult = await _unitOfWork.ListeningResultRepository.GetByIdAsync(id);
             if (listeningTestResult == null) throw new FullTestResultNotFoundException(id);
@@ -236,7 +236,7 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
                 {
                     Part = part,
                     StartQuestion = start,
-                    EndQuestion = part * 10 - 1,
+                    EndQuestion = part * 10,
                     QuestionResults = listeningTestResult.Answers
                         .Slice(start - 1, 10)
                         .Select(answer => new QuestionResultDto
@@ -251,7 +251,7 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
                 results.Add(testResultDto);
             }
 
-            return new FullTestResultDto
+            return new ListeningResultDto
             {
                 FullTestId = listeningTestResult.ListeningTestId,
                 Id = listeningTestResult.Id,
@@ -262,6 +262,8 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
                 Time = listeningTestResult.Time,
                 Results = results,
                 CreatedOn = listeningTestResult.ListeningTest.CreatedOn,
+                VideoId = listeningTestResult.ListeningTest.VideoId,
+                Transcripts = listeningTestResult.ListeningTest.ListeningParts.Select(lp => lp.Transcript).ToList()
             };
         }
     }

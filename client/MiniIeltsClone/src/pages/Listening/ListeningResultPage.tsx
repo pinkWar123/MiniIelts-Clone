@@ -1,26 +1,24 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   getListeningTestById,
-  getListeningTestSolution,
+  getListeningTestResultById,
 } from "../../services/listeningTest";
+import { useParams } from "react-router-dom";
 import { ITest } from "../../types/Model/Test";
-import TestDisplay from "../../components/DoTest/TestDisplay";
-import Test from "../../components/DoTest/RenderTest/Test";
-import { ListeningTestKeyDto } from "../../types/Responses/listeningTest";
 import ResultDisplay from "../FullTestResultPage/ResultDisplay";
 import { Col, Empty, Row } from "antd";
 import UrlBox from "../../components/UrlBox/UrlBox";
 import Transcript from "./Transcript";
+import Test from "../../components/DoTest/RenderTest/Test";
 import styles from "./Listening.module.scss";
-interface ListeningSolutionPageProps {}
+import TestDisplay from "../../components/DoTest/TestDisplay";
+import { ListeningResultDto } from "../../types/Responses/listeningTest";
+interface ListeningResultProps {}
 
-const ListeningSolutionPage: FunctionComponent<
-  ListeningSolutionPageProps
-> = () => {
-  const { id } = useParams();
+const ListeningResult: FunctionComponent<ListeningResultProps> = () => {
+  const { id, resultId } = useParams();
   const [test, setTest] = useState<ITest>();
-  const [solution, setSolution] = useState<ListeningTestKeyDto>();
+  const [solution, setSolution] = useState<ListeningResultDto>();
   const [activeIndex, setActiveIndex] = useState<number>(0);
   useEffect(() => {
     if (!id) return;
@@ -41,13 +39,14 @@ const ListeningSolutionPage: FunctionComponent<
     fetchTest();
   }, [id, setTest]);
   useEffect(() => {
-    if (!id) return;
+    if (!resultId) return;
     const fetchTest = async () => {
-      const res = await getListeningTestSolution(parseInt(id));
+      if (!resultId) return;
+      const res = await getListeningTestResultById(parseInt(resultId));
       setSolution(res.data);
     };
     fetchTest();
-  }, [id, setSolution]);
+  }, [resultId, setSolution]);
   const getActiveExercises = () => {
     const start = activeIndex * 10 + 1;
     const end = activeIndex * 10 + 10;
@@ -70,13 +69,15 @@ const ListeningSolutionPage: FunctionComponent<
         <Col lg={14} xl={14} xxl={14} md={22} sm={22} xs={22} offset={2}>
           <ResultDisplay
             {...solution}
+            showUserAnswer
             keys={
-              solution?.testKeys?.map((t) => {
+              solution?.results?.map((t) => {
                 return {
                   ...t,
-                  keys: t.keys.map((k) => ({
+                  keys: t.questionResults.map((k) => ({
                     value: k.answer,
                     order: k.order,
+                    userAnswer: k.userAnswer,
                   })),
                 };
               }) ?? []
@@ -121,4 +122,4 @@ const ListeningSolutionPage: FunctionComponent<
   );
 };
 
-export default ListeningSolutionPage;
+export default ListeningResult;

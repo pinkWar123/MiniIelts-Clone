@@ -15,6 +15,6 @@ namespace MiniIeltsCloneServer.Services.ListeningTestService
         Task<PagedData<ListeningDropDownDto>> GetListeningTests(ListeningTestQueryObject @object);
         Task<ListeningTestKeyDto> GetListeningTestKey(int listeningTestId);
         Task<int> SubmitTest(int testId, TestSubmitDto testSubmitDto);
-        Task<FullTestResultDto> GetListeningTestResultById(int id);
+        Task<ListeningResultDto> GetListeningTestResultById(int id);
     }
 }

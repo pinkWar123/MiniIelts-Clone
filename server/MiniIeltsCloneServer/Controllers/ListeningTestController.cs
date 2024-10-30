@@ -57,7 +57,7 @@ namespace MiniIeltsCloneServer.Controllers
         public async Task<IResult> GetListeningTestResult([FromRoute] int id)
         {
             var listeningTestResult = await _listeningTestService.GetListeningTestResultById(id);
-            return Results.Ok(new Response<FullTestResultDto>(listeningTestResult));
+            return Results.Ok(new Response<ListeningResultDto>(listeningTestResult));
         }
 
         [HttpPost("{id}")]

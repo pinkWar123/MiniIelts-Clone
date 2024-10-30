@@ -52,6 +52,7 @@ import DoListeningTestPage from "./pages/DoFullTestPage/DoListeningTestPage";
 import CollectionPage from "./pages/SeriesPage/Series/CollectionPage";
 import ListeningTest from "./pages/AdminPage/ListeningTest/ListeningTest";
 import ListeningSolutionPage from "./pages/Listening/ListeningSolutionPage";
+import ListeningResult from "./pages/Listening/ListeningResultPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -277,6 +278,16 @@ function App() {
                 <StartTestProvider>
                   <AnswersProvider>
                     <ListeningSolutionPage />
+                  </AnswersProvider>
+                </StartTestProvider>
+              }
+            />
+            <Route
+              path="result/:resultId"
+              element={
+                <StartTestProvider>
+                  <AnswersProvider>
+                    <ListeningResult />
                   </AnswersProvider>
                 </StartTestProvider>
               }

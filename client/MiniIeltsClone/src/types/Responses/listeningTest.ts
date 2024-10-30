@@ -1,7 +1,7 @@
 import { QuestionTypeEnum } from "../../contants/questionType";
 import { IExerciseChoice } from "../Model/Choice";
 import { IQuestion } from "../Model/Question";
-import { TestKeyDto } from "./fullTest";
+import { FullTestResultDto, TestKeyDto } from "./fullTest";
 
 export interface ListeningTestViewDto {
   title: string;
@@ -44,4 +44,9 @@ export interface ListeningTestKeyDto {
   createdOn: string;
   viewCount: number;
   transcripts: string[];
+}
+
+export interface ListeningResultDto extends FullTestResultDto {
+  transcripts: string[];
+  videoId: string;
 }
