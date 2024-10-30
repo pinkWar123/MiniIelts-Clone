@@ -6,6 +6,7 @@ import AdminHeader from "../../components/Header/AdminHeader";
 import NormalHeader from "../../components/Header/NormalHeader";
 import { Content } from "antd/es/layout/layout";
 import { Outlet } from "react-router-dom";
+import Footer from "../NormalLayout/Footer";
 
 interface FullTestResultLayoutProps {}
 
@@ -23,6 +24,7 @@ const FullTestResultLayout: FunctionComponent<
       <Content style={{ width: "100%" }}>
         <Outlet />
       </Content>
+      <Footer />
     </Layout>
   );
 };

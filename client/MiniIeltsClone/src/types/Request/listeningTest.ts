@@ -17,6 +17,7 @@ export interface CreateListeningExercise {
 
 export interface CreateListeningPart {
   listeningExercises: CreateListeningExercise[];
+  transcript?: string;
 }
 
 export interface CreateListeningTestDto {
@@ -24,6 +25,8 @@ export interface CreateListeningTestDto {
   videoId: string;
   listeningParts: CreateListeningPart[];
 }
+
+export interface UpdateListeningTestDto extends CreateListeningTestDto {}
 
 export interface ListeningTestQuery extends BaseQuery {
   pageNumber: number;

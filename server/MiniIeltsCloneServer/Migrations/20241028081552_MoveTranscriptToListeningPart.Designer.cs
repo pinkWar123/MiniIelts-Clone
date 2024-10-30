@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniIeltsCloneServer.Data;
 
@@ -11,9 +12,11 @@ using MiniIeltsCloneServer.Data;
 namespace MiniIeltsCloneServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241028081552_MoveTranscriptToListeningPart")]
+    partial class MoveTranscriptToListeningPart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,13 +178,10 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ListeningResultId")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuestionType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResultId")
+                    b.Property<int>("ResultId")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
@@ -190,8 +190,6 @@ namespace MiniIeltsCloneServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("ListeningResultId");
 
                     b.HasIndex("ResultId");
 
@@ -528,41 +526,6 @@ namespace MiniIeltsCloneServer.Migrations
                     b.ToTable("ListeningExercises");
                 });
 
-            modelBuilder.Entity("MiniIeltsCloneServer.Models.Listening.ListeningResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ListeningTestId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Time")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("ListeningTestId");
-
-                    b.ToTable("ListeningResults");
-                });
-
             modelBuilder.Entity("MiniIeltsCloneServer.Models.ListeningPart", b =>
                 {
                     b.Property<int>("Id")
@@ -584,6 +547,7 @@ namespace MiniIeltsCloneServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Transcript")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -966,18 +930,13 @@ namespace MiniIeltsCloneServer.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
-                    b.HasOne("MiniIeltsCloneServer.Models.Listening.ListeningResult", "ListeningResult")
-                        .WithMany("Answers")
-                        .HasForeignKey("ListeningResultId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("MiniIeltsCloneServer.Models.Result", "Result")
                         .WithMany("Answers")
-                        .HasForeignKey("ResultId");
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
-
-                    b.Navigation("ListeningResult");
 
                     b.Navigation("Result");
                 });
@@ -1115,23 +1074,6 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("AppUser");
 
                     b.Navigation("ListeningPart");
-                });
-
-            modelBuilder.Entity("MiniIeltsCloneServer.Models.Listening.ListeningResult", b =>
-                {
-                    b.HasOne("MiniIeltsCloneServer.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("MiniIeltsCloneServer.Models.ListeningTest", "ListeningTest")
-                        .WithMany("ListeningResults")
-                        .HasForeignKey("ListeningTestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("ListeningTest");
                 });
 
             modelBuilder.Entity("MiniIeltsCloneServer.Models.ListeningPart", b =>
@@ -1363,11 +1305,6 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("MiniIeltsCloneServer.Models.Listening.ListeningResult", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
             modelBuilder.Entity("MiniIeltsCloneServer.Models.ListeningPart", b =>
                 {
                     b.Navigation("ListeningExercises");
@@ -1376,8 +1313,6 @@ namespace MiniIeltsCloneServer.Migrations
             modelBuilder.Entity("MiniIeltsCloneServer.Models.ListeningTest", b =>
                 {
                     b.Navigation("ListeningParts");
-
-                    b.Navigation("ListeningResults");
 
                     b.Navigation("SeriesListeningTests");
                 });

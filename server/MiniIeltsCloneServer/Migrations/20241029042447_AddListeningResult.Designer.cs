@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniIeltsCloneServer.Data;
 
@@ -11,9 +12,11 @@ using MiniIeltsCloneServer.Data;
 namespace MiniIeltsCloneServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029042447_AddListeningResult")]
+    partial class AddListeningResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +184,7 @@ namespace MiniIeltsCloneServer.Migrations
                     b.Property<int>("QuestionType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResultId")
+                    b.Property<int>("ResultId")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
@@ -558,7 +561,8 @@ namespace MiniIeltsCloneServer.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("ListeningTestId");
+                    b.HasIndex("ListeningTestId")
+                        .IsUnique();
 
                     b.ToTable("ListeningResults");
                 });
@@ -973,7 +977,9 @@ namespace MiniIeltsCloneServer.Migrations
 
                     b.HasOne("MiniIeltsCloneServer.Models.Result", "Result")
                         .WithMany("Answers")
-                        .HasForeignKey("ResultId");
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
 
@@ -1124,8 +1130,8 @@ namespace MiniIeltsCloneServer.Migrations
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("MiniIeltsCloneServer.Models.ListeningTest", "ListeningTest")
-                        .WithMany("ListeningResults")
-                        .HasForeignKey("ListeningTestId")
+                        .WithOne("ListeningResult")
+                        .HasForeignKey("MiniIeltsCloneServer.Models.Listening.ListeningResult", "ListeningTestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1377,7 +1383,8 @@ namespace MiniIeltsCloneServer.Migrations
                 {
                     b.Navigation("ListeningParts");
 
-                    b.Navigation("ListeningResults");
+                    b.Navigation("ListeningResult")
+                        .IsRequired();
 
                     b.Navigation("SeriesListeningTests");
                 });

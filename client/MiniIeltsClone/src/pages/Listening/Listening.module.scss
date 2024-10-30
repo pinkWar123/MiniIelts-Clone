@@ -1,36 +1,47 @@
-// body {
-//   overflow: hidden;
-// }
-.wrapper {
-  width: 100%;
-  display: flex;
-}
-
-.left-container {
-  align-items: center;
+.exam-review-wrapper {
   height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .content {
+    overflow-y: auto;
+    flex: 1;
+    text-align: justify;
+    display: flex;
+    justify-content: center;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
+  }
+  .content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .content::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+  }
+  .content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+  }
+
+  .bottom {
+    background-color: #d4dae0;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+
+    .part {
+      color: #32b3c7;
+      text-align: center;
+      line-height: 20px;
+    }
+  }
 }
 
-.right-container {
-  flex: 1;
-  overflow-y: scroll;
-  max-width: 98%;
-}
-
-.left-container,
-.right-container {
-  padding: 20px;
-  overflow-y: scroll;
-  overflow-x: scroll;
-  // min-height: 100vh;
-  height: 600px;
-  margin-left: 10px;
-}
-
-/* Apply to the left-container and right-container specifically */
 .left-container::-webkit-scrollbar,
 .right-container::-webkit-scrollbar {
   width: 8px; /* Width of the scrollbar */

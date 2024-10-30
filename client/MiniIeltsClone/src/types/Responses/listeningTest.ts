@@ -1,10 +1,12 @@
 import { QuestionTypeEnum } from "../../contants/questionType";
 import { IExerciseChoice } from "../Model/Choice";
 import { IQuestion } from "../Model/Question";
+import { FullTestResultDto, TestKeyDto } from "./fullTest";
 
 export interface ListeningTestViewDto {
   title: string;
   videoId: string;
+  transcript?: string;
   listeningParts: ListeningPartViewDto[];
 }
 
@@ -15,6 +17,7 @@ export interface ListeningDropDownDto {
 
 export interface ListeningPartViewDto {
   listeningTestId: number;
+  transcript: string;
   listeningExercises: ListeningExerciseViewDto[];
 }
 
@@ -30,4 +33,20 @@ export interface ListeningExerciseViewDto {
   content: string;
   questions: IQuestion[];
   chooseManyChoices: IExerciseChoice[];
+}
+
+export interface ListeningTestKeyDto {
+  listeningTestId: number;
+  title: string;
+  questionCount: number;
+  videoId: string;
+  testKeys: TestKeyDto[];
+  createdOn: string;
+  viewCount: number;
+  transcripts: string[];
+}
+
+export interface ListeningResultDto extends FullTestResultDto {
+  transcripts: string[];
+  videoId: string;
 }

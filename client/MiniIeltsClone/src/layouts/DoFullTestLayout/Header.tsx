@@ -10,6 +10,9 @@ import { submitFullTest } from "../../services/fullTest";
 import Time from "./Time";
 import useUser from "../../hooks/useUser";
 import AskLoginModal from "../../components/AuthForm/AskLoginModal";
+import { submitTest } from "../../services/listeningTest";
+import { IResponse } from "../../types/Responses/response";
+import { TestSubmitDto } from "../../types/Request/test";
 interface FullTestHeaderProps {}
 
 const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
@@ -44,14 +47,7 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
   }, [location.search]);
   const handleSubmit = useCallback(async () => {
     if (!id || !answers || answers.length === 0) return;
-    const dto: SubmitFullTestDto = {
-      answers: answers?.map((a) => ({
-        order: a.order,
-        value: a.value,
-        questionType: a.questionType,
-      })),
-      time: initialTime - time,
-    };
+
     if (!user) {
       let url = `/result?`;
       answers.forEach((a) => (url += `a=${a.value}&`));
@@ -59,7 +55,29 @@ const FullTestHeader: FunctionComponent<FullTestHeaderProps> = () => {
       navigate(location.pathname + url);
       return;
     }
-    const res = await submitFullTest(parseInt(id), dto);
+    let res: IResponse<number>;
+    if (location.pathname.split("/")[1] === "listening") {
+      const dto: TestSubmitDto = {
+        questionSubmitDtos: answers?.map((a) => ({
+          order: a.order,
+          value: a.value,
+          questionType: a.questionType,
+        })),
+        time: initialTime - time,
+      };
+      console.log(dto);
+      res = await submitTest(parseInt(id), dto);
+    } else {
+      const dto: SubmitFullTestDto = {
+        answers: answers?.map((a) => ({
+          order: a.order,
+          value: a.value,
+          questionType: a.questionType,
+        })),
+        time: initialTime - time,
+      };
+      res = await submitFullTest(parseInt(id), dto);
+    }
     if (res.data) {
       navigate(location.pathname + `/result/${res.data}`);
     }

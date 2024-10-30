@@ -30,6 +30,7 @@ namespace MiniIeltsCloneServer.Data
         public DbSet<ListeningPart> ListeningParts { get; set; }
         public DbSet<ListeningTest> ListeningTests { get; set; }
         public DbSet<SeriesListeningTest> SeriesListeningTests { get; set; }
+        public DbSet<ListeningResult> ListeningResults { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -63,7 +64,8 @@ namespace MiniIeltsCloneServer.Data
             builder.Entity<Result>()
                 .HasMany(t => t.Answers)
                 .WithOne(a => a.Result)
-                .HasForeignKey(a => a.ResultId);
+                .HasForeignKey(a => a.ResultId)
+                .IsRequired(false);
             
             builder.Entity<FullTest>()
                 .HasMany(f => f.Tests)
@@ -144,6 +146,18 @@ namespace MiniIeltsCloneServer.Data
                 .HasOne(s => s.ListeningTest)
                 .WithMany(f => f.SeriesListeningTests)
                 .HasForeignKey(f => f.ListeningTestId);
+
+            builder.Entity<ListeningResult>()
+                .HasMany(lr => lr.Answers)
+                .WithOne(a => a.ListeningResult)
+                .HasForeignKey(a => a.ListeningResultId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
+            
+            builder.Entity<ListeningTest>()
+                .HasMany(lt => lt.ListeningResults)
+                .WithOne(lr => lr.ListeningTest)
+                .HasForeignKey(lr => lr.ListeningTestId);
 
         }
     }

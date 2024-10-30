@@ -44,6 +44,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExplanationRepo;
 using MiniIeltsCloneServer.Data.Repositories.ListeningTestRepo;
 using MiniIeltsCloneServer.Services.ListeningTestService;
 using MiniIeltsCloneServer.Data.Repositories.SeriesListeningTestRepo;
+using MiniIeltsCloneServer.Data.Repositories.ListeningResultRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -166,6 +167,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IExplanationRepository, ExplanationRepository>();
 builder.Services.AddScoped<IListeningTestRepository, ListeningTestRepository>();
 builder.Services.AddScoped<ISeriesListeningTestRepository, SeriesListeningTestRepository>();
+builder.Services.AddScoped<IListeningResultRepository, ListeningResultRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();

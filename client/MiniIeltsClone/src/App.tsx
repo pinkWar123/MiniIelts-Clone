@@ -50,6 +50,9 @@ import PlayGround from "./components/AudioPlayer";
 import CreateListeningTestPage from "./pages/CreateTestPage/CreateListeningTestPage";
 import DoListeningTestPage from "./pages/DoFullTestPage/DoListeningTestPage";
 import CollectionPage from "./pages/SeriesPage/Series/CollectionPage";
+import ListeningTest from "./pages/AdminPage/ListeningTest/ListeningTest";
+import ListeningSolutionPage from "./pages/Listening/ListeningSolutionPage";
+import ListeningResult from "./pages/Listening/ListeningResultPage";
 function App() {
   const { setUser } = useUser();
   const contextHolder = useMessage();
@@ -203,10 +206,18 @@ function App() {
             }
           />
           <Route
-            path="create-listening-test"
+            path="listening-test/create"
             element={
               <TestProvider>
                 <CreateListeningTestPage />
+              </TestProvider>
+            }
+          />
+          <Route
+            path="listening-test/edit/:id"
+            element={
+              <TestProvider>
+                <CreateListeningTestPage mode="edit" />
               </TestProvider>
             }
           />
@@ -249,6 +260,40 @@ function App() {
             }
           />
           <Route
+            path="listening"
+            element={
+              <StartTestProvider>
+                <AnswersProvider>
+                  <DoFullTestLayout hideOverflow={false}></DoFullTestLayout>
+                </AnswersProvider>
+              </StartTestProvider>
+            }
+          >
+            <Route path=":id" element={<DoListeningTestPage />} />
+          </Route>
+          <Route path="listening/:id" element={<NormalLayout />}>
+            <Route
+              path="solution"
+              element={
+                <StartTestProvider>
+                  <AnswersProvider>
+                    <ListeningSolutionPage />
+                  </AnswersProvider>
+                </StartTestProvider>
+              }
+            />
+            <Route
+              path="result/:resultId"
+              element={
+                <StartTestProvider>
+                  <AnswersProvider>
+                    <ListeningResult />
+                  </AnswersProvider>
+                </StartTestProvider>
+              }
+            />
+          </Route>
+          <Route
             path="result/:id"
             element={
               <StartTestProvider>
@@ -271,6 +316,7 @@ function App() {
             <Route path="user" element={<Users />} />
             <Route path="series" element={<Series />} />
             <Route path="post" element={<PostPage />} />
+            <Route path="listening-test" element={<ListeningTest />} />
             <Route path="full-test" element={<FullTest />} />
           </Route>
           <Route
@@ -343,18 +389,6 @@ function App() {
             }
           />
           <Route path="playground" element={<PlayGround videoId="1" />} />
-          <Route
-            path="listening"
-            element={
-              <StartTestProvider>
-                <AnswersProvider>
-                  <DoFullTestLayout hideOverflow={false}></DoFullTestLayout>
-                </AnswersProvider>
-              </StartTestProvider>
-            }
-          >
-            <Route path=":id" element={<DoListeningTestPage />} />
-          </Route>
         </Routes>
       </>
     </>
