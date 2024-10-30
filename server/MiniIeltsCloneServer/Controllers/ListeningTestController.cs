@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiniIeltsCloneServer.Extensions;
 using MiniIeltsCloneServer.Helpers;
 using MiniIeltsCloneServer.Models;
+using MiniIeltsCloneServer.Models.Dtos.FullTest;
 using MiniIeltsCloneServer.Models.Dtos.ListeningTest;
 using MiniIeltsCloneServer.Services.ListeningTestService;
 using MiniIeltsCloneServer.Services.UriService;
@@ -50,6 +51,20 @@ namespace MiniIeltsCloneServer.Controllers
         {
             var listeningTest = await _listeningTestService.GetListeningTestKey(id);
             return Results.Ok(new Response<ListeningTestKeyDto>(listeningTest));
+        }
+
+        [HttpGet("{id}/result")]
+        public async Task<IResult> GetListeningTestResult([FromRoute] int id)
+        {
+            var listeningTestResult = await _listeningTestService.GetListeningTestResultById(id);
+            return Results.Ok(new Response<FullTestResultDto>(listeningTestResult));
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IResult> SubmitListeningTest([FromRoute] int id, [FromBody] Models.Dtos.Test.TestSubmitDto testSubmitDto)
+        {
+            var result = await _listeningTestService.SubmitTest(id, testSubmitDto);
+            return Results.Ok(new Response<int>(result));
         }
 
         [HttpPut("{id}")]

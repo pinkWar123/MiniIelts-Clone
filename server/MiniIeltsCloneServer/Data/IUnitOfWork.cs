@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.ExplanationRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.ListeningResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.ListeningTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.PostRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
@@ -42,6 +43,7 @@ namespace MiniIeltsCloneServer.Data
         IExplanationRepository ExplanationRepository { get; }        
         IListeningTestRepository ListeningTestRepository { get; }
         ISeriesListeningTestRepository SeriesListeningTestRepository { get; }
+        IListeningResultRepository ListeningResultRepository { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();

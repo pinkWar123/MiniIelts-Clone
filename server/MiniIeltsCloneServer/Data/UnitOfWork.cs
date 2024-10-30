@@ -9,6 +9,7 @@ using MiniIeltsCloneServer.Data.Repositories.ExerciseRepository;
 using MiniIeltsCloneServer.Data.Repositories.ExplanationRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.FullTestResultRepo;
+using MiniIeltsCloneServer.Data.Repositories.ListeningResultRepo;
 using MiniIeltsCloneServer.Data.Repositories.ListeningTestRepo;
 using MiniIeltsCloneServer.Data.Repositories.PostRepo;
 using MiniIeltsCloneServer.Data.Repositories.QuestionChoiceRepo;
@@ -47,6 +48,7 @@ namespace MiniIeltsCloneServer.Data
             ExplanationRepository = new ExplanationRepository(_context);
             ListeningTestRepository = new ListeningTestRepository(_context);
             SeriesListeningTestRepository = new SeriesListeningTestRepository(_context);
+            ListeningResultRepository = new ListeningResultRepository(_context);
         }
 
         public ITestRepository TestRepository { get; private set; }
@@ -74,6 +76,8 @@ namespace MiniIeltsCloneServer.Data
         public IListeningTestRepository ListeningTestRepository { get; private set; }
 
         public ISeriesListeningTestRepository SeriesListeningTestRepository { get; private set; }
+
+        public IListeningResultRepository ListeningResultRepository { get; private set; }
 
         public void Dispose()
         {

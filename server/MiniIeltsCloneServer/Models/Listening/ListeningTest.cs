@@ -10,7 +10,7 @@ namespace MiniIeltsCloneServer.Models
     {
         public required string Title { get; set; }
         public required string VideoId { get; set; } // This field stores the video id of youtube
-        public ListeningResult ListeningResult { get; set; }
+        public List<ListeningResult> ListeningResults { get; set; }
         public List<ListeningPart> ListeningParts { get; set; } = new List<ListeningPart>();
         public List<SeriesListeningTest> SeriesListeningTests { get; set; }= new List<SeriesListeningTest>();
     }

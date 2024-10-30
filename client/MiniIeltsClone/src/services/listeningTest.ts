@@ -3,6 +3,7 @@ import {
   ListeningTestQuery,
   UpdateListeningTestDto,
 } from "../types/Request/listeningTest";
+import { TestSubmitDto } from "../types/Request/test";
 import {
   ListeningDropDownDto,
   ListeningTestKeyDto,
@@ -46,5 +47,11 @@ export const getListeningTestSolution = async (id: number) => {
     await axiosInstance.get<IResponse<ListeningTestKeyDto>>(
       `ListeningTest/${id}/solution`
     )
+  ).data;
+};
+
+export const submitTest = async (id: number, dto: TestSubmitDto) => {
+  return (
+    await axiosInstance.post<IResponse<number>>(`ListeningTest/${id}`, dto)
   ).data;
 };
