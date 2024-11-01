@@ -53,5 +53,24 @@ namespace MiniIeltsCloneServer.Data.Repositories.ListeningResultRepo
                 Value = history
             };
         }
+
+        public async Task<List<QuestionStatistics>> GetQuestionStatistics(string userId)
+        {
+            var query = from result in _context.ListeningResults
+                        where result.AppUserId == userId
+                        join answer in _context.Answers
+                        on result.Id equals answer.ListeningResultId
+                        group new { result, answer } by answer.QuestionType into newAnswer
+                        select new QuestionStatistics
+                        {
+                            QuestionType = newAnswer.Key,
+                            Accuracy = (double) newAnswer.Count(n => n.answer.IsCorrect) / newAnswer.Count()
+                        };
+                        
+            return await query.ToListAsync();
+            // throw new NotImplementedException();
+        }
     }
+
+    
 }

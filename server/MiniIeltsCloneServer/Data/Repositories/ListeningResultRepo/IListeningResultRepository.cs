@@ -13,5 +13,6 @@ namespace MiniIeltsCloneServer.Data.Repositories.ListeningResultRepo
     public interface IListeningResultRepository : IGenericRepository<ListeningResult>
     {
         Task<PagedData<TestHistory>> GetListeningTestHistory(string userId, DashboardQueryObject @object);
+        Task<List<QuestionStatistics>> GetQuestionStatistics(string userId);
     }
 }

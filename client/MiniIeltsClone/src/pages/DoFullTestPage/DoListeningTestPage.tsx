@@ -36,11 +36,15 @@ const DoListeningTestPage: FunctionComponent<DoListeningTestPageProps> = () => {
       const res = await getListeningTestById(parseInt(id));
       if (res) {
         setTest(res.data);
+        const flattenedTypes = res.data.listeningParts
+          .flatMap((lp) => lp.listeningExercises)
+          .flatMap((le) => le.questions)
+          .map((q) => q.questionType);
         setAnswers(
           Array.from({ length: 40 }, (_, index) => ({
             order: index + 1,
             value: "",
-            questionType: 0,
+            questionType: flattenedTypes[index],
           }))
         );
       }

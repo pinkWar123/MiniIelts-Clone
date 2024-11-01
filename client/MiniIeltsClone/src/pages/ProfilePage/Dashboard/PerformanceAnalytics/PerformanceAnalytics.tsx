@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import {
   callGetFullTestHistory,
+  callGetListeningTestHistory,
   callGetTestHistory,
   callGetTestHistoryByAdmin,
 } from "../../../../services/profile";
@@ -45,6 +46,8 @@ const PerformanceAnalytics: FunctionComponent<
 > = () => {
   const [testHistory, setTestHistory] = useState<TestHistory[]>();
   const [fullTestHistory, setFullTestHistory] = useState<TestHistory[]>();
+  const [listeningTestHistory, setListeningTestHistory] =
+    useState<TestHistory[]>();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState<number>(0);
   useEffect(() => {
@@ -69,8 +72,23 @@ const PerformanceAnalytics: FunctionComponent<
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      let res: IPagedResponse<TestHistory[]>;
+      if (id) res = await callGetListeningTestHistory(1, 10);
+      else res = await callGetListeningTestHistory(1, 10);
+      if (res.data) setListeningTestHistory(res.data);
+    };
+
+    fetchData();
+  }, [id]);
+
   const getChartDetails = () => {
-    return testHistory?.map(
+    const history = () => {
+      if (activeTab === 0) return listeningTestHistory;
+      else if (activeTab === 1) return fullTestHistory;
+    };
+    return history()?.map(
       (t) =>
         ({
           score: t.score,
@@ -102,7 +120,7 @@ const PerformanceAnalytics: FunctionComponent<
             <PerformanceChart histories={getChartDetails() ?? []} />
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <QuestionTypes />
+            <QuestionTypes activeTab={activeTab} />
           </Col>
         </Row>
       </Card>

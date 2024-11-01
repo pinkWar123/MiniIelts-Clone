@@ -17,5 +17,6 @@ namespace MiniIeltsCloneServer.Services.DashboardService
         Task<List<QuestionStatistics>> GetQuestionStatistics();
         Task<List<QuestionStatistics>> GetQuestionStatisticsByAdmin(string userId);
         Task<PagedData<TestHistory>> GetListeningTestHistory(DashboardQueryObject @object);
+        Task<List<QuestionStatistics>> GetListeningStatistics();
     }
 }
