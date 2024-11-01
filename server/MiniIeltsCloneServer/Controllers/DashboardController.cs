@@ -60,6 +60,14 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(pagedResponse);
         }
 
+        [HttpGet("listening/history")]
+        public async Task<IResult> GetListeningTestHistory([FromQuery] DashboardQueryObject @object)
+        {
+            var result = await _dashboardService.GetListeningTestHistory(@object);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(result.Value, result.TotalRecords, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request?.Path.Value ?? "");
+            return Results.Ok(pagedResponse);
+        }
+
         [HttpGet("history/{id}")]
         [Authorize]
         public async Task<IActionResult> GetTestHistory([FromRoute] string id, [FromQuery] DashboardQueryObject @object)
@@ -70,14 +78,16 @@ namespace MiniIeltsCloneServer.Controllers
         }
 
         [HttpGet("question-statistics")]
-        public async Task<IActionResult> GetQuestionStatistics()
+        public async Task<IActionResult> GetQuestionStatistics([FromQuery] string skill)
         {
-            var result = await _dashboardService.GetQuestionStatistics();
+            var result = new List<QuestionStatistics>();
+            if(skill.ToLower().Trim() == "reading") result = await _dashboardService.GetQuestionStatistics();
+            else if(skill.ToLower().Trim() == "listening") result = await _dashboardService.GetListeningStatistics();
             return Ok(new Response<List<QuestionStatistics>>(result));
         }
 
         [HttpGet("question-statistics/{id}")]
-        public async Task<IActionResult> GetQuestionStatistics([FromRoute] string id)
+        public async Task<IActionResult> GetQuestionStatisticsById([FromRoute] string id)
         {
             var result = await _dashboardService.GetQuestionStatisticsByAdmin(id);
             return Ok(new Response<List<QuestionStatistics>>(result));

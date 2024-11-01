@@ -64,7 +64,8 @@ export const callGetFullTestHistory = async (
 export const callGetQuestionStatistics = async () => {
   return (
     await axiosInstance.get<IResponse<QuestionStatistics[]>>(
-      "Dashboard/question-statistics"
+      "Dashboard/question-statistics",
+      { params: { skill: "reading" } }
     )
   ).data;
 };
@@ -73,6 +74,31 @@ export const callGetQuestionStatisticsByAdmin = async (id: string) => {
   return (
     await axiosInstance.get<IResponse<QuestionStatistics[]>>(
       `Dashboard/question-statistics/${id}`
+    )
+  ).data;
+};
+
+export const callGetListeningQuestionStatistics = async () => {
+  return (
+    await axiosInstance.get<IResponse<QuestionStatistics[]>>(
+      "Dashboard/question-statistics",
+      {
+        params: { skill: "listening" },
+      }
+    )
+  ).data;
+};
+
+export const callGetListeningTestHistory = async (
+  pageNumber: number,
+  pageSize: number
+) => {
+  return (
+    await axiosInstance.get<IPagedResponse<TestHistory[]>>(
+      `Dashboard/listening/history`,
+      {
+        params: { pageNumber, pageSize },
+      }
     )
   ).data;
 };

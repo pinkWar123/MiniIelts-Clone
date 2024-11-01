@@ -9,7 +9,7 @@ import ReviewButton from "./ReviewButton";
 import HistoryItem from "./HistoryItem";
 interface TestHistoryProps {
   histories: TestHistory[];
-  type: "test" | "full-test";
+  type: "test" | "full-test" | "listening";
 }
 
 const breakpoint = 768;
@@ -70,11 +70,22 @@ const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
     return cols;
   };
 
+  const getTitle = () => {
+    switch (type) {
+      case "test":
+        return "Test";
+      case "full-test":
+        return "Full Test";
+      case "listening":
+        return "Listening";
+    }
+  };
+
   if (!renderAsCard)
     return (
       <div style={{ marginTop: "50px" }}>
         <Typography.Title level={4} className={styles["title"]}>
-          {type === "test" ? "Test" : "Full Test"} history
+          {getTitle()} history
         </Typography.Title>
 
         <Card>{renderList()}</Card>
@@ -84,11 +95,12 @@ const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
   return (
     <div style={{ marginTop: "50px" }}>
       <Typography.Title level={4} className={styles["title"]}>
-        {type === "test" ? "Test" : "Full Test"} history
+        {getTitle()} history
       </Typography.Title>
       <Card>
         {histories.map((history) => (
           <HistoryItem
+            history={history}
             type={type}
             resultId={history.resultId}
             testId={history.testId}

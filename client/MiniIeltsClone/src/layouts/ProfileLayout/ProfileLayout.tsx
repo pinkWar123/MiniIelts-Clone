@@ -8,6 +8,7 @@ import useUser from "../../hooks/useUser";
 import { ADMIN_ROLE } from "../../contants/roles";
 import AdminHeader from "../../components/Header/AdminHeader";
 import NormalHeader from "../../components/Header/NormalHeader";
+import Footer from "../NormalLayout/Footer";
 interface ProfileLayoutProps {}
 
 const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
@@ -55,6 +56,7 @@ const ProfileLayout: FunctionComponent<ProfileLayoutProps> = () => {
           </Col>
         </Row>
       </Flex>
+      <Footer />
     </>
   );
 };
