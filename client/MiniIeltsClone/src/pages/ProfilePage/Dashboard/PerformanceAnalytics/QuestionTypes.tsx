@@ -26,6 +26,7 @@ const QuestionTypes: FunctionComponent<QuestionTypesProps> = ({
       if (id) res = await callGetQuestionStatisticsByAdmin(id);
       else res = await callGetQuestionStatistics();
       if (res.data) setReadingStat(res.data);
+      console.log(res.data);
     };
     fetchStat();
   }, [id]);

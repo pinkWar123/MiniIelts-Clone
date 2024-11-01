@@ -65,7 +65,7 @@ export const callGetQuestionStatistics = async () => {
   return (
     await axiosInstance.get<IResponse<QuestionStatistics[]>>(
       "Dashboard/question-statistics",
-      { params: "reading" }
+      { params: { skill: "reading" } }
     )
   ).data;
 };

@@ -49,7 +49,7 @@ const PerformanceAnalytics: FunctionComponent<
   const [listeningTestHistory, setListeningTestHistory] =
     useState<TestHistory[]>();
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(1);
   useEffect(() => {
     const fetchData = async () => {
       let res: IPagedResponse<TestHistory[]>;
@@ -127,6 +127,10 @@ const PerformanceAnalytics: FunctionComponent<
 
       <TestHistoryList type="test" histories={testHistory ?? []} />
       <TestHistoryList type="full-test" histories={fullTestHistory ?? []} />
+      <TestHistoryList
+        type="listening"
+        histories={listeningTestHistory ?? []}
+      />
     </>
   );
 };

@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import ReviewButton from "./ReviewButton";
 
 interface HistoryItemProps {
-  type: "test" | "full-test";
+  type: "test" | "full-test" | "listening";
   resultId: number;
   testId?: number;
 }

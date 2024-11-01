@@ -4,7 +4,7 @@ import { FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ReviewButtonProps {
-  type: "test" | "full-test";
+  type: "test" | "full-test" | "listening";
   resultId: number;
   testId?: number;
 }
@@ -23,6 +23,8 @@ const ReviewButton: FunctionComponent<ReviewButtonProps> = ({
         if (type === "test") navigate(`/result/${resultId}`);
         else if (type === "full-test") {
           navigate(`/full-test/${testId}/result/${resultId}`);
+        } else if (type === "listening") {
+          navigate(`/listening/${testId}/result/${resultId}`);
         }
       }}
     >
