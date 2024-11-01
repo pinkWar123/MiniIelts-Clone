@@ -100,6 +100,7 @@ const TestHistoryList: FunctionComponent<TestHistoryProps> = ({
       <Card>
         {histories.map((history) => (
           <HistoryItem
+            history={history}
             type={type}
             resultId={history.resultId}
             testId={history.testId}

@@ -6,7 +6,7 @@ import {
   callGetTestHistoryByAdmin,
 } from "../../../../services/profile";
 import PerformanceChart, { Result } from "./PerformanceChart";
-import { Card, Col, Flex, Row, Space } from "antd";
+import { Card, Col, Flex, Row, Select, Space } from "antd";
 import styles from "./PerformanceAnalytics.module.scss";
 import { TestHistory } from "../../../../types/Responses/history";
 import dayjs from "dayjs";
@@ -41,6 +41,8 @@ const tabs = [
   },
 ];
 
+const breakpoint = 768;
+
 const PerformanceAnalytics: FunctionComponent<
   PerformanceAnalyticsProps
 > = () => {
@@ -50,6 +52,21 @@ const PerformanceAnalytics: FunctionComponent<
     useState<TestHistory[]>();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState<number>(1);
+  const [renderAsSelect, setRenderAsSelect] = useState<boolean>(
+    window.innerWidth < breakpoint
+  );
+  useEffect(() => {
+    function handleResize() {
+      setRenderAsSelect(window.innerWidth < breakpoint);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       let res: IPagedResponse<TestHistory[]>;
@@ -96,24 +113,41 @@ const PerformanceAnalytics: FunctionComponent<
         } as Result)
     );
   };
+  const renderTabs = () =>
+    tabs.map((tab, index) => (
+      <div
+        key={`${tab.title}`}
+        id={styles[tab.title]}
+        className={`${styles["skill-tab"]} ${
+          index === activeTab ? styles["active"] : ""
+        }`}
+        onClick={() => setActiveTab(index)}
+      >
+        <Space>
+          {tab.icon} {tab.title}
+        </Space>
+      </div>
+    ));
   return (
     <>
       <Card className={styles["container"]}>
         <Flex style={{ marginBottom: "20px" }}>
-          {tabs.map((tab, index) => (
-            <div
-              key={`${tab.title}`}
-              id={styles[tab.title]}
-              className={`${styles["skill-tab"]} ${
-                index === activeTab ? styles["active"] : ""
-              }`}
-              onClick={() => setActiveTab(index)}
-            >
-              <Space>
-                {tab.icon} {tab.title}
-              </Space>
-            </div>
-          ))}
+          {renderAsSelect && (
+            <Select
+              style={{ width: "100%", textAlign: "center" }}
+              defaultValue={activeTab}
+              onChange={(index) => setActiveTab(index)}
+              options={tabs.map((tab, index) => ({
+                value: index,
+                label: (
+                  <Flex justify="center" gap="middle">
+                    {tab.icon} {tab.title}
+                  </Flex>
+                ),
+              }))}
+            />
+          )}
+          {!renderAsSelect && renderTabs()}
         </Flex>
         <Row gutter={16}>
           <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
