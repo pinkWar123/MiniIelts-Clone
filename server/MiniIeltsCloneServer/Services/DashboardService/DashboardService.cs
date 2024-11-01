@@ -72,5 +72,14 @@ namespace MiniIeltsCloneServer.Services.DashboardService
         {
             return await _unitOfWork.ResultRepository.GetTestHistory(userId, @object);
         }
+
+        public async Task<PagedData<TestHistory>> GetListeningTestHistory(DashboardQueryObject @object)
+        {
+            var user = await _userService.GetCurrentUser();
+            if(user == null) throw new UnauthorizedAccessException();
+
+            var result = await _unitOfWork.ListeningResultRepository.GetListeningTestHistory(user.Id, @object);
+            return result;      
+        }
     }
 }

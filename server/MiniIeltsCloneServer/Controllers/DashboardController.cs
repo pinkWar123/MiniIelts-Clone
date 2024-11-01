@@ -60,6 +60,14 @@ namespace MiniIeltsCloneServer.Controllers
             return Ok(pagedResponse);
         }
 
+        [HttpGet("listening/history")]
+        public async Task<IResult> GetListeningTestHistory([FromQuery] DashboardQueryObject @object)
+        {
+            var result = await _dashboardService.GetListeningTestHistory(@object);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(result.Value, result.TotalRecords, new Wrappers.Filter.PaginationFilter(@object.PageNumber, @object.PageSize), _uriService, Request?.Path.Value ?? "");
+            return Results.Ok(pagedResponse);
+        }
+
         [HttpGet("history/{id}")]
         [Authorize]
         public async Task<IActionResult> GetTestHistory([FromRoute] string id, [FromQuery] DashboardQueryObject @object)
